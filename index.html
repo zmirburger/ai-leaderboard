@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<title>AI Leader Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>📊</text></svg>">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface-2: #f3f3ee;
+    --text: #1a1a1a;
+    --text-muted: #666661;
+    --text-dim: #9b9b94;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.16);
+    --accent: #2563eb;
+    --accent-bg: rgba(37,99,235,0.08);
+    --success-bg: rgba(34,197,94,0.12);
+    --success-text: #15803d;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0a0a;
+      --surface: #161616;
+      --surface-2: #1f1f1f;
+      --text: #ededed;
+      --text-muted: #a0a0a0;
+      --text-dim: #666;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.16);
+      --accent: #60a5fa;
+      --accent-bg: rgba(96,165,250,0.12);
+      --success-bg: rgba(34,197,94,0.18);
+      --success-text: #4ade80;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 24px 16px 48px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .meta { font-size: 12px; color: var(--text-dim); margin: 0 0 24px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .refresh-btn { background: transparent; border: 0.5px solid var(--border-strong); color: var(--text-muted); font-size: 12px; padding: 4px 10px; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; }
+  .refresh-btn:hover { color: var(--text); border-color: var(--text-muted); }
+  .section-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin: 0 0 12px; font-weight: 500; }
+  .winner-card {
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 28px;
+  }
+  .winner-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; gap: 12px; }
+  .badge { background: var(--accent-bg); color: var(--accent); font-size: 10.5px; padding: 3px 10px; border-radius: var(--radius-sm); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 500; }
+  .winner-name { font-size: 26px; font-weight: 600; margin: 8px 0 2px; letter-spacing: -0.015em; }
+  .winner-vendor { font-size: 12px; color: var(--text-muted); margin: 0; }
+  .composite { text-align: right; }
+  .composite-label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin: 0; }
+  .composite-value { font-size: 24px; font-weight: 600; margin: 4px 0 0; letter-spacing: -0.015em; }
+  .composite-value .denom { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+  .winner-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 14px; border-top: 0.5px solid var(--border); }
+  .winner-grid .label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px; }
+  .winner-grid .val { font-size: 14px; font-weight: 500; margin: 0; }
+  .winner-grid .val .rank { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+  .rationale { font-size: 13px; color: var(--text-muted); margin: 14px 0 0; line-height: 1.55; }
+  .runners { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { background: var(--surface-2); color: var(--text-muted); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-sm); }
+  .priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+  .pri-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .pri-tag { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px; }
+  .pri-name { font-size: 16px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.005em; }
+  .pri-summary { font-size: 12px; color: var(--text-muted); margin: 0 0 4px; line-height: 1.45; }
+  .pri-supporting { font-size: 11px; color: var(--text-dim); margin: 0; }
+  .tabs { display: flex; gap: 4px; border-bottom: 0.5px solid var(--border); margin-bottom: 18px; }
+  .tab-btn { background: transparent; border: 0; color: var(--text-muted); font-size: 13.5px; padding: 9px 14px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; font-weight: 500; }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+  .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .model-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: border-color 0.12s; }
+  .model-card:hover { border-color: var(--border-strong); }
+  .model-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .model-name { font-size: 14px; font-weight: 600; margin: 0; }
+  .model-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .new-chip { background: var(--success-bg); color: var(--success-text); font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
+  .model-vendor { font-size: 12px; color: var(--text-muted); margin: 2px 0 0; }
+  .chev { font-size: 9px; color: var(--text-dim); transition: transform 0.15s; }
+  .model-card.open .chev { transform: rotate(180deg); }
+  .model-changelog { display: none; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); }
+  .model-card.open .model-changelog { display: block; }
+  .model-changelog p { font-size: 12.5px; color: var(--text-muted); margin: 0 0 8px; line-height: 1.55; }
+  .model-changelog a { font-size: 12px; color: var(--accent); text-decoration: none; }
+  .model-changelog a:hover { text-decoration: underline; }
+  .changelog-head { color: var(--text); font-weight: 500; }
+  .bench-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px; }
+  .bench-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .bench-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; gap: 10px; }
+  .bench-name { font-size: 13.5px; font-weight: 600; margin: 0; }
+  .bench-link { font-size: 11.5px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .bench-link:hover { text-decoration: underline; }
+  .bench-desc { font-size: 11.5px; color: var(--text-muted); margin: 0 0 10px; }
+  .bench-table { width: 100%; border-collapse: collapse; }
+  .bench-table td { padding: 3px 0; font-size: 12.5px; }
+  .bench-table td:last-child { text-align: right; color: var(--text-muted); }
+  .footer-note { font-size: 11px; color: var(--text-dim); margin: 24px 0 0; text-align: center; line-height: 1.5; }
+  .footer-note a { color: var(--text-muted); text-decoration: none; }
+  .footer-note a:hover { color: var(--text); }
+  .lmarena-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 24px; }
+  .loading { text-align: center; color: var(--text-dim); padding: 60px 0; font-size: 13px; }
+  @media (max-width: 580px) {
+    body { padding: 16px 12px 32px; font-size: 14px; }
+    h1 { font-size: 20px; }
+    .winner-card { padding: 16px 18px; }
+    .winner-name { font-size: 22px; }
+    .composite-value { font-size: 22px; }
+    .priority-grid { grid-template-columns: 1fr; }
+    .model-grid { grid-template-columns: 1fr; }
+    .bench-grid { grid-template-columns: 1fr; }
+    .winner-grid .label { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>AI Leader Dashboard</h1>
+  </header>
+  <div class="meta">
+    <span id="last-updated">Loading…</span>
+    <span style="color: var(--text-dim);">·</span>
+    <span>Weights: 45 acc · 30 ctx · 25 agent</span>
+    <button class="refresh-btn" onclick="location.reload()">Reload</button>
+  </div>
+  <div id="content" class="loading">Loading dashboard data…</div>
+</div>
+
+<script>
+const fmt = (d) => {
+  const dt = new Date(d);
+  return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+const daysSince = (d) => Math.floor((Date.now() - new Date(d)) / 86400000);
+
+async function load() {
+  try {
+    const res = await fetch('data.json?_=' + Date.now());
+    const data = await res.json();
+    document.getElementById('last-updated').textContent = 'Updated ' + fmt(data.last_updated);
+    render(data);
+  } catch (e) {
+    document.getElementById('content').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;">Could not load data.json — has the scraper run yet?</p>';
+  }
+}
+
+function render(d) {
+  const w = d.weights;
+  const wPct = (k) => Math.round(w[k] * 100);
+  const overall = d.best_overall;
+  const overallModel = d.models.find(m => m.name === overall.model);
+  const ranked = (priority) => [...d.models].sort((a,b) => b.per_priority[priority] - a.per_priority[priority]);
+  const rank = (model, priority) => ranked(priority).findIndex(m => m.name === model.name) + 1;
+
+  const others = d.models.filter(m => m.name !== overall.model).sort((a,b) => b.composite_overall - a.composite_overall);
+
+  const html = `
+    <p class="section-label">Best overall · ${wPct('accuracy')}/${wPct('long_context')}/${wPct('agent')}</p>
+    <div class="winner-card">
+      <div class="winner-head">
+        <div>
+          <span class="badge">Recommended</span>
+          <p class="winner-name">${overall.model}</p>
+          <p class="winner-vendor">${overallModel.vendor} · released ${daysSince(overallModel.released)}d ago</p>
+        </div>
+        <div class="composite">
+          <p class="composite-label">Composite</p>
+          <p class="composite-value">${overall.composite}<span class="denom">/100</span></p>
+        </div>
+      </div>
+      <div class="winner-grid">
+        <div>
+          <p class="label">Accuracy · ${wPct('accuracy')}%</p>
+          <p class="val">${overallModel.per_priority.accuracy} <span class="rank">· #${rank(overallModel,'accuracy')}</span></p>
+        </div>
+        <div>
+          <p class="label">Long context · ${wPct('long_context')}%</p>
+          <p class="val">${overallModel.per_priority.long_context} <span class="rank">· #${rank(overallModel,'long_context')}</span></p>
+        </div>
+        <div>
+          <p class="label">Agent · ${wPct('agent')}%</p>
+          <p class="val">${overallModel.per_priority.agent} <span class="rank">· #${rank(overallModel,'agent')}</span></p>
+        </div>
+      </div>
+      <p class="rationale">${overall.rationale}</p>
+      <div class="runners">
+        ${others.slice(0,2).map((m,i) => `<span class="chip">${i===0?'Runner-up':'3rd'}: ${m.name} (${m.composite_overall})</span>`).join('')}
+      </div>
+    </div>
+
+    <p class="section-label">Best per priority</p>
+    <div class="priority-grid">
+      ${['agent','accuracy','long_context'].map(k => {
+        const p = d.best_per_priority[k];
+        const labels = {agent:'Autonomous agent', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context'};
+        return `<div class="pri-card"><p class="pri-tag">${labels[k]}</p><p class="pri-name">${p.model}</p><p class="pri-summary">${p.summary}</p><p class="pri-supporting">${p.supporting}</p></div>`;
+      }).join('')}
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="models">Latest releases</button>
+      <button class="tab-btn" data-tab="details">Benchmark details</button>
+    </div>
+
+    <div id="pane-models" class="tab-pane active">
+      <div class="model-grid">
+        ${d.models.map(m => `
+          <div class="model-card" data-toggle>
+            <div class="model-head">
+              <div>
+                <div class="model-name-row">
+                  <p class="model-name">${m.name}</p>
+                  ${daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
+                </div>
+                <p class="model-vendor">${m.vendor} · ${fmt(m.released)}</p>
+              </div>
+              <span class="chev">▼</span>
+            </div>
+            <div class="model-changelog">
+              <p><span class="changelog-head">vs ${m.previous}:</span> ${m.changelog}</p>
+              <a href="${m.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div id="pane-details" class="tab-pane">
+      ${['agent','accuracy','long_context'].map(cat => {
+        const labels = {agent:'Autonomous agents', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context'};
+        return `
+          <p class="section-label" style="margin-top:8px;">${labels[cat]}</p>
+          <div class="bench-grid">
+            ${d.benchmarks[cat].map(b => `
+              <div class="bench-card">
+                <div class="bench-head">
+                  <p class="bench-name">${b.name}</p>
+                  <a class="bench-link" href="${b.url}" target="_blank" rel="noopener">open ↗</a>
+                </div>
+                <p class="bench-desc">${b.description}</p>
+                <table class="bench-table">
+                  ${b.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.value}</td></tr>`).join('')}
+                </table>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }).join('')}
+
+      <p class="section-label">Vibe check (not in composite)</p>
+      <div class="lmarena-card">
+        <div class="bench-head">
+          <p class="bench-name">LMArena</p>
+          <a class="bench-link" href="${d.lmarena_vibe_check.url}" target="_blank" rel="noopener">open ↗</a>
+        </div>
+        <p class="bench-desc">${d.lmarena_vibe_check.note}</p>
+        <table class="bench-table">
+          ${d.lmarena_vibe_check.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.score}</td></tr>`).join('')}
+        </table>
+      </div>
+    </div>
+
+    <p class="footer-note">${d.data_status === 'initial_estimates' ? 'Showing seeded estimates — scraper will replace with live numbers on first run. ' : ''}<a href="https://github.com/zmirburger/ai-leaderboard" target="_blank" rel="noopener">Source on GitHub</a></p>
+  `;
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('content').classList.remove('loading');
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+  document.querySelectorAll('[data-toggle]').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('open'));
+  });
+}
+
+load();
+</script>
+</body>
+</html>

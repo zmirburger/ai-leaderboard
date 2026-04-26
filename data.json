@@ -1,330 +1,49 @@
 {
-  "last_updated": "2026-04-26T09:04:53Z",
-  "data_status": "auto_refreshed",
+  "last_updated": "2026-04-26T09:10:00Z",
+  "data_status": "manually_restored",
   "note": "Placeholder values seeded on Apr 26 2026 from public release announcements. Scraper will replace with live numbers on first run.",
-  "weights": {
-    "accuracy": 0.45,
-    "long_context": 0.3,
-    "agent": 0.25
-  },
+  "weights": { "accuracy": 0.45, "long_context": 0.3, "agent": 0.25 },
   "best_overall": {
     "model": "Claude Opus 4.7",
     "composite": 90,
     "rationale": "Wins accuracy outright (95). Close #2 on agent (87) and long context (85). 45/30/25 weighting widens the lead vs equal thirds."
   },
   "best_per_priority": {
-    "agent": {
-      "model": "GPT-5.5",
-      "summary": "Deep Research v2, faster computer use",
-      "supporting": "METR · BrowseComp"
-    },
-    "accuracy": {
-      "model": "Claude Opus 4.7",
-      "summary": "~0.5% hallucination, leads IFBench",
-      "supporting": "HHEM · Omniscience · Scale RLI"
-    },
-    "long_context": {
-      "model": "Gemini 3.1 Pro",
-      "summary": "94.3% GPQA Diamond, 77.1% ARC-AGI-2",
-      "supporting": "Fiction.Live · AA Long-Context"
-    }
+    "agent": { "model": "GPT-5.5", "summary": "Deep Research v2, faster computer use", "supporting": "METR · BrowseComp" },
+    "accuracy": { "model": "Claude Opus 4.7", "summary": "~0.5% hallucination, leads IFBench", "supporting": "HHEM · Omniscience · Scale RLI" },
+    "long_context": { "model": "Gemini 3.1 Pro", "summary": "94.3% GPQA Diamond, 77.1% ARC-AGI-2", "supporting": "Fiction.Live · AA Long-Context" }
   },
   "models": [
-    {
-      "id": "opus_4_7",
-      "name": "Claude Opus 4.7",
-      "vendor": "Anthropic",
-      "released": "2026-04-16",
-      "previous": "Claude Opus 4.6",
-      "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.",
-      "release_notes_url": "https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7",
-      "composite_overall": 90,
-      "per_priority": {
-        "agent": 87,
-        "accuracy": 95,
-        "long_context": 85
-      }
-    },
-    {
-      "id": "gpt_5_5",
-      "name": "GPT-5.5",
-      "vendor": "OpenAI",
-      "released": "2026-04-23",
-      "previous": "GPT-5.4",
-      "changelog": "Stepped up on coding, computer use, deeper research. Matches GPT-5.4 per-token latency despite higher capability. New Deep Research v2 toolchain. Rolling out to Plus, Pro, Business, Enterprise + API.",
-      "release_notes_url": "https://openai.com/index/introducing-gpt-5-5/",
-      "composite_overall": 84,
-      "per_priority": {
-        "agent": 92,
-        "accuracy": 80,
-        "long_context": 80
-      }
-    },
-    {
-      "id": "gemini_3_1_pro",
-      "name": "Gemini 3 Pro",
-      "vendor": "Google",
-      "released": "2026-04-15",
-      "previous": "Gemini 3.1 Pro",
-      "changelog": "(Auto-detected from changelog - full notes at link)",
-      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 83,
-      "per_priority": {
-        "agent": 78,
-        "accuracy": 78,
-        "long_context": 92
-      }
-    },
-    {
-      "id": "grok_4_3_beta",
-      "name": "Grok 4.20",
-      "vendor": "xAI",
-      "released": "2026-04-17",
-      "previous": "Grok 4.3 Beta",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
-      "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 72,
-      "per_priority": {
-        "agent": 75,
-        "accuracy": 65,
-        "long_context": 78
-      }
-    }
+    { "id": "opus_4_7", "name": "Claude Opus 4.7", "vendor": "Anthropic", "released": "2026-04-16", "previous": "Claude Opus 4.6", "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.", "release_notes_url": "https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7", "composite_overall": 90, "per_priority": { "agent": 87, "accuracy": 95, "long_context": 85 } },
+    { "id": "gpt_5_5", "name": "GPT-5.5", "vendor": "OpenAI", "released": "2026-04-23", "previous": "GPT-5.4", "changelog": "Stepped up on coding, computer use, deeper research. Matches GPT-5.4 per-token latency despite higher capability. New Deep Research v2 toolchain. Rolling out to Plus, Pro, Business, Enterprise + API.", "release_notes_url": "https://openai.com/index/introducing-gpt-5-5/", "composite_overall": 84, "per_priority": { "agent": 92, "accuracy": 80, "long_context": 80 } },
+    { "id": "gemini_3_1_pro", "name": "Gemini 3.1 Pro", "vendor": "Google", "released": "2026-04-15", "previous": "Gemini 3.0 Pro", "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).", "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/", "composite_overall": 83, "per_priority": { "agent": 78, "accuracy": 78, "long_context": 92 } },
+    { "id": "grok_4_3_beta", "name": "Grok 4.3 Beta", "vendor": "xAI", "released": "2026-04-17", "previous": "Grok 4.x", "changelog": "Native video understanding (first in lineup). Generates PDFs, PowerPoints, spreadsheets in chat. Tighter Grok Computer (autonomous desktop agent) integration. Locked to SuperGrok Heavy at $300/mo. Full rollout est. mid-late May. Grok 5 in training, Q2 window.", "release_notes_url": "https://docs.x.ai/developers/release-notes", "composite_overall": 72, "per_priority": { "agent": 75, "accuracy": 65, "long_context": 78 } }
   ],
   "benchmarks": {
     "agent": [
-      {
-        "id": "metr_time_horizon",
-        "name": "METR Time Horizon",
-        "url": "https://metr.org/time-horizons/",
-        "description": "50% reliable task length",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "GPT-5.5",
-            "value": "~4h"
-          },
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~3h 30m"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~2h 30m"
-          }
-        ]
-      },
-      {
-        "id": "tau_bench",
-        "name": "τ-bench (retail)",
-        "url": "https://github.com/sierra-research/tau-bench",
-        "description": "Tool-use in customer-service flows",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~80"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~78"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~71"
-          }
-        ]
-      },
-      {
-        "id": "browsecomp",
-        "name": "BrowseComp",
-        "url": "https://openai.com/index/browsecomp/",
-        "description": "Multi-hop autonomous web research",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "GPT-5.5",
-            "value": "~62%"
-          },
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~54%"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~48%"
-          }
-        ]
-      }
+      { "id": "metr_time_horizon", "name": "METR Time Horizon", "url": "https://metr.org/time-horizons/", "description": "50% reliable task length", "lower_better": false, "top3": [ { "model": "GPT-5.5", "value": "~4h" }, { "model": "Claude Opus 4.7", "value": "~3h 30m" }, { "model": "Gemini 3.1 Pro", "value": "~2h 30m" } ] },
+      { "id": "tau_bench", "name": "τ-bench (retail)", "url": "https://github.com/sierra-research/tau-bench", "description": "Tool-use in customer-service flows", "lower_better": false, "top3": [ { "model": "Claude Opus 4.7", "value": "~80" }, { "model": "GPT-5.5", "value": "~78" }, { "model": "Gemini 3.1 Pro", "value": "~71" } ] },
+      { "id": "browsecomp", "name": "BrowseComp", "url": "https://openai.com/index/browsecomp/", "description": "Multi-hop autonomous web research", "lower_better": false, "top3": [ { "model": "GPT-5.5", "value": "~62%" }, { "model": "Claude Opus 4.7", "value": "~54%" }, { "model": "Gemini 3.1 Pro", "value": "~48%" } ] }
     ],
     "accuracy": [
-      {
-        "id": "vectara_hhem",
-        "name": "Vectara HHEM",
-        "url": "https://huggingface.co/spaces/vectara/leaderboard",
-        "description": "Hallucination rate (lower = better)",
-        "lower_better": true,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~0.5%"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~0.9%"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~1.0%"
-          }
-        ]
-      },
-      {
-        "id": "aa_omniscience",
-        "name": "AA Omniscience",
-        "url": "https://artificialanalysis.ai/evaluations/omniscience",
-        "description": "Punishes confident wrong answers",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~64"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~60"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~55"
-          }
-        ]
-      },
-      {
-        "id": "aa_intelligence_index",
-        "name": "AA Intelligence Index",
-        "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
-        "description": "Composite of 10 hard evals",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~73"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~71"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~68"
-          }
-        ]
-      },
-      {
-        "id": "scale_seal_rli",
-        "name": "Scale SEAL (RLI)",
-        "url": "https://scale.com/leaderboard/rli",
-        "description": "Private holdout, harder to game",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~83"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~81"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~79"
-          }
-        ]
-      }
+      { "id": "vectara_hhem", "name": "Vectara HHEM", "url": "https://huggingface.co/spaces/vectara/leaderboard", "description": "Hallucination rate (lower = better)", "lower_better": true, "top3": [ { "model": "Claude Opus 4.7", "value": "~0.5%" }, { "model": "Gemini 3.1 Pro", "value": "~0.9%" }, { "model": "GPT-5.5", "value": "~1.0%" } ] },
+      { "id": "aa_omniscience", "name": "AA Omniscience", "url": "https://artificialanalysis.ai/evaluations/omniscience", "description": "Punishes confident wrong answers", "lower_better": false, "top3": [ { "model": "Claude Opus 4.7", "value": "~64" }, { "model": "GPT-5.5", "value": "~60" }, { "model": "Gemini 3.1 Pro", "value": "~55" } ] },
+      { "id": "aa_intelligence_index", "name": "AA Intelligence Index", "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", "description": "Composite of 10 hard evals", "lower_better": false, "top3": [ { "model": "Claude Opus 4.7", "value": "~73" }, { "model": "GPT-5.5", "value": "~71" }, { "model": "Gemini 3.1 Pro", "value": "~68" } ] },
+      { "id": "scale_seal_rli", "name": "Scale SEAL (RLI)", "url": "https://scale.com/leaderboard/rli", "description": "Private holdout, harder to game", "lower_better": false, "top3": [ { "model": "Claude Opus 4.7", "value": "~83" }, { "model": "GPT-5.5", "value": "~81" }, { "model": "Gemini 3.1 Pro", "value": "~79" } ] }
     ],
     "long_context": [
-      {
-        "id": "fiction_livebench",
-        "name": "Fiction.LiveBench",
-        "url": "https://epoch.ai/benchmarks/fictionlivebench",
-        "description": "Reasoning at 120k tokens",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~88%"
-          },
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~83%"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~78%"
-          }
-        ]
-      },
-      {
-        "id": "aa_long_context",
-        "name": "AA Long-Context",
-        "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning",
-        "description": "Multi-document synthesis",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~85"
-          },
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~83"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~80"
-          }
-        ]
-      },
-      {
-        "id": "aa_ifbench",
-        "name": "AA IFBench",
-        "url": "https://artificialanalysis.ai/evaluations/ifbench",
-        "description": "Instruction-following compliance",
-        "lower_better": false,
-        "top3": [
-          {
-            "model": "Claude Opus 4.7",
-            "value": "~92"
-          },
-          {
-            "model": "GPT-5.5",
-            "value": "~90"
-          },
-          {
-            "model": "Gemini 3.1 Pro",
-            "value": "~88"
-          }
-        ]
-      }
+      { "id": "fiction_livebench", "name": "Fiction.LiveBench", "url": "https://epoch.ai/benchmarks/fictionlivebench", "description": "Reasoning at 120k tokens", "lower_better": false, "top3": [ { "model": "Gemini 3.1 Pro", "value": "~88%" }, { "model": "Claude Opus 4.7", "value": "~83%" }, { "model": "GPT-5.5", "value": "~78%" } ] },
+      { "id": "aa_long_context", "name": "AA Long-Context", "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning", "description": "Multi-document synthesis", "lower_better": false, "top3": [ { "model": "Gemini 3.1 Pro", "value": "~85" }, { "model": "Claude Opus 4.7", "value": "~83" }, { "model": "GPT-5.5", "value": "~80" } ] },
+      { "id": "aa_ifbench", "name": "AA IFBench", "url": "https://artificialanalysis.ai/evaluations/ifbench", "description": "Instruction-following compliance", "lower_better": false, "top3": [ { "model": "Claude Opus 4.7", "value": "~92" }, { "model": "GPT-5.5", "value": "~90" }, { "model": "Gemini 3.1 Pro", "value": "~88" } ] }
     ]
   },
   "lmarena_vibe_check": {
     "url": "https://lmarena.ai/leaderboard",
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
     "top3": [
-      {
-        "model": "Gemini 3.1 Pro",
-        "score": "~1465"
-      },
-      {
-        "model": "GPT-5.5",
-        "score": "~1448"
-      },
-      {
-        "model": "Claude Opus 4.7",
-        "score": "~1440"
-      }
+      { "model": "Gemini 3.1 Pro", "score": "~1465" },
+      { "model": "GPT-5.5", "score": "~1448" },
+      { "model": "Claude Opus 4.7", "score": "~1440" }
     ]
   }
 }

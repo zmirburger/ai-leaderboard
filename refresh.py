@@ -3,14 +3,13 @@
 refresh.py — daily refresh for the AI Leader Dashboard.
 
 Strategy:
-- Vendor release pages are the highest-value, most-reliable scrape target.
-  When a new flagship drops (GPT-5.6, Opus 4.8, Gemini 3.2, Grok 5), this
-  is what tells you within 24 hours.
-- Benchmark leaderboards are heavily JS-rendered. Plain requests doesn't
-  see most of them. We stub these and rely on Claude to manually refresh
-  benchmark scores when asked.
-- Critical anti-race rule: only write data.json when something actually
-  changed. No change = no commit = no race with local edits.
+- Vendor release pages are the highest-value scrape target.
+- Benchmark leaderboards are JS-rendered; manual refresh on demand.
+- Anti-race rule: only write data.json when something actually changed.
+- Tight version regex: single-digit major.minor only (4.7, 5.5, 3.1) — rejects
+  date fragments like "4.20" that come from "April 20" being concatenated.
+- findall + scoring: when a page mentions both "Gemini 3 Pro" (brand) and
+  "Gemini 3.1 Pro" (release), pick the most specific (longest version string).
 """
 
 from __future__ import annotations
@@ -31,7 +30,7 @@ TIMEOUT = 20
 
 # ---------- helpers ----------
 
-def fetch(url: str) -> str | None:
+def fetch(url):
     try:
         r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         r.raise_for_status()
@@ -40,14 +39,13 @@ def fetch(url: str) -> str | None:
         print(f"  fetch failed: {url} - {e}", file=sys.stderr)
         return None
 
-def load_data() -> dict:
+def load_data():
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
 
-def save_data(data: dict) -> None:
+def save_data(data):
     DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-def _extract_iso_date(text: str) -> str:
-    """Find first 'Month DD, YYYY' date in the first 2000 chars, return ISO."""
+def _extract_iso_date(text):
     date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
     if not date_match:
         return ""
@@ -56,16 +54,23 @@ def _extract_iso_date(text: str) -> str:
     except ValueError:
         return ""
 
-def _search_headings_then_body(soup: BeautifulSoup, pattern: str):
-    """Try regex against headings first (versions live there), then full body."""
+def _find_best_match(soup, pattern):
+    """Find ALL matches in headings (preferred) or body; pick the most specific.
+    For tuple matches, scores by total length of captured groups (longer + has
+    Beta suffix wins). For string matches, by length."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
-    m = re.search(pattern, headings)
-    if m:
-        return m
-    return re.search(pattern, soup.get_text(" ", strip=True))
+    matches = re.findall(pattern, headings)
+    if not matches:
+        matches = re.findall(pattern, soup.get_text(" ", strip=True))
+    if not matches:
+        return None
+    if isinstance(matches[0], tuple):
+        return max(matches, key=lambda m: sum(len(str(g).strip()) for g in m))
+    return max(matches, key=len)
 
 # ---------- vendor release detection ----------
-# Each function returns (latest_name, release_date_iso, changelog, release_notes_url) or None.
+# Tight pattern: single-digit major, optional single-digit minor.
+# Rejects "4.20" etc. (date fragments). Real model versions all fit.
 
 def detect_anthropic():
     url = "https://platform.claude.com/docs/en/release-notes/overview"
@@ -73,11 +78,11 @@ def detect_anthropic():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    m = _search_headings_then_body(soup, r"Claude Opus (\d{1,2}(?:\.\d{1,2})?)\b(?!\d)")
-    if not m:
+    version = _find_best_match(soup, r"Claude Opus (\d(?:\.\d)?)\b(?!\d)")
+    if not version:
         return None
     return (
-        f"Claude Opus {m.group(1)}",
+        f"Claude Opus {version}",
         _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes - full changelog at link)",
         url,
@@ -89,11 +94,11 @@ def detect_openai():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    m = _search_headings_then_body(soup, r"GPT-(\d{1,2}(?:\.\d{1,2})?)\b(?!\d)")
-    if not m:
+    version = _find_best_match(soup, r"GPT-(\d(?:\.\d)?)\b(?!\d)")
+    if not version:
         return None
     return (
-        f"GPT-{m.group(1)}",
+        f"GPT-{version}",
         _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes - full changelog at link)",
         url,
@@ -105,11 +110,11 @@ def detect_google():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    m = _search_headings_then_body(soup, r"Gemini (\d{1,2}(?:\.\d{1,2})?) Pro\b(?!\d)")
-    if not m:
+    version = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Pro\b(?!\d)")
+    if not version:
         return None
     return (
-        f"Gemini {m.group(1)} Pro",
+        f"Gemini {version} Pro",
         _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from changelog - full notes at link)",
         url,
@@ -121,28 +126,21 @@ def detect_xai():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    # Find ALL Grok matches, pick the most specific (longest version + has Beta suffix wins).
-    text = soup.get_text(" ", strip=True)
-    headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1","h2","h3"]))
-    pattern = r"Grok[ -]?(\d{1,2}(?:\.\d{1,2})?)(\s+Beta)?\b(?!\d)"
-    matches = re.findall(pattern, headings) or re.findall(pattern, text)
-    if not matches:
+    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)")
+    if not best:
         return None
-    # Score: 10 points per char in version, 5 points if Beta suffix present
-    best = max(matches, key=lambda m: len(m[0]) * 10 + (5 if m[1].strip() else 0))
     version, suffix = best[0], best[1].strip()
     name = f"Grok {version}" + (f" {suffix}" if suffix else "")
     return (
         name,
-        _extract_iso_date(text),
+        _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes - full changelog at link)",
         url,
     )
 
 # ---------- main ----------
 
-def update_releases(data: dict) -> list[str]:
-    """Detect new model releases, update data['models']. Returns list of changes."""
+def update_releases(data):
     changes = []
     detectors = {
         "Anthropic": detect_anthropic,
@@ -175,12 +173,11 @@ def update_releases(data: dict) -> list[str]:
             print(f"  no change ({name})")
     return changes
 
-def update_benchmarks(data: dict) -> list[str]:
+def update_benchmarks(data):
     print("\nBenchmark scores - manual refresh recommended (sites are JS-rendered).")
-    print("To refresh: ask Claude 'refresh benchmark scores' in chat.")
     return []
 
-def main() -> int:
+def main():
     data = load_data()
     print(f"Loaded data.json (last updated: {data['last_updated']})\n")
 
@@ -192,7 +189,6 @@ def main() -> int:
 
     print("\n=== Summary ===")
     if release_changes or benchmark_changes:
-        # Anti-race: only write/commit when something actually changed.
         data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         data["data_status"] = "auto_refreshed"
         save_data(data)

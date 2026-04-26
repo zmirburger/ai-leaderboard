@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-26T08:32:12Z",
+  "last_updated": "2026-04-26T08:45:32Z",
   "data_status": "auto_refreshed",
   "note": "Placeholder values seeded on Apr 26 2026 from public release announcements. Scraper will replace with live numbers on first run.",
   "weights": {
@@ -77,11 +77,11 @@
     },
     {
       "id": "grok_4_3_beta",
-      "name": "Grok 4.3 Beta",
+      "name": "Grok 4",
       "vendor": "xAI",
       "released": "2026-04-17",
-      "previous": "Grok 4.x",
-      "changelog": "Native video understanding (first in lineup). Generates PDFs, PowerPoints, spreadsheets in chat. Tighter Grok Computer (autonomous desktop agent) integration. Locked to SuperGrok Heavy at $300/mo. Full rollout est. mid-late May. Grok 5 in training, Q2 window.",
+      "previous": "Grok 4.3 Beta",
+      "changelog": "(Auto-detected from release notes — full changelog at link)",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
       "composite_overall": 72,
       "per_priority": {

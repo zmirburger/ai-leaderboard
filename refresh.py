@@ -54,30 +54,38 @@ def save_data(data: dict) -> None:
 # ---------- vendor release detection ----------
 # Each function returns (latest_name, release_date_iso, changelog_summary, release_notes_url) or None.
 
+def _extract_iso_date(text: str) -> str:
+    """Find first 'Month DD, YYYY' date in the first 2000 chars, return ISO. Empty string if none."""
+    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
+    if not date_match:
+        return ""
+    try:
+        return datetime.strptime(date_match.group(1), "%B %d, %Y").date().isoformat()
+    except ValueError:
+        return ""
+
+def _search_headings_then_body(soup: BeautifulSoup, pattern: str) -> re.Match | None:
+    """Try the regex against heading text first (where versions actually live), then full body."""
+    headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
+    m = re.search(pattern, headings)
+    if m:
+        return m
+    return re.search(pattern, soup.get_text(" ", strip=True))
+
 def detect_anthropic() -> tuple[str, str, str, str] | None:
     """Anthropic publishes release notes as markdown-ish HTML."""
     url = "https://platform.claude.com/docs/en/release-notes/overview"
     html = fetch(url)
     if not html:
         return None
-    # Look for "Claude Opus X.Y" mentions in headings/dates near the top.
     soup = BeautifulSoup(html, "html.parser")
-    text = soup.get_text(" ", strip=True)
-    m = re.search(r"Claude Opus (\d+\.\d+)", text)
+    # Tight pattern: 1-2 digits for major, optional .1-2 digits for minor, no trailing digit (rejects "4.20" from dates).
+    m = _search_headings_then_body(soup, r"Claude Opus (\d{1,2}(?:\.\d{1,2})?)\b(?!\d)")
     if not m:
         return None
-    version = m.group(1)
-    # Date heuristic: look for a nearby date in YYYY-MM-DD or "Month DD, YYYY" format
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
-    iso_date = ""
-    if date_match:
-        try:
-            iso_date = datetime.strptime(date_match.group(1), "%B %d, %Y").date().isoformat()
-        except ValueError:
-            pass
     return (
-        f"Claude Opus {version}",
-        iso_date,
+        f"Claude Opus {m.group(1)}",
+        _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes — full changelog at link)",
         url,
     )
@@ -88,22 +96,12 @@ def detect_openai() -> tuple[str, str, str, str] | None:
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    text = soup.get_text(" ", strip=True)
-    # Look for the latest GPT-X.Y mention
-    m = re.search(r"GPT-(\d+\.\d+)(?:\s|,|\.)", text)
+    m = _search_headings_then_body(soup, r"GPT-(\d{1,2}(?:\.\d{1,2})?)\b(?!\d)")
     if not m:
         return None
-    version = m.group(1)
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
-    iso_date = ""
-    if date_match:
-        try:
-            iso_date = datetime.strptime(date_match.group(1), "%B %d, %Y").date().isoformat()
-        except ValueError:
-            pass
     return (
-        f"GPT-{version}",
-        iso_date,
+        f"GPT-{m.group(1)}",
+        _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes — full changelog at link)",
         url,
     )
@@ -114,21 +112,12 @@ def detect_google() -> tuple[str, str, str, str] | None:
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    text = soup.get_text(" ", strip=True)
-    m = re.search(r"Gemini (\d+\.\d+) Pro", text)
+    m = _search_headings_then_body(soup, r"Gemini (\d{1,2}(?:\.\d{1,2})?) Pro\b(?!\d)")
     if not m:
         return None
-    version = m.group(1)
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
-    iso_date = ""
-    if date_match:
-        try:
-            iso_date = datetime.strptime(date_match.group(1), "%B %d, %Y").date().isoformat()
-        except ValueError:
-            pass
     return (
-        f"Gemini {version} Pro",
-        iso_date,
+        f"Gemini {m.group(1)} Pro",
+        _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from changelog — full notes at link)",
         url,
     )
@@ -139,30 +128,16 @@ def detect_xai() -> tuple[str, str, str, str] | None:
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    # Prefer headings (h1/h2/h3) over body text — release pages put version names in headings.
-    headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
-    # Match Grok followed by single-digit major.minor (no triple-digit fragments like 4.20 from dates).
-    # Accepts "Grok 4", "Grok 4.3", "Grok 4.3 Beta", "Grok-4.3", but rejects "Grok 4.20".
-    m = re.search(r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)", headings)
-    if not m:
-        # Fall back to body text with same tight pattern
-        text = soup.get_text(" ", strip=True)
-        m = re.search(r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)", text)
+    # Accepts "Grok 4", "Grok 4.3", "Grok 4.3 Beta", "Grok-4.3"; rejects "Grok 4.20" (date misread).
+    m = _search_headings_then_body(soup, r"Grok[ -]?(\d{1,2}(?:\.\d{1,2})?)(\s+Beta)?\b(?!\d)")
     if not m:
         return None
     version = m.group(1)
     suffix = (m.group(2) or "").strip()
     name = f"Grok {version}" + (f" {suffix}" if suffix else "")
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", soup.get_text(" ", strip=True)[:2000])
-    iso_date = ""
-    if date_match:
-        try:
-            iso_date = datetime.strptime(date_match.group(1), "%B %d, %Y").date().isoformat()
-        except ValueError:
-            pass
     return (
         name,
-        iso_date,
+        _extract_iso_date(soup.get_text(" ", strip=True)),
         "(Auto-detected from release notes — full changelog at link)",
         url,
     )

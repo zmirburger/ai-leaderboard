@@ -139,12 +139,21 @@ def detect_xai() -> tuple[str, str, str, str] | None:
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    text = soup.get_text(" ", strip=True)
-    m = re.search(r"Grok[ -]?(\d+(?:\.\d+)?)(?:\s+Beta)?", text)
+    # Prefer headings (h1/h2/h3) over body text — release pages put version names in headings.
+    headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
+    # Match Grok followed by single-digit major.minor (no triple-digit fragments like 4.20 from dates).
+    # Accepts "Grok 4", "Grok 4.3", "Grok 4.3 Beta", "Grok-4.3", but rejects "Grok 4.20".
+    m = re.search(r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)", headings)
+    if not m:
+        # Fall back to body text with same tight pattern
+        text = soup.get_text(" ", strip=True)
+        m = re.search(r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)", text)
     if not m:
         return None
     version = m.group(1)
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
+    suffix = (m.group(2) or "").strip()
+    name = f"Grok {version}" + (f" {suffix}" if suffix else "")
+    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", soup.get_text(" ", strip=True)[:2000])
     iso_date = ""
     if date_match:
         try:
@@ -152,7 +161,7 @@ def detect_xai() -> tuple[str, str, str, str] | None:
         except ValueError:
             pass
     return (
-        f"Grok {version}",
+        name,
         iso_date,
         "(Auto-detected from release notes — full changelog at link)",
         url,

@@ -188,16 +188,18 @@ def main():
     benchmark_changes = update_benchmarks(data)
 
     print("\n=== Summary ===")
+    # Always update last_updated so the dashboard shows today's check date,
+    # even when no model releases changed.
+    data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    data["data_status"] = "auto_refreshed"
+    save_data(data)
     if release_changes or benchmark_changes:
-        data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        data["data_status"] = "auto_refreshed"
-        save_data(data)
         print("Changes:")
         for c in release_changes:
             print(f"  - {c}")
-        print(f"\ndata.json updated. Last refresh stamp: {data['last_updated']}")
     else:
-        print("No changes detected - leaving data.json untouched (skips commit, avoids race).")
+        print("No model changes detected.")
+    print(f"\ndata.json updated. Last refresh stamp: {data['last_updated']}")
     return 0
 
 if __name__ == "__main__":

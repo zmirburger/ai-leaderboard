@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-29T03:30:58Z",
+  "last_updated": "2026-04-30T03:32:01Z",
   "data_status": "auto_refreshed",
   "note": "Placeholder values seeded on Apr 26 2026 from public release announcements. Scraper will replace with live numbers on first run.",
   "weights": {
@@ -47,12 +47,12 @@
     },
     {
       "id": "gpt_5_5",
-      "name": "GPT-5.5",
+      "name": "GPT-5.4",
       "vendor": "OpenAI",
-      "released": "2026-04-23",
-      "previous": "GPT-5.4",
-      "changelog": "Stepped up on coding, computer use, deeper research. Matches GPT-5.4 per-token latency despite higher capability. New Deep Research v2 toolchain. Rolling out to Plus, Pro, Business, Enterprise + API.",
-      "release_notes_url": "https://openai.com/index/introducing-gpt-5-5/",
+      "released": "2026-03-18",
+      "previous": "GPT-5.5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://help.openai.com/en/articles/9624314-model-release-notes",
       "composite_overall": 84,
       "per_priority": {
         "agent": 92,

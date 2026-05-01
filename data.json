@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-30T03:32:01Z",
+  "last_updated": "2026-05-01T03:41:36Z",
   "data_status": "auto_refreshed",
   "note": "Placeholder values seeded on Apr 26 2026 from public release announcements. Scraper will replace with live numbers on first run.",
   "weights": {
@@ -32,12 +32,12 @@
   "models": [
     {
       "id": "opus_4_7",
-      "name": "Claude Opus 4.7",
+      "name": "Claude Opus 4.6",
       "vendor": "Anthropic",
       "released": "2026-04-16",
-      "previous": "Claude Opus 4.6",
-      "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.",
-      "release_notes_url": "https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7",
+      "previous": "Claude Opus 4.7",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "composite_overall": 90,
       "per_priority": {
         "agent": 87,

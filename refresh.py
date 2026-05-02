@@ -54,6 +54,13 @@ def _extract_iso_date(text):
     except ValueError:
         return ""
 
+def _parse_version(name):
+    """Extract (major, minor) from a model name for downgrade protection."""
+    m = re.search(r'(\d+)(?:\.(\d+))?', name)
+    if not m:
+        return (0, 0)
+    return (int(m.group(1)), int(m.group(2)) if m.group(2) else 0)
+
 def _find_best_match(soup, pattern):
     """Find ALL matches in headings (preferred) or body; pick the most specific.
     For tuple matches, scores by total length of captured groups (longer + has
@@ -161,6 +168,9 @@ def update_releases(data):
             continue
         if existing["name"] != name:
             old = existing["name"]
+            if _parse_version(name) <= _parse_version(old):
+                print(f"  detected {name} but keeping {old} (not a newer version)")
+                continue
             existing["previous"] = old
             existing["name"] = name
             if date:

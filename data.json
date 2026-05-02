@@ -32,12 +32,12 @@
   "models": [
     {
       "id": "opus_4_7",
-      "name": "Claude Opus 4.6",
+      "name": "Claude Opus 4.7",
       "vendor": "Anthropic",
       "released": "2026-04-16",
-      "previous": "Claude Opus 4.7",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
-      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "previous": "Claude Opus 4.6",
+      "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.",
+      "release_notes_url": "https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7",
       "composite_overall": 90,
       "per_priority": {
         "agent": 87,
@@ -47,12 +47,12 @@
     },
     {
       "id": "gpt_5_5",
-      "name": "GPT-5.4",
+      "name": "GPT-5.5",
       "vendor": "OpenAI",
-      "released": "2026-03-18",
-      "previous": "GPT-5.5",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
-      "release_notes_url": "https://help.openai.com/en/articles/9624314-model-release-notes",
+      "released": "2026-04-23",
+      "previous": "GPT-5.4",
+      "changelog": "Stepped up on coding, computer use, deeper research. Matches GPT-5.4 per-token latency despite higher capability. New Deep Research v2 toolchain. Rolling out to Plus, Pro, Business, Enterprise + API.",
+      "release_notes_url": "https://openai.com/index/introducing-gpt-5-5/",
       "composite_overall": 84,
       "per_priority": {
         "agent": 92,

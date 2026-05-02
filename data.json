@@ -77,10 +77,10 @@
     },
     {
       "id": "grok_4_3_beta",
-      "name": "Grok 4.1",
+      "name": "Grok 4.3",
       "vendor": "xAI",
-      "released": "2026-04-17",
-      "previous": "Grok 4.3 Beta",
+      "released": "2026-04-30",
+      "previous": "Grok 4.1",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
       "composite_overall": 72,

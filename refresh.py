@@ -72,7 +72,7 @@ def _find_best_match(soup, pattern):
     if not matches:
         return None
     if isinstance(matches[0], tuple):
-        return max(matches, key=lambda m: sum(len(str(g).strip()) for g in m))
+        return max(matches, key=lambda m: (sum(len(str(g).strip()) for g in m), _parse_version(m[0])))
     return max(matches, key=len)
 
 # ---------- vendor release detection ----------

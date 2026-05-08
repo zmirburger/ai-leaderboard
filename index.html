@@ -103,6 +103,7 @@
   .model-name { font-size: 14px; font-weight: 600; margin: 0; }
   .model-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .new-chip { background: var(--success-bg); color: var(--success-text); font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
+  .tier-chip { background: var(--surface-2); color: var(--text-dim); font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
   .model-vendor { font-size: 12px; color: var(--text-muted); margin: 2px 0 0; }
   .chev { font-size: 9px; color: var(--text-dim); transition: transform 0.15s; }
   .model-card.open .chev { transform: rotate(180deg); }
@@ -231,26 +232,34 @@ function render(d) {
     </div>
 
     <div id="pane-models" class="tab-pane active">
-      <div class="model-grid">
-        ${d.models.map(m => `
-          <div class="model-card" data-toggle>
-            <div class="model-head">
-              <div>
-                <div class="model-name-row">
-                  <p class="model-name">${m.name}</p>
-                  ${daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
+      ${['Anthropic', 'OpenAI', 'Google', 'xAI'].map(vendor => {
+        const tiers = d.models.filter(m => m.vendor === vendor);
+        if (!tiers.length) return '';
+        return `
+          <p class="section-label" style="margin-top:16px;">${vendor}</p>
+          <div class="model-grid" style="margin-bottom:8px;">
+            ${tiers.map(m => `
+              <div class="model-card" data-toggle>
+                <div class="model-head">
+                  <div>
+                    <div class="model-name-row">
+                      <p class="model-name">${m.name}</p>
+                      ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
+                      ${daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
+                    </div>
+                    <p class="model-vendor">${fmt(m.released)}</p>
+                  </div>
+                  <span class="chev">▼</span>
                 </div>
-                <p class="model-vendor">${m.vendor} · ${fmt(m.released)}</p>
+                <div class="model-changelog">
+                  <p><span class="changelog-head">vs ${m.previous}:</span> ${m.changelog}</p>
+                  <a href="${m.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
+                </div>
               </div>
-              <span class="chev">▼</span>
-            </div>
-            <div class="model-changelog">
-              <p><span class="changelog-head">vs ${m.previous}:</span> ${m.changelog}</p>
-              <a href="${m.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
-            </div>
+            `).join('')}
           </div>
-        `).join('')}
-      </div>
+        `;
+      }).join('')}
     </div>
 
     <div id="pane-details" class="tab-pane">

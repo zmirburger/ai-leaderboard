@@ -5,11 +5,10 @@ refresh.py — daily refresh for the AI Leader Dashboard.
 Strategy:
 - Vendor release pages are the highest-value scrape target.
 - Benchmark leaderboards are JS-rendered; manual refresh on demand.
-- Anti-race rule: only write data.json when something actually changed.
-- Tight version regex: single-digit major.minor only (4.7, 5.5, 3.1) — rejects
-  date fragments like "4.20" that come from "April 20" being concatenated.
-- findall + scoring: when a page mentions both "Gemini 3 Pro" (brand) and
-  "Gemini 3.1 Pro" (release), pick the most specific (longest version string).
+- Each (vendor, tier) pair has its own detector function.
+- Downgrade guard: only accept a detected name if version is strictly newer.
+- Tiebreaker: when version string lengths tie, numerically higher version wins.
+- recompute_rankings() auto-updates best_overall and best_per_priority from scores.
 """
 
 from __future__ import annotations
@@ -63,8 +62,7 @@ def _parse_version(name):
 
 def _find_best_match(soup, pattern):
     """Find ALL matches in headings (preferred) or body; pick the most specific.
-    For tuple matches, scores by total length of captured groups (longer + has
-    Beta suffix wins). For string matches, by length."""
+    For tuple matches, scores by string length then numeric version as tiebreaker."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
     matches = re.findall(pattern, headings)
     if not matches:
@@ -75,25 +73,49 @@ def _find_best_match(soup, pattern):
         return max(matches, key=lambda m: (sum(len(str(g).strip()) for g in m), _parse_version(m[0])))
     return max(matches, key=len)
 
-# ---------- vendor release detection ----------
-# Tight pattern: single-digit major, optional single-digit minor.
-# Rejects "4.20" etc. (date fragments). Real model versions all fit.
+def _result(name, soup_text, url):
+    return (name, _extract_iso_date(soup_text), "(Auto-detected from release notes - full changelog at link)", url)
 
-def detect_anthropic():
-    url = "https://platform.claude.com/docs/en/release-notes/overview"
-    html = fetch(url)
-    if not html:
+# ---------- Anthropic ----------
+
+_ANTHROPIC_URL = "https://platform.claude.com/docs/en/release-notes/overview"
+_anthropic_soup = None
+
+def _get_anthropic_soup():
+    global _anthropic_soup
+    if _anthropic_soup is None:
+        html = fetch(_ANTHROPIC_URL)
+        _anthropic_soup = BeautifulSoup(html, "html.parser") if html else None
+    return _anthropic_soup
+
+def detect_anthropic_opus():
+    soup = _get_anthropic_soup()
+    if not soup:
         return None
-    soup = BeautifulSoup(html, "html.parser")
     version = _find_best_match(soup, r"Claude Opus (\d(?:\.\d)?)\b(?!\d)")
     if not version:
         return None
-    return (
-        f"Claude Opus {version}",
-        _extract_iso_date(soup.get_text(" ", strip=True)),
-        "(Auto-detected from release notes - full changelog at link)",
-        url,
-    )
+    return _result(f"Claude Opus {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
+
+def detect_anthropic_sonnet():
+    soup = _get_anthropic_soup()
+    if not soup:
+        return None
+    version = _find_best_match(soup, r"Claude Sonnet (\d(?:\.\d)?)\b(?!\d)")
+    if not version:
+        return None
+    return _result(f"Claude Sonnet {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
+
+def detect_anthropic_haiku():
+    soup = _get_anthropic_soup()
+    if not soup:
+        return None
+    version = _find_best_match(soup, r"Claude Haiku (\d(?:\.\d)?)\b(?!\d)")
+    if not version:
+        return None
+    return _result(f"Claude Haiku {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
+
+# ---------- OpenAI ----------
 
 def detect_openai():
     url = "https://help.openai.com/en/articles/9624314-model-release-notes"
@@ -104,67 +126,113 @@ def detect_openai():
     version = _find_best_match(soup, r"GPT-(\d(?:\.\d)?)\b(?!\d)")
     if not version:
         return None
-    return (
-        f"GPT-{version}",
-        _extract_iso_date(soup.get_text(" ", strip=True)),
-        "(Auto-detected from release notes - full changelog at link)",
-        url,
-    )
+    return _result(f"GPT-{version}", soup.get_text(" ", strip=True), url)
 
-def detect_google():
-    url = "https://ai.google.dev/gemini-api/docs/changelog"
-    html = fetch(url)
-    if not html:
+# ---------- Google ----------
+
+_GOOGLE_URL = "https://ai.google.dev/gemini-api/docs/changelog"
+_google_soup = None
+
+def _get_google_soup():
+    global _google_soup
+    if _google_soup is None:
+        html = fetch(_GOOGLE_URL)
+        _google_soup = BeautifulSoup(html, "html.parser") if html else None
+    return _google_soup
+
+def detect_gemini_pro():
+    soup = _get_google_soup()
+    if not soup:
         return None
-    soup = BeautifulSoup(html, "html.parser")
     version = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Pro\b(?!\d)")
     if not version:
         return None
-    return (
-        f"Gemini {version} Pro",
-        _extract_iso_date(soup.get_text(" ", strip=True)),
-        "(Auto-detected from changelog - full notes at link)",
-        url,
-    )
+    return _result(f"Gemini {version} Pro", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
-def detect_xai():
-    url = "https://docs.x.ai/developers/release-notes"
-    html = fetch(url)
-    if not html:
+def detect_gemini_thinking():
+    soup = _get_google_soup()
+    if not soup:
         return None
-    soup = BeautifulSoup(html, "html.parser")
-    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)(\s+Beta)?\b(?!\d)")
+    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash Thinking\b")
     if not best:
         return None
-    version, suffix = best[0], best[1].strip()
-    name = f"Grok {version}" + (f" {suffix}" if suffix else "")
-    return (
-        name,
-        _extract_iso_date(soup.get_text(" ", strip=True)),
-        "(Auto-detected from release notes - full changelog at link)",
-        url,
-    )
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Flash Thinking", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
-# ---------- main ----------
+def detect_gemini_flash():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    # Exclude "Flash Thinking" matches — only plain Flash
+    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash\b(?! Thinking)")
+    if not best:
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Flash", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
+# ---------- xAI ----------
+
+_XAI_URL = "https://docs.x.ai/developers/release-notes"
+_xai_soup = None
+
+def _get_xai_soup():
+    global _xai_soup
+    if _xai_soup is None:
+        html = fetch(_XAI_URL)
+        _xai_soup = BeautifulSoup(html, "html.parser") if html else None
+    return _xai_soup
+
+def detect_grok_expert():
+    soup = _get_xai_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Expert\b(?!\d)")
+    if not best:
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Grok {version} Expert", soup.get_text(" ", strip=True), _XAI_URL)
+
+def detect_grok_fast():
+    soup = _get_xai_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Fast\b(?!\d)")
+    if not best:
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Grok {version} Fast", soup.get_text(" ", strip=True), _XAI_URL)
+
+# ---------- tier detector registry ----------
+
+TIER_DETECTORS = {
+    ("Anthropic", "Opus"):    detect_anthropic_opus,
+    ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
+    ("Anthropic", "Haiku"):   detect_anthropic_haiku,
+    ("Google",    "Pro"):     detect_gemini_pro,
+    ("Google",    "Thinking"):detect_gemini_thinking,
+    ("Google",    "Flash"):   detect_gemini_flash,
+    ("OpenAI",    "GPT"):     detect_openai,
+    ("xAI",       "Expert"):  detect_grok_expert,
+    ("xAI",       "Fast"):    detect_grok_fast,
+}
+
+# ---------- main logic ----------
 
 def update_releases(data):
     changes = []
-    detectors = {
-        "Anthropic": detect_anthropic,
-        "OpenAI": detect_openai,
-        "Google": detect_google,
-        "xAI": detect_xai,
-    }
-    for vendor, fn in detectors.items():
-        print(f"Checking {vendor}...")
+    for (vendor, tier), fn in TIER_DETECTORS.items():
+        print(f"Checking {vendor} / {tier}...")
         result = fn()
         if not result:
             print(f"  skipped (no parse)")
             continue
         name, date, changelog, url = result
-        existing = next((m for m in data["models"] if m["vendor"] == vendor), None)
+        existing = next(
+            (m for m in data["models"] if m["vendor"] == vendor and m.get("tier") == tier),
+            None,
+        )
         if not existing:
-            print(f"  no entry for {vendor} in data.json")
+            print(f"  no entry for {vendor}/{tier} in data.json")
             continue
         if existing["name"] != name:
             old = existing["name"]
@@ -177,11 +245,28 @@ def update_releases(data):
                 existing["released"] = date
             existing["changelog"] = changelog
             existing["release_notes_url"] = url
-            changes.append(f"{vendor}: {old} -> {name}")
+            changes.append(f"{vendor}/{tier}: {old} -> {name}")
             print(f"  NEW RELEASE: {old} -> {name}")
         else:
             print(f"  no change ({name})")
     return changes
+
+def recompute_rankings(data):
+    """Recompute composite_overall for all models and update best_overall/best_per_priority."""
+    w = data["weights"]
+    for m in data["models"]:
+        pp = m["per_priority"]
+        m["composite_overall"] = round(
+            pp["accuracy"] * w["accuracy"]
+            + pp["long_context"] * w["long_context"]
+            + pp["agent"] * w["agent"]
+        )
+    best = max(data["models"], key=lambda m: m["composite_overall"])
+    data["best_overall"]["model"] = best["name"]
+    data["best_overall"]["composite"] = best["composite_overall"]
+    for priority in ["agent", "accuracy", "long_context"]:
+        top = max(data["models"], key=lambda m: m["per_priority"][priority])
+        data["best_per_priority"][priority]["model"] = top["name"]
 
 def update_benchmarks(data):
     print("\nBenchmark scores - manual refresh recommended (sites are JS-rendered).")
@@ -196,6 +281,9 @@ def main():
 
     print("\n=== Benchmark scores ===")
     benchmark_changes = update_benchmarks(data)
+
+    print("\n=== Rankings ===")
+    recompute_rankings(data)
 
     print("\n=== Summary ===")
     # Always update last_updated so the dashboard shows today's check date,

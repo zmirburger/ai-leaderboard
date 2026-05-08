@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-05-07T03:30:22Z",
+  "last_updated": "2026-05-08T00:30:58Z",
   "data_status": "auto_refreshed",
-  "note": "Placeholder values seeded on Apr 26 2026 from public release announcements. Scraper will replace with live numbers on first run.",
+  "note": "Scores are seeded estimates; scraper auto-updates model names/versions. Per-priority scores are manually maintained.",
   "weights": {
     "accuracy": 0.45,
     "long_context": 0.3,
@@ -31,9 +31,10 @@
   },
   "models": [
     {
-      "id": "opus_4_7",
+      "id": "claude_opus_4_7",
       "name": "Claude Opus 4.7",
       "vendor": "Anthropic",
+      "tier": "Opus",
       "released": "2026-04-16",
       "previous": "Claude Opus 4.6",
       "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.",
@@ -46,14 +47,47 @@
       }
     },
     {
+      "id": "claude_sonnet_4_6",
+      "name": "Claude Sonnet 4.6",
+      "vendor": "Anthropic",
+      "tier": "Sonnet",
+      "released": "2026-04-16",
+      "previous": "Claude Sonnet 4.5",
+      "changelog": "Balanced performance and speed. Strong coding and reasoning at lower cost than Opus. Ideal for most production workloads.",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "composite_overall": 85,
+      "per_priority": {
+        "agent": 82,
+        "accuracy": 88,
+        "long_context": 82
+      }
+    },
+    {
+      "id": "claude_haiku_4_5",
+      "name": "Claude Haiku 4.5",
+      "vendor": "Anthropic",
+      "tier": "Haiku",
+      "released": "2026-04-20",
+      "previous": "Claude Haiku 4.4",
+      "changelog": "Fastest and most compact Claude model. Sub-second responses, lowest cost per token. Good for high-volume, low-latency tasks.",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "composite_overall": 74,
+      "per_priority": {
+        "agent": 72,
+        "accuracy": 76,
+        "long_context": 72
+      }
+    },
+    {
       "id": "gpt_5_5",
       "name": "GPT-5.5",
       "vendor": "OpenAI",
+      "tier": "GPT",
       "released": "2026-04-23",
       "previous": "GPT-5.4",
       "changelog": "Stepped up on coding, computer use, deeper research. Matches GPT-5.4 per-token latency despite higher capability. New Deep Research v2 toolchain. Rolling out to Plus, Pro, Business, Enterprise + API.",
       "release_notes_url": "https://openai.com/index/introducing-gpt-5-5/",
-      "composite_overall": 84,
+      "composite_overall": 83,
       "per_priority": {
         "agent": 92,
         "accuracy": 80,
@@ -64,11 +98,12 @@
       "id": "gemini_3_1_pro",
       "name": "Gemini 3.1 Pro",
       "vendor": "Google",
+      "tier": "Pro",
       "released": "2026-04-15",
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 83,
+      "composite_overall": 82,
       "per_priority": {
         "agent": 78,
         "accuracy": 78,
@@ -76,18 +111,67 @@
       }
     },
     {
-      "id": "grok_4_3_beta",
-      "name": "Grok 4.3",
-      "vendor": "xAI",
-      "released": "2026-04-30",
-      "previous": "Grok 4.1",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
-      "release_notes_url": "https://docs.x.ai/developers/release-notes",
+      "id": "gemini_3_1_thinking",
+      "name": "Gemini 3.1 Flash Thinking",
+      "vendor": "Google",
+      "tier": "Thinking",
+      "released": "2026-04-15",
+      "previous": "Gemini 3.0 Flash Thinking",
+      "changelog": "Extended thinking mode with step-by-step reasoning. Optimized for complex multi-step problems requiring deliberation. Available via Gemini API and Vertex AI.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "composite_overall": 79,
+      "per_priority": {
+        "agent": 70,
+        "accuracy": 80,
+        "long_context": 85
+      }
+    },
+    {
+      "id": "gemini_3_1_flash",
+      "name": "Gemini 3.1 Flash",
+      "vendor": "Google",
+      "tier": "Flash",
+      "released": "2026-04-15",
+      "previous": "Gemini 3.0 Flash",
+      "changelog": "Fast and efficient Gemini variant. Low latency, lower cost. Good for high-frequency API usage and lightweight agentic tasks.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
       "composite_overall": 72,
       "per_priority": {
-        "agent": 75,
-        "accuracy": 65,
-        "long_context": 78
+        "agent": 65,
+        "accuracy": 70,
+        "long_context": 80
+      }
+    },
+    {
+      "id": "grok_4_3_expert",
+      "name": "Grok 4.3 Expert",
+      "vendor": "xAI",
+      "tier": "Expert",
+      "released": "2026-04-30",
+      "previous": "Grok 4.1 Expert",
+      "changelog": "Expert-level Grok with enhanced reasoning and knowledge depth. Designed for complex tasks requiring deep domain expertise and extended context.",
+      "release_notes_url": "https://docs.x.ai/developers/release-notes",
+      "composite_overall": 74,
+      "per_priority": {
+        "agent": 78,
+        "accuracy": 70,
+        "long_context": 75
+      }
+    },
+    {
+      "id": "grok_4_3_fast",
+      "name": "Grok 4.3 Fast",
+      "vendor": "xAI",
+      "tier": "Fast",
+      "released": "2026-04-30",
+      "previous": "Grok 4.1 Fast",
+      "changelog": "Speed-optimized Grok variant. Lower latency and cost for high-throughput use cases.",
+      "release_notes_url": "https://docs.x.ai/developers/release-notes",
+      "composite_overall": 66,
+      "per_priority": {
+        "agent": 72,
+        "accuracy": 60,
+        "long_context": 70
       }
     }
   ],

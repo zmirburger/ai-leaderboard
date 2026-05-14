@@ -40,6 +40,9 @@ jobs:
             echo "$code  $url"
           done
 
+      - name: Probe benchmark site data structures
+        run: python probe_benchmarks.py
+
       - name: Run refresh.py
         run: python refresh.py
 

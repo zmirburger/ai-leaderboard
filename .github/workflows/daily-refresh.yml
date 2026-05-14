@@ -25,6 +25,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Benchmark site connectivity check
+        run: |
+          for url in \
+            "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index" \
+            "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning" \
+            "https://epoch.ai/benchmarks/fictionlivebench" \
+            "https://huggingface.co/spaces/vectara/leaderboard" \
+            "https://metr.org/time-horizons/" \
+            "https://lmarena.ai/leaderboard" \
+            "https://scale.com/leaderboard/rli"; do
+            code=$(curl -s -A "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0" \
+                   -o /dev/null -w "%{http_code}" --max-time 10 "$url" || echo "ERR")
+            echo "$code  $url"
+          done
+
       - name: Run refresh.py
         run: python refresh.py
 

@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-05-14T03:41:41Z",
+  "last_updated": "2026-05-14T07:38:52Z",
   "data_status": "auto_refreshed",
-  "note": "Scores are seeded estimates; scraper auto-updates model names/versions. Per-priority scores are manually maintained.",
+  "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
     "accuracy": 0.45,
     "long_context": 0.3,

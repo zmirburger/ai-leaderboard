@@ -252,21 +252,29 @@ def update_releases(data):
     return changes
 
 def recompute_rankings(data):
-    """Recompute composite_overall for all models and update best_overall/best_per_priority."""
+    """Recompute composite_overall for all models and update best_overall/best_per_priority.
+    Null per_priority scores are skipped (weight→0); composite is None when all scores are null."""
     w = data["weights"]
     for m in data["models"]:
         pp = m["per_priority"]
-        m["composite_overall"] = round(
-            pp["accuracy"] * w["accuracy"]
-            + pp["long_context"] * w["long_context"]
-            + pp["agent"] * w["agent"]
-        )
-    best = max(data["models"], key=lambda m: m["composite_overall"])
-    data["best_overall"]["model"] = best["name"]
-    data["best_overall"]["composite"] = best["composite_overall"]
+        total = 0
+        for dim, weight in w.items():
+            score = pp.get(dim)
+            if score is not None:
+                total += score * weight
+        has_any = any(v is not None for v in pp.values())
+        m["composite_overall"] = round(total) if has_any else None
+
+    ranked = [m for m in data["models"] if m["composite_overall"] is not None]
+    if ranked:
+        best = max(ranked, key=lambda m: m["composite_overall"])
+        data["best_overall"]["model"] = best["name"]
+        data["best_overall"]["composite"] = best["composite_overall"]
     for priority in ["agent", "accuracy", "long_context"]:
-        top = max(data["models"], key=lambda m: m["per_priority"][priority])
-        data["best_per_priority"][priority]["model"] = top["name"]
+        scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
+        if scoreable:
+            top = max(scoreable, key=lambda m: m["per_priority"][priority])
+            data["best_per_priority"][priority]["model"] = top["name"]
 
 def update_benchmarks(data):
     print("\nBenchmark scores - manual refresh recommended (sites are JS-rendered).")

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-15T07:10:06Z",
+  "last_updated": "2026-05-15T07:34:37Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -185,16 +185,16 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "Claude Mythos Preview (early)",
-            "value": "~375h"
-          },
-          {
             "model": "Claude Opus 4.6 (Inspect)",
             "value": "~222h"
           },
           {
             "model": "Gemini 3.1 Pro",
             "value": "~89h"
+          },
+          {
+            "model": "GPT-5.2",
+            "value": "~79h"
           }
         ]
       },
@@ -271,16 +271,16 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "Claude Opus 4.7",
-            "value": "~64"
+            "model": "gpt-5",
+            "value": "~1772"
           },
           {
-            "model": "GPT-5.5",
-            "value": "~60"
+            "model": "claude-4",
+            "value": "~1753"
           },
           {
-            "model": "Gemini 3.1 Pro",
-            "value": "~55"
+            "model": "mimo",
+            "value": "~1572"
           }
         ]
       },

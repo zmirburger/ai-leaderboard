@@ -319,7 +319,8 @@ def scrape_lmarena():
     return out or None
 
 def scrape_metr():
-    """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon."""
+    """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon.
+    Filters out pre-release '(early)' models which have unreliable extrapolated estimates."""
     url = "https://metr.org/time-horizons/"
     html = fetch(url)
     if not html:
@@ -333,6 +334,9 @@ def scrape_metr():
         return None
     horizons = []
     for name, info in thdata.get("agents", {}).items():
+        # Skip pre-release models — their coefficients are extrapolated from limited data
+        if "(early)" in name.lower():
+            continue
         coef = info.get("coefficient")
         intercept = info.get("intercept")
         if not coef or coef == 0 or intercept is None:
@@ -424,11 +428,17 @@ def update_benchmarks(data):
         print("  skipped (no parse)")
 
     print("Scraping AA Omniscience...")
-    aa_omni = scrape_aa_field(
-        "https://artificialanalysis.ai/evaluations/omniscience",
-        "omniscience",
-        value_fmt=lambda v: f"~{v:.0f}",
-    )
+    aa_omni = None
+    omni_url = "https://artificialanalysis.ai/evaluations/omniscience"
+    omni_html = fetch(omni_url)
+    if omni_html:
+        for field_candidate in ["omniscience", "omniscience_index", "omniscience_score", "gdpval", "knowledge"]:
+            extracted = _extract_aa_models(omni_html, field_candidate)
+            if extracted:
+                sorted_models = sorted(extracted.items(), key=lambda kv: kv[1], reverse=True)
+                aa_omni = [{"model": slug, "value": f"~{score:.0f}"} for slug, score in sorted_models[:10]]
+                print(f"  matched field: {field_candidate!r}")
+                break
     if aa_omni:
         ch = _set_top3(data, "accuracy", "aa_omniscience", aa_omni[:3])
         if ch:
@@ -436,7 +446,13 @@ def update_benchmarks(data):
         else:
             print("  no change")
     else:
-        print("  skipped (no parse)")
+        # Dump a sample of field-like keys visible in the bundle to help identify the right name
+        if omni_html:
+            keys_found = re.findall(r'\\"([a-z][a-z0-9_]{3,30})\\":\d', omni_html)
+            unique_keys = sorted(set(keys_found))[:30]
+            print(f"  skipped (no match). Numeric field names in bundle: {unique_keys}")
+        else:
+            print("  skipped (fetch failed)")
 
     print("Scraping AA IFBench...")
     aa_if = scrape_aa_field(

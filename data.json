@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-15T06:54:04Z",
+  "last_updated": "2026-05-15T07:10:06Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -185,16 +185,16 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "GPT-5.5",
-            "value": "~4h"
+            "model": "Claude Mythos Preview (early)",
+            "value": "~375h"
           },
           {
-            "model": "Claude Opus 4.7",
-            "value": "~3h 30m"
+            "model": "Claude Opus 4.6 (Inspect)",
+            "value": "~222h"
           },
           {
             "model": "Gemini 3.1 Pro",
-            "value": "~2h 30m"
+            "value": "~89h"
           }
         ]
       },
@@ -292,16 +292,16 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "Claude Opus 4.7",
-            "value": "~73"
+            "model": "gpt-5",
+            "value": "~60"
           },
           {
-            "model": "GPT-5.5",
-            "value": "~71"
+            "model": "claude-4",
+            "value": "~57"
           },
           {
-            "model": "Gemini 3.1 Pro",
-            "value": "~68"
+            "model": "gemini-3-1",
+            "value": "~57"
           }
         ]
       },
@@ -378,16 +378,16 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "Claude Opus 4.7",
-            "value": "~92"
+            "model": "grok-4",
+            "value": "~83%"
           },
           {
-            "model": "GPT-5.5",
-            "value": "~90"
+            "model": "nemotron-cascade-2-30b-a3b",
+            "value": "~80%"
           },
           {
-            "model": "Gemini 3.1 Pro",
-            "value": "~88"
+            "model": "mimo",
+            "value": "~80%"
           }
         ]
       }
@@ -398,16 +398,16 @@
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
     "top3": [
       {
-        "model": "Gemini 3.1 Pro",
-        "score": "~1465"
+        "model": "Anthropic claude-opus-4-6-thinking",
+        "score": "1502"
       },
       {
-        "model": "GPT-5.5",
-        "score": "~1448"
+        "model": "Anthropic claude-opus-4-7-thinking",
+        "score": "1500"
       },
       {
-        "model": "Claude Opus 4.7",
-        "score": "~1440"
+        "model": "Anthropic claude-opus-4-6",
+        "score": "1498"
       }
     ]
   }

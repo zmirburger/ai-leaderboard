@@ -13,88 +13,104 @@ from bs4 import BeautifulSoup
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0"
 HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"}
 
-SITES = [
-    ("AA-Intelligence",  "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index"),
-    ("AA-LongContext",   "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning"),
-    ("AA-IFBench",       "https://artificialanalysis.ai/evaluations/ifbench"),
-    ("AA-Omniscience",   "https://artificialanalysis.ai/evaluations/omniscience"),
-    ("Epoch-Fiction",    "https://epoch.ai/benchmarks/fictionlivebench"),
-    ("METR",             "https://metr.org/time-horizons/"),
-    ("LMArena",          "https://lmarena.ai/leaderboard"),
-    ("Scale-RLI",        "https://scale.com/leaderboard/rli"),
-    ("Vectara-HHEM",     "https://huggingface.co/spaces/vectara/leaderboard"),
-]
-
 MODEL_KEYWORDS = ["Claude", "GPT-5", "Gemini", "Grok", "claude-", "gpt-5", "gemini-", "grok-"]
 
 
-def probe(name, url):
-    print(f"\n{'=' * 70}\n{name}: {url}\n{'=' * 70}")
+def probe_lmarena():
+    url = "https://lmarena.ai/leaderboard"
+    print(f"\n{'='*70}\nLMArena (detail): {url}\n{'='*70}")
     try:
         r = requests.get(url, headers=HEADERS, timeout=15, allow_redirects=True)
     except Exception as e:
-        print(f"  ERROR: {e}")
+        print(f"  ERROR: {e}"); return
+    print(f"  status: {r.status_code}, final url: {r.url}")
+    if r.status_code != 200:
         return
-    print(f"  status: {r.status_code}, final url: {r.url}, body: {len(r.text)} chars")
+    soup = BeautifulSoup(r.text, "html.parser")
+    tables = soup.find_all("table")
+    print(f"  total tables: {len(tables)}")
+    for i, t in enumerate(tables[:3]):
+        rows = t.find_all("tr")
+        print(f"\n  --- table[{i}] ({len(rows)} rows) ---")
+        for row in rows[:15]:
+            cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
+            print(f"    {cols}")
+
+
+def probe_metr():
+    url = "https://metr.org/time-horizons/"
+    print(f"\n{'='*70}\nMETR (detail): {url}\n{'='*70}")
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=15, allow_redirects=True)
+    except Exception as e:
+        print(f"  ERROR: {e}"); return
+    print(f"  status: {r.status_code}, body: {len(r.text)} chars")
+    if r.status_code != 200:
+        return
+    soup = BeautifulSoup(r.text, "html.parser")
+    text = soup.get_text(" ", strip=True)
+
+    # Show text around each "Claude" and "GPT-5" mention (±100 chars)
+    print("\n  === Visible text context around model mentions ===")
+    for kw in ["Claude", "GPT-5", "Gemini", "Grok"]:
+        for m in re.finditer(re.escape(kw), text):
+            s, e = max(0, m.start()-80), min(len(text), m.end()+80)
+            print(f"  [{kw}] ...{text[s:e]}...")
+
+    # Check for script tags containing JSON-like data with model names
+    print("\n  === Script tags containing model keywords ===")
+    for i, script in enumerate(soup.find_all("script")):
+        content = script.string or ""
+        if any(kw in content for kw in ["Claude", "GPT-5", "claude-", "gpt-5"]):
+            print(f"  script[{i}] ({len(content)} chars): first 800 chars:")
+            print(f"    {content[:800]}")
+
+    # Tables
+    tables = soup.find_all("table")
+    print(f"\n  <table> count: {len(tables)}")
+    for i, t in enumerate(tables[:3]):
+        rows = t.find_all("tr")
+        print(f"  table[{i}]: {len(rows)} rows")
+        for row in rows[:5]:
+            cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
+            print(f"    {cols}")
+
+
+def probe_aa_detail():
+    """Check if AA JS bundles contain extractable JSON data."""
+    url = "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index"
+    print(f"\n{'='*70}\nAA-Intelligence (JS detail): {url}\n{'='*70}")
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=20, allow_redirects=True)
+    except Exception as e:
+        print(f"  ERROR: {e}"); return
+    print(f"  status: {r.status_code}, body: {len(r.text)} chars")
     if r.status_code != 200:
         return
 
+    # Find the largest script tag and show segment around first claude- mention
     soup = BeautifulSoup(r.text, "html.parser")
+    scripts = sorted(
+        [s for s in soup.find_all("script") if s.string],
+        key=lambda s: len(s.string), reverse=True
+    )
+    print(f"  top script sizes: {[len(s.string) for s in scripts[:5]]}")
 
-    # __NEXT_DATA__
-    next_data = soup.find("script", {"id": "__NEXT_DATA__"})
-    if next_data and next_data.string:
-        size = len(next_data.string)
-        print(f"  __NEXT_DATA__: present, {size} chars")
-        try:
-            parsed = json.loads(next_data.string)
-            # Look for model-like keys recursively (shallow probe)
-            keys_seen = set()
-            def walk(obj, depth=0):
-                if depth > 4:
-                    return
-                if isinstance(obj, dict):
-                    for k, v in obj.items():
-                        keys_seen.add(k)
-                        walk(v, depth + 1)
-                elif isinstance(obj, list) and obj:
-                    walk(obj[0], depth + 1)
-            walk(parsed)
-            interesting = [k for k in keys_seen if any(t in k.lower() for t in
-                          ["model", "score", "benchmark", "eval", "result", "data"])]
-            print(f"  __NEXT_DATA__ interesting keys: {sorted(interesting)[:25]}")
-        except json.JSONDecodeError as e:
-            print(f"  __NEXT_DATA__ JSON parse failed: {e}")
-    else:
-        print("  __NEXT_DATA__: NOT present")
-
-    # Other embedded scripts (look for huge JSON blobs)
-    big_scripts = [s for s in soup.find_all("script") if s.string and len(s.string) > 5000]
-    print(f"  large <script> tags (>5KB): {len(big_scripts)}")
-
-    # <table> elements
-    tables = soup.find_all("table")
-    print(f"  <table> count: {len(tables)}")
-    for i, t in enumerate(tables[:3]):
-        rows = t.find_all("tr")
-        first_row_text = rows[0].get_text(" ", strip=True)[:120] if rows else ""
-        print(f"    table[{i}]: {len(rows)} rows. first: {first_row_text!r}")
-
-    # Model keyword counts in body
-    text = soup.get_text(" ", strip=True)
-    counts = {kw: len(re.findall(re.escape(kw), text)) for kw in MODEL_KEYWORDS}
-    nonzero = {k: v for k, v in counts.items() if v > 0}
-    print(f"  model keyword hits in visible text: {nonzero}")
-
-    # Same but in raw HTML (catches embedded JSON strings)
-    raw_counts = {kw: len(re.findall(re.escape(kw), r.text)) for kw in MODEL_KEYWORDS}
-    raw_nonzero = {k: v for k, v in raw_counts.items() if v > 0}
-    print(f"  model keyword hits in raw HTML:     {raw_nonzero}")
+    for i, script in enumerate(scripts[:3]):
+        content = script.string
+        m = re.search(r'claude-', content)
+        if m:
+            s = max(0, m.start() - 200)
+            e = min(len(content), m.end() + 400)
+            print(f"\n  script[{i}] ({len(content)} chars) — context around 'claude-':")
+            print(f"    {content[s:e]}")
+            break
 
 
 def main():
-    for name, url in SITES:
-        probe(name, url)
+    probe_lmarena()
+    probe_metr()
+    probe_aa_detail()
     return 0
 
 

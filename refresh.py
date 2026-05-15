@@ -13,6 +13,7 @@ Strategy:
 
 from __future__ import annotations
 import json
+import math
 import re
 import sys
 from datetime import datetime, timezone
@@ -252,25 +253,225 @@ def update_releases(data):
     return changes
 
 def recompute_rankings(data):
-    """Recompute composite_overall for all models and update best_overall/best_per_priority."""
+    """Recompute composite_overall for all models and update best_overall/best_per_priority.
+    Null per_priority scores are skipped (weight→0); composite is None when all scores are null."""
     w = data["weights"]
     for m in data["models"]:
         pp = m["per_priority"]
-        m["composite_overall"] = round(
-            pp["accuracy"] * w["accuracy"]
-            + pp["long_context"] * w["long_context"]
-            + pp["agent"] * w["agent"]
-        )
-    best = max(data["models"], key=lambda m: m["composite_overall"])
-    data["best_overall"]["model"] = best["name"]
-    data["best_overall"]["composite"] = best["composite_overall"]
+        total = 0
+        for dim, weight in w.items():
+            score = pp.get(dim)
+            if score is not None:
+                total += score * weight
+        has_any = any(v is not None for v in pp.values())
+        m["composite_overall"] = round(total) if has_any else None
+
+    ranked = [m for m in data["models"] if m["composite_overall"] is not None]
+    if ranked:
+        best = max(ranked, key=lambda m: m["composite_overall"])
+        data["best_overall"]["model"] = best["name"]
+        data["best_overall"]["composite"] = best["composite_overall"]
     for priority in ["agent", "accuracy", "long_context"]:
-        top = max(data["models"], key=lambda m: m["per_priority"][priority])
-        data["best_per_priority"][priority]["model"] = top["name"]
+        scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
+        if scoreable:
+            top = max(scoreable, key=lambda m: m["per_priority"][priority])
+            data["best_per_priority"][priority]["model"] = top["name"]
+
+# ---------- benchmark scrapers ----------
+
+def _set_top3(data, category, bench_id, new_top3):
+    """Replace top3 for a given benchmark id; returns change description or None."""
+    for bench in data["benchmarks"].get(category, []):
+        if bench["id"] == bench_id:
+            old = bench.get("top3", [])
+            if old == new_top3:
+                return None
+            bench["top3"] = new_top3
+            return f"{category}/{bench_id}: top3 updated ({len(new_top3)} entries)"
+    return None
+
+def _fmt_minutes(mins):
+    if mins >= 60:
+        hours = mins / 60
+        if hours >= 10:
+            return f"~{hours:.0f}h"
+        return f"~{hours:.1f}h"
+    if mins >= 1:
+        return f"~{int(round(mins))}m"
+    return f"~{mins:.1f}m"
+
+def scrape_lmarena():
+    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}."""
+    url = "https://lmarena.ai/leaderboard"
+    html = fetch(url)
+    if not html:
+        return None
+    soup = BeautifulSoup(html, "html.parser")
+    tables = soup.find_all("table")
+    if not tables:
+        return None
+    rows = tables[0].find_all("tr")
+    out = []
+    for row in rows[1:]:
+        cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
+        if len(cols) >= 3 and cols[2].isdigit():
+            out.append({"model": cols[1], "score": cols[2]})
+    return out or None
+
+def scrape_metr():
+    """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon.
+    Filters out pre-release '(early)' models which have unreliable extrapolated estimates."""
+    url = "https://metr.org/time-horizons/"
+    html = fetch(url)
+    if not html:
+        return None
+    m = re.search(r'var\s+thData\s*=\s*(\{.*?\})\s*;', html, re.DOTALL)
+    if not m:
+        return None
+    try:
+        thdata = json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return None
+    horizons = []
+    for name, info in thdata.get("agents", {}).items():
+        # Skip pre-release models — their coefficients are extrapolated from limited data
+        if "(early)" in name.lower():
+            continue
+        coef = info.get("coefficient")
+        intercept = info.get("intercept")
+        if not coef or coef == 0 or intercept is None:
+            continue
+        try:
+            mins = math.exp(-intercept / coef)
+        except (OverflowError, ValueError):
+            continue
+        horizons.append((name, mins))
+    if not horizons:
+        return None
+    horizons.sort(key=lambda x: x[1], reverse=True)
+    return [{"model": name, "value": _fmt_minutes(mins)} for name, mins in horizons[:10]]
+
+def _extract_aa_models(html, field):
+    """Regex-extract (model_family_slug, field_value) pairs from AA's JS bundle.
+    Each model object is escaped JSON inside the React bundle; we match nearby
+    field/slug pairs without trying to parse the whole object."""
+    results = {}
+    pattern = re.compile(
+        r'\\"' + re.escape(field) + r'\\":([\d.]+)[^{}]{0,800}?\\"model_family_slug\\":\\"([^"\\]+)\\"'
+        r'|\\"model_family_slug\\":\\"([^"\\]+)\\"[^{}]{0,800}?\\"' + re.escape(field) + r'\\":([\d.]+)'
+    )
+    for m in pattern.finditer(html):
+        if m.group(2):
+            slug, val = m.group(2), m.group(1)
+        else:
+            slug, val = m.group(3), m.group(4)
+        try:
+            val_f = float(val)
+        except ValueError:
+            continue
+        # Keep best score per family
+        if slug not in results or val_f > results[slug]:
+            results[slug] = val_f
+    return results
+
+def scrape_aa_field(url, field, value_fmt=lambda v: f"{v:.1f}", scale=1.0):
+    """Fetch an AA evaluation page, regex-extract model_family_slug→field, return top 10."""
+    html = fetch(url)
+    if not html:
+        return None
+    extracted = _extract_aa_models(html, field)
+    if not extracted:
+        return None
+    sorted_models = sorted(extracted.items(), key=lambda kv: kv[1], reverse=True)
+    return [{"model": slug, "value": value_fmt(score * scale)} for slug, score in sorted_models[:10]]
 
 def update_benchmarks(data):
-    print("\nBenchmark scores - manual refresh recommended (sites are JS-rendered).")
-    return []
+    changes = []
+
+    print("Scraping LMArena leaderboard...")
+    lmarena = scrape_lmarena()
+    if lmarena:
+        old = data["lmarena_vibe_check"].get("top3", [])
+        if old != lmarena[:3]:
+            data["lmarena_vibe_check"]["top3"] = lmarena[:3]
+            changes.append(f"lmarena_vibe_check: top3 updated -> {lmarena[0]['model']} @ {lmarena[0]['score']}")
+            print(f"  updated. top: {lmarena[0]['model']} ({lmarena[0]['score']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    print("Scraping METR time horizons...")
+    metr = scrape_metr()
+    if metr:
+        ch = _set_top3(data, "agent", "metr_time_horizon", metr[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {metr[0]['model']} ({metr[0]['value']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    print("Scraping AA Intelligence Index...")
+    aa_intel = scrape_aa_field(
+        "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
+        "intelligence_index",
+        value_fmt=lambda v: f"~{v:.0f}",
+    )
+    if aa_intel:
+        ch = _set_top3(data, "accuracy", "aa_intelligence_index", aa_intel[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {aa_intel[0]['model']} ({aa_intel[0]['value']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    print("Scraping AA Omniscience...")
+    aa_omni = None
+    omni_url = "https://artificialanalysis.ai/evaluations/omniscience"
+    omni_html = fetch(omni_url)
+    if omni_html:
+        # Values must be in 0–100 range (normalized benchmark, not Elo-style)
+        for field_candidate in ["omniscience", "omniscience_index", "omniscience_score", "knowledge"]:
+            extracted = _extract_aa_models(omni_html, field_candidate)
+            in_range = {s: v for s, v in extracted.items() if 0 <= v <= 100}
+            if in_range:
+                sorted_models = sorted(in_range.items(), key=lambda kv: kv[1], reverse=True)
+                aa_omni = [{"model": slug, "value": f"~{score:.0f}"} for slug, score in sorted_models[:10]]
+                print(f"  matched field: {field_candidate!r}")
+                break
+    if aa_omni:
+        ch = _set_top3(data, "accuracy", "aa_omniscience", aa_omni[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {aa_omni[0]['model']} ({aa_omni[0]['value']})")
+        else:
+            print("  no change")
+    else:
+        # Dump a sample of field-like keys visible in the bundle to help identify the right name
+        if omni_html:
+            keys_found = re.findall(r'\\"([a-z][a-z0-9_]{3,30})\\":\d', omni_html)
+            unique_keys = sorted(set(keys_found))[:30]
+            print(f"  skipped (no match). Numeric field names in bundle: {unique_keys}")
+        else:
+            print("  skipped (fetch failed)")
+
+    print("Scraping AA IFBench...")
+    aa_if = scrape_aa_field(
+        "https://artificialanalysis.ai/evaluations/ifbench",
+        "ifbench",
+        value_fmt=lambda v: f"~{v*100:.0f}%",
+    )
+    if aa_if:
+        ch = _set_top3(data, "long_context", "aa_ifbench", aa_if[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {aa_if[0]['model']} ({aa_if[0]['value']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    return changes
 
 def main():
     data = load_data()

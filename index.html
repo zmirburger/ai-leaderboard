@@ -178,7 +178,14 @@ function render(d) {
   const wPct = (k) => Math.round(w[k] * 100);
   const overall = d.best_overall;
   const overallModel = d.models.find(m => m.name === overall.model);
-  const ranked = (priority) => [...d.models].sort((a,b) => b.per_priority[priority] - a.per_priority[priority]);
+  const ranked = (priority) => [...d.models].sort((a,b) => {
+    const sa = a.per_priority[priority];
+    const sb = b.per_priority[priority];
+    if (sa == null && sb == null) return 0;
+    if (sa == null) return 1;
+    if (sb == null) return -1;
+    return sb - sa;
+  });
   const rank = (model, priority) => ranked(priority).findIndex(m => m.name === model.name) + 1;
 
   const others = d.models.filter(m => m.name !== overall.model).sort((a,b) => b.composite_overall - a.composite_overall);
@@ -200,15 +207,15 @@ function render(d) {
       <div class="winner-grid">
         <div>
           <p class="label">Accuracy · ${wPct('accuracy')}%</p>
-          <p class="val">${overallModel.per_priority.accuracy} <span class="rank">· #${rank(overallModel,'accuracy')}</span></p>
+          <p class="val">${overallModel.per_priority.accuracy ?? '—'} <span class="rank">${overallModel.per_priority.accuracy != null ? `· #${rank(overallModel,'accuracy')}` : ''}</span></p>
         </div>
         <div>
           <p class="label">Long context · ${wPct('long_context')}%</p>
-          <p class="val">${overallModel.per_priority.long_context} <span class="rank">· #${rank(overallModel,'long_context')}</span></p>
+          <p class="val">${overallModel.per_priority.long_context ?? '—'} <span class="rank">${overallModel.per_priority.long_context != null ? `· #${rank(overallModel,'long_context')}` : ''}</span></p>
         </div>
         <div>
           <p class="label">Agent · ${wPct('agent')}%</p>
-          <p class="val">${overallModel.per_priority.agent} <span class="rank">· #${rank(overallModel,'agent')}</span></p>
+          <p class="val">${overallModel.per_priority.agent ?? '—'} <span class="rank">${overallModel.per_priority.agent != null ? `· #${rank(overallModel,'agent')}` : ''}</span></p>
         </div>
       </div>
       <p class="rationale">${overall.rationale}</p>
@@ -221,8 +228,7 @@ function render(d) {
     <div class="priority-grid">
       ${['agent','accuracy','long_context'].map(k => {
         const labels = {agent:'Autonomous agent', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context'};
-        const top3 = ranked(k).slice(0, 3);
-        return `<div class="pri-card"><p class="pri-tag">${labels[k]}</p><table class="pri-rank">${top3.map((m, i) => `<tr><td>${i+1}. ${m.name}</td><td>${m.per_priority[k]}</td></tr>`).join('')}</table></div>`;
+        return `<div class="pri-card"><p class="pri-tag">${labels[k]}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; return `<tr><td>${i+1}. ${m.name}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
       }).join('')}
     </div>
 

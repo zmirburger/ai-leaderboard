@@ -432,10 +432,12 @@ def update_benchmarks(data):
     omni_url = "https://artificialanalysis.ai/evaluations/omniscience"
     omni_html = fetch(omni_url)
     if omni_html:
-        for field_candidate in ["omniscience", "omniscience_index", "omniscience_score", "gdpval", "knowledge"]:
+        # Values must be in 0–100 range (normalized benchmark, not Elo-style)
+        for field_candidate in ["omniscience", "omniscience_index", "omniscience_score", "knowledge"]:
             extracted = _extract_aa_models(omni_html, field_candidate)
-            if extracted:
-                sorted_models = sorted(extracted.items(), key=lambda kv: kv[1], reverse=True)
+            in_range = {s: v for s, v in extracted.items() if 0 <= v <= 100}
+            if in_range:
+                sorted_models = sorted(in_range.items(), key=lambda kv: kv[1], reverse=True)
                 aa_omni = [{"model": slug, "value": f"~{score:.0f}"} for slug, score in sorted_models[:10]]
                 print(f"  matched field: {field_candidate!r}")
                 break

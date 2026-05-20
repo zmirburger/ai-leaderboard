@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T03:53:38Z",
+  "last_updated": "2026-05-20T03:53:52Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -128,12 +128,12 @@
     },
     {
       "id": "gemini_3_1_flash",
-      "name": "Gemini 3.1 Flash",
+      "name": "Gemini 3.5 Flash",
       "vendor": "Google",
       "tier": "Flash",
       "released": "2026-04-15",
-      "previous": "Gemini 3.0 Flash",
-      "changelog": "Fast and efficient Gemini variant. Low latency, lower cost. Good for high-frequency API usage and lightweight agentic tasks.",
+      "previous": "Gemini 3.1 Flash",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
       "composite_overall": 72,
       "per_priority": {

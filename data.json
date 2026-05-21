@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:53:52Z",
+  "last_updated": "2026-05-21T04:02:38Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -382,11 +382,11 @@
             "value": "~83%"
           },
           {
-            "model": "nemotron-cascade-2-30b-a3b",
-            "value": "~80%"
+            "model": "qwen3-7",
+            "value": "~81%"
           },
           {
-            "model": "mimo",
+            "model": "nemotron-cascade-2-30b-a3b",
             "value": "~80%"
           }
         ]

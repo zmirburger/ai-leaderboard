@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T03:55:49Z",
+  "last_updated": "2026-05-29T03:57:26Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -8,7 +8,7 @@
     "agent": 0.25
   },
   "best_overall": {
-    "model": "Claude Opus 4.7",
+    "model": "Claude Opus 4.8",
     "composite": 90,
     "rationale": "Wins accuracy outright (95). Close #2 on agent (87) and long context (85). 45/30/25 weighting widens the lead vs equal thirds."
   },
@@ -19,7 +19,7 @@
       "supporting": "METR · BrowseComp"
     },
     "accuracy": {
-      "model": "Claude Opus 4.7",
+      "model": "Claude Opus 4.8",
       "summary": "~0.5% hallucination, leads IFBench",
       "supporting": "HHEM · Omniscience · Scale RLI"
     },
@@ -32,13 +32,13 @@
   "models": [
     {
       "id": "claude_opus_4_7",
-      "name": "Claude Opus 4.7",
+      "name": "Claude Opus 4.8",
       "vendor": "Anthropic",
       "tier": "Opus",
-      "released": "2026-04-16",
-      "previous": "Claude Opus 4.6",
-      "changelog": "Task budgets (token target for full agentic loop). High-res image input up to 3.75MP / 2576px - first Claude with this. Better software engineering, instruction-following, real-world task completion. Pricing unchanged at $5 / $25 per MTok.",
-      "release_notes_url": "https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7",
+      "released": "2026-05-28",
+      "previous": "Claude Opus 4.7",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "composite_overall": 90,
       "per_priority": {
         "agent": 87,
@@ -292,12 +292,12 @@
         "lower_better": false,
         "top3": [
           {
-            "model": "gpt-5",
-            "value": "~60"
+            "model": "claude-4",
+            "value": "~61"
           },
           {
-            "model": "claude-4",
-            "value": "~57"
+            "model": "gpt-5",
+            "value": "~60"
           },
           {
             "model": "gemini-3-1",
@@ -398,16 +398,16 @@
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
     "top3": [
       {
-        "model": "Anthropic claude-opus-4-6-thinking",
-        "score": "1502"
+        "model": "1",
+        "score": "1"
       },
       {
-        "model": "Anthropic claude-opus-4-7-thinking",
-        "score": "1500"
+        "model": "2",
+        "score": "6"
       },
       {
-        "model": "Anthropic claude-opus-4-6",
-        "score": "1498"
+        "model": "3",
+        "score": "2"
       }
     ]
   }

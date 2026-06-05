@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T04:20:58Z",
+  "last_updated": "2026-06-05T04:04:31Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -386,7 +386,7 @@
             "value": "~83%"
           },
           {
-            "model": "qwen3-7",
+            "model": "nemotron-3",
             "value": "~81%"
           }
         ]

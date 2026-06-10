@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-09T03:50:35Z",
+  "last_updated": "2026-06-10T04:01:22Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -293,7 +293,7 @@
         "top3": [
           {
             "model": "claude-4",
-            "value": "~61"
+            "value": "~65"
           },
           {
             "model": "gpt-5",

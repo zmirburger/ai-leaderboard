@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-17T04:24:04Z",
+  "last_updated": "2026-06-18T04:16:54Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -300,8 +300,8 @@
             "value": "~55"
           },
           {
-            "model": "gemini-3-5",
-            "value": "~50"
+            "model": "glm-5",
+            "value": "~51"
           }
         ]
       },

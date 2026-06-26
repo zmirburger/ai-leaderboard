@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-25T03:53:51Z",
+  "last_updated": "2026-06-26T04:00:28Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -399,7 +399,7 @@
     "top3": [
       {
         "model": "1",
-        "score": "3"
+        "score": "4"
       },
       {
         "model": "2",
@@ -407,7 +407,7 @@
       },
       {
         "model": "3",
-        "score": "6"
+        "score": "5"
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-03T05:21:19Z",
+  "last_updated": "2026-07-03T05:34:20Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -412,19 +412,6 @@
   "lmarena_vibe_check": {
     "url": "https://lmarena.ai/leaderboard",
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
-    "top3": [
-      {
-        "model": "1",
-        "score": "3"
-      },
-      {
-        "model": "2",
-        "score": "1"
-      },
-      {
-        "model": "3",
-        "score": "5"
-      }
-    ]
+    "top3": []
   }
 }

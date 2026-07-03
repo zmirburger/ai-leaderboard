@@ -16,6 +16,7 @@ import json
 import math
 import re
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,14 +31,18 @@ TIMEOUT = 20
 
 # ---------- helpers ----------
 
-def fetch(url):
-    try:
-        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-        r.raise_for_status()
-        return r.text
-    except Exception as e:
-        print(f"  fetch failed: {url} - {e}", file=sys.stderr)
-        return None
+def fetch(url, retries=2):
+    for attempt in range(retries + 1):
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            r.raise_for_status()
+            return r.text
+        except Exception as e:
+            if attempt < retries:
+                time.sleep(2 ** attempt)
+                continue
+            print(f"  fetch failed: {url} - {e}", file=sys.stderr)
+            return None
 
 def load_data():
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -280,13 +285,25 @@ def recompute_rankings(data):
     ranked = [m for m in data["models"] if m["composite_overall"] is not None]
     if ranked:
         best = max(ranked, key=lambda m: m["composite_overall"])
+        if data["best_overall"]["model"] != best["name"]:
+            # New leader: the hand-written rationale describes the old one, replace
+            # with a factual auto-generated line rather than leave stale claims.
+            pp = best["per_priority"]
+            data["best_overall"]["rationale"] = (
+                f"Auto-ranked leader: accuracy {pp.get('accuracy', '—')}, "
+                f"long context {pp.get('long_context', '—')}, agent {pp.get('agent', '—')}. "
+                "Edit this rationale in data.json for a hand-written take."
+            )
         data["best_overall"]["model"] = best["name"]
         data["best_overall"]["composite"] = best["composite_overall"]
     for priority in ["agent", "accuracy", "long_context"]:
         scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
         if scoreable:
             top = max(scoreable, key=lambda m: m["per_priority"][priority])
-            data["best_per_priority"][priority]["model"] = top["name"]
+            entry = data["best_per_priority"][priority]
+            if entry["model"] != top["name"]:
+                entry["summary"] = f"Score {top['per_priority'][priority]} (auto-ranked; edit summary in data.json)"
+            entry["model"] = top["name"]
 
 # ---------- benchmark scrapers ----------
 
@@ -311,23 +328,37 @@ def _fmt_minutes(mins):
         return f"~{int(round(mins))}m"
     return f"~{mins:.1f}m"
 
+def _looks_like_model_name(s):
+    """A real model name contains letters, not just a rank digit or icon."""
+    return bool(re.search(r"[A-Za-z]{2,}", s))
+
+def _looks_like_arena_score(s):
+    """Arena scores are Elo-style integers, roughly 900-3000."""
+    return s.isdigit() and 900 <= int(s) <= 3000
+
 def scrape_lmarena():
-    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}."""
+    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}.
+
+    Scans every table and every column layout; only accepts rows where the model
+    cell contains an actual name and the score cell is a plausible Elo. Previously
+    this trusted fixed column positions and wrote junk like {model: "1", score: "3"}
+    when the page layout shifted. Requires >=3 valid rows or returns None."""
     url = "https://lmarena.ai/leaderboard"
     html = fetch(url)
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    tables = soup.find_all("table")
-    if not tables:
-        return None
-    rows = tables[0].find_all("tr")
-    out = []
-    for row in rows[1:]:
-        cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
-        if len(cols) >= 3 and cols[2].isdigit():
-            out.append({"model": cols[1], "score": cols[2]})
-    return out or None
+    for table in soup.find_all("table"):
+        out = []
+        for row in table.find_all("tr"):
+            cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
+            score = next((c for c in cols if _looks_like_arena_score(c)), None)
+            model = next((c for c in cols if _looks_like_model_name(c)), None)
+            if score and model:
+                out.append({"model": model, "score": score})
+        if len(out) >= 3:
+            return out[:10]
+    return None
 
 def scrape_metr():
     """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon.

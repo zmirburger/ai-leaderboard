@@ -2,7 +2,7 @@
 
 Daily-refreshed view of the leading AI model across three priorities.
 
-**Live URL:** https://zmirburger.github.io/ai-leaderboard/ — bookmark on phone home screen for one-tap access.
+**Live URL:** https://airank.zmirburger.com/ — bookmark on phone home screen for one-tap access.
 
 ## Priorities & weights
 
@@ -42,17 +42,9 @@ To change weights, edit `data.json` and re-run `refresh.py`.
 
 Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT), Google (Gemini), xAI (Grok)
 
-## Custom domain (airank.zmirburger.com via Cloudflare)
+## Hosting
 
-No code changes needed — the site is plain static files. Two options:
-
-**Option A — Cloudflare Pages (recommended, everything lives in Cloudflare):**
-1. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → pick `zmirburger/ai-leaderboard`
-2. Build settings: no framework, no build command, output directory `/`
-3. After first deploy: Custom domains → add `airank.zmirburger.com` (Cloudflare creates the DNS record automatically)
-4. Daily GitHub Actions commits trigger automatic redeploys — no other changes needed
-
-**Option B — keep GitHub Pages, point the domain at it:**
-1. Cloudflare DNS: add `CNAME` record, name `airank`, target `zmirburger.github.io`
-2. GitHub repo → Settings → Pages → Custom domain → `airank.zmirburger.com`, enable "Enforce HTTPS"
-3. In Cloudflare, set SSL/TLS mode to "Full" for the zone (avoids redirect loops)
+Served by **Cloudflare Pages** at https://airank.zmirburger.com/ — connected to this repo,
+production branch `main`, no build command, output directory `/`. Every push to `main`
+(including the daily GitHub Actions refresh commit) triggers an automatic redeploy.
+GitHub Pages is no longer used.

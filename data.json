@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-03T03:33:28Z",
+  "last_updated": "2026-07-03T05:21:19Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -8,19 +8,19 @@
     "agent": 0.25
   },
   "best_overall": {
-    "model": "Claude Opus 4.8",
-    "composite": 90,
-    "rationale": "Wins accuracy outright (95). Close #2 on agent (87) and long context (85). 45/30/25 weighting widens the lead vs equal thirds."
+    "model": "Claude Fable 5",
+    "composite": 94,
+    "rationale": "Mythos-class tier above Opus. Estimated leader on accuracy (97) and agent (92), strong long context (90). Scores are initial estimates - adjust as benchmark results land."
   },
   "best_per_priority": {
     "agent": {
-      "model": "GPT-5.5",
-      "summary": "Deep Research v2, faster computer use",
+      "model": "Claude Fable 5",
+      "summary": "Est. 92 agent score (initial estimate)",
       "supporting": "METR · BrowseComp"
     },
     "accuracy": {
-      "model": "Claude Opus 4.8",
-      "summary": "~0.5% hallucination, leads IFBench",
+      "model": "Claude Fable 5",
+      "summary": "Est. 97 accuracy (initial estimate)",
       "supporting": "HHEM · Omniscience · Scale RLI"
     },
     "long_context": {
@@ -30,6 +30,22 @@
     }
   },
   "models": [
+    {
+      "id": "claude_fable_5",
+      "name": "Claude Fable 5",
+      "vendor": "Anthropic",
+      "tier": "Fable",
+      "released": "2026-07-01",
+      "previous": "Claude Fable",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "composite_overall": 94,
+      "per_priority": {
+        "agent": 92,
+        "accuracy": 97,
+        "long_context": 90
+      }
+    },
     {
       "id": "claude_opus_4_7",
       "name": "Claude Opus 4.8",
@@ -48,12 +64,12 @@
     },
     {
       "id": "claude_sonnet_4_6",
-      "name": "Claude Sonnet 4.6",
+      "name": "Claude Sonnet 5",
       "vendor": "Anthropic",
       "tier": "Sonnet",
-      "released": "2026-04-16",
-      "previous": "Claude Sonnet 4.5",
-      "changelog": "Balanced performance and speed. Strong coding and reasoning at lower cost than Opus. Ideal for most production workloads.",
+      "released": "2026-07-01",
+      "previous": "Claude Sonnet 4.6",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "composite_overall": 85,
       "per_priority": {

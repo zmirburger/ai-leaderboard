@@ -40,4 +40,19 @@ To change weights, edit `data.json` and re-run `refresh.py`.
 
 ## Tracked vendors
 
-Anthropic (Claude Opus), OpenAI (GPT), Google (Gemini Pro), xAI (Grok)
+Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT), Google (Gemini), xAI (Grok)
+
+## Custom domain (airank.zmirburger.com via Cloudflare)
+
+No code changes needed — the site is plain static files. Two options:
+
+**Option A — Cloudflare Pages (recommended, everything lives in Cloudflare):**
+1. Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git → pick `zmirburger/ai-leaderboard`
+2. Build settings: no framework, no build command, output directory `/`
+3. After first deploy: Custom domains → add `airank.zmirburger.com` (Cloudflare creates the DNS record automatically)
+4. Daily GitHub Actions commits trigger automatic redeploys — no other changes needed
+
+**Option B — keep GitHub Pages, point the domain at it:**
+1. Cloudflare DNS: add `CNAME` record, name `airank`, target `zmirburger.github.io`
+2. GitHub repo → Settings → Pages → Custom domain → `airank.zmirburger.com`, enable "Enforce HTTPS"
+3. In Cloudflare, set SSL/TLS mode to "Full" for the zone (avoids redirect loops)

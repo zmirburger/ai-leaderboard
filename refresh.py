@@ -7,7 +7,7 @@ Strategy:
 - Benchmark leaderboards are JS-rendered; manual refresh on demand.
 - Each (vendor, tier) pair has its own detector function.
 - Downgrade guard: only accept a detected name if version is strictly newer.
-- Tiebreaker: when version string lengths tie, numerically higher version wins.
+- Version picking is numeric on (major, minor), so 5 beats 4.5.
 - recompute_rankings() auto-updates best_overall and best_per_priority from scores.
 """
 
@@ -62,8 +62,9 @@ def _parse_version(name):
     return (int(m.group(1)), int(m.group(2)) if m.group(2) else 0)
 
 def _find_best_match(soup, pattern):
-    """Find ALL matches in headings (preferred) or body; pick the most specific.
-    For tuple matches, scores by string length then numeric version as tiebreaker."""
+    """Find ALL matches in headings (preferred) or body; pick the highest version.
+    Compares parsed (major, minor) numerically so "5" beats "4.5" — ranking by
+    string length would keep a longer-but-older version like "4.5" forever."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
     matches = re.findall(pattern, headings)
     if not matches:
@@ -71,8 +72,8 @@ def _find_best_match(soup, pattern):
     if not matches:
         return None
     if isinstance(matches[0], tuple):
-        return max(matches, key=lambda m: (sum(len(str(g).strip()) for g in m), _parse_version(m[0])))
-    return max(matches, key=len)
+        return max(matches, key=lambda m: _parse_version(m[0]))
+    return max(matches, key=_parse_version)
 
 def _result(name, soup_text, url):
     return (name, _extract_iso_date(soup_text), "(Auto-detected from release notes - full changelog at link)", url)
@@ -89,11 +90,20 @@ def _get_anthropic_soup():
         _anthropic_soup = BeautifulSoup(html, "html.parser") if html else None
     return _anthropic_soup
 
+def detect_anthropic_fable():
+    soup = _get_anthropic_soup()
+    if not soup:
+        return None
+    version = _find_best_match(soup, r"Claude Fable (\d+(?:\.\d+)?)\b(?!\d)")
+    if not version:
+        return None
+    return _result(f"Claude Fable {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
+
 def detect_anthropic_opus():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Opus (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Opus (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Opus {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -102,7 +112,7 @@ def detect_anthropic_sonnet():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Sonnet (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Sonnet (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Sonnet {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -111,7 +121,7 @@ def detect_anthropic_haiku():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Haiku (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Haiku (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Haiku {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -124,7 +134,7 @@ def detect_openai():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    version = _find_best_match(soup, r"GPT-(\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"GPT-(\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"GPT-{version}", soup.get_text(" ", strip=True), url)
@@ -145,7 +155,7 @@ def detect_gemini_pro():
     soup = _get_google_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Pro\b(?!\d)")
+    version = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Pro\b(?!\d)")
     if not version:
         return None
     return _result(f"Gemini {version} Pro", soup.get_text(" ", strip=True), _GOOGLE_URL)
@@ -154,7 +164,7 @@ def detect_gemini_thinking():
     soup = _get_google_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash Thinking\b")
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash Thinking\b")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -165,7 +175,7 @@ def detect_gemini_flash():
     if not soup:
         return None
     # Exclude "Flash Thinking" matches — only plain Flash
-    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash\b(?! Thinking)")
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash\b(?! Thinking)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -187,7 +197,7 @@ def detect_grok_expert():
     soup = _get_xai_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Expert\b(?!\d)")
+    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Expert\b(?!\d)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -197,7 +207,7 @@ def detect_grok_fast():
     soup = _get_xai_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Fast\b(?!\d)")
+    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Fast\b(?!\d)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -206,6 +216,7 @@ def detect_grok_fast():
 # ---------- tier detector registry ----------
 
 TIER_DETECTORS = {
+    ("Anthropic", "Fable"):   detect_anthropic_fable,
     ("Anthropic", "Opus"):    detect_anthropic_opus,
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,

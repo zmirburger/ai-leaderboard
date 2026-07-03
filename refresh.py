@@ -7,7 +7,7 @@ Strategy:
 - Benchmark leaderboards are JS-rendered; manual refresh on demand.
 - Each (vendor, tier) pair has its own detector function.
 - Downgrade guard: only accept a detected name if version is strictly newer.
-- Tiebreaker: when version string lengths tie, numerically higher version wins.
+- Version picking is numeric on (major, minor), so 5 beats 4.5.
 - recompute_rankings() auto-updates best_overall and best_per_priority from scores.
 """
 
@@ -16,6 +16,7 @@ import json
 import math
 import re
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -30,14 +31,18 @@ TIMEOUT = 20
 
 # ---------- helpers ----------
 
-def fetch(url):
-    try:
-        r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-        r.raise_for_status()
-        return r.text
-    except Exception as e:
-        print(f"  fetch failed: {url} - {e}", file=sys.stderr)
-        return None
+def fetch(url, retries=2):
+    for attempt in range(retries + 1):
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            r.raise_for_status()
+            return r.text
+        except Exception as e:
+            if attempt < retries:
+                time.sleep(2 ** attempt)
+                continue
+            print(f"  fetch failed: {url} - {e}", file=sys.stderr)
+            return None
 
 def load_data():
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
@@ -62,8 +67,9 @@ def _parse_version(name):
     return (int(m.group(1)), int(m.group(2)) if m.group(2) else 0)
 
 def _find_best_match(soup, pattern):
-    """Find ALL matches in headings (preferred) or body; pick the most specific.
-    For tuple matches, scores by string length then numeric version as tiebreaker."""
+    """Find ALL matches in headings (preferred) or body; pick the highest version.
+    Compares parsed (major, minor) numerically so "5" beats "4.5" — ranking by
+    string length would keep a longer-but-older version like "4.5" forever."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
     matches = re.findall(pattern, headings)
     if not matches:
@@ -71,8 +77,8 @@ def _find_best_match(soup, pattern):
     if not matches:
         return None
     if isinstance(matches[0], tuple):
-        return max(matches, key=lambda m: (sum(len(str(g).strip()) for g in m), _parse_version(m[0])))
-    return max(matches, key=len)
+        return max(matches, key=lambda m: _parse_version(m[0]))
+    return max(matches, key=_parse_version)
 
 def _result(name, soup_text, url):
     return (name, _extract_iso_date(soup_text), "(Auto-detected from release notes - full changelog at link)", url)
@@ -89,11 +95,20 @@ def _get_anthropic_soup():
         _anthropic_soup = BeautifulSoup(html, "html.parser") if html else None
     return _anthropic_soup
 
+def detect_anthropic_fable():
+    soup = _get_anthropic_soup()
+    if not soup:
+        return None
+    version = _find_best_match(soup, r"Claude Fable (\d+(?:\.\d+)?)\b(?!\d)")
+    if not version:
+        return None
+    return _result(f"Claude Fable {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
+
 def detect_anthropic_opus():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Opus (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Opus (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Opus {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -102,7 +117,7 @@ def detect_anthropic_sonnet():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Sonnet (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Sonnet (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Sonnet {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -111,7 +126,7 @@ def detect_anthropic_haiku():
     soup = _get_anthropic_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Claude Haiku (\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"Claude Haiku (\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"Claude Haiku {version}", soup.get_text(" ", strip=True), _ANTHROPIC_URL)
@@ -124,7 +139,7 @@ def detect_openai():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    version = _find_best_match(soup, r"GPT-(\d(?:\.\d)?)\b(?!\d)")
+    version = _find_best_match(soup, r"GPT-(\d+(?:\.\d+)?)\b(?!\d)")
     if not version:
         return None
     return _result(f"GPT-{version}", soup.get_text(" ", strip=True), url)
@@ -145,7 +160,7 @@ def detect_gemini_pro():
     soup = _get_google_soup()
     if not soup:
         return None
-    version = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Pro\b(?!\d)")
+    version = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Pro\b(?!\d)")
     if not version:
         return None
     return _result(f"Gemini {version} Pro", soup.get_text(" ", strip=True), _GOOGLE_URL)
@@ -154,7 +169,7 @@ def detect_gemini_thinking():
     soup = _get_google_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash Thinking\b")
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash Thinking\b")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -165,7 +180,7 @@ def detect_gemini_flash():
     if not soup:
         return None
     # Exclude "Flash Thinking" matches — only plain Flash
-    best = _find_best_match(soup, r"Gemini (\d(?:\.\d)?) Flash\b(?! Thinking)")
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash\b(?! Thinking)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -187,7 +202,7 @@ def detect_grok_expert():
     soup = _get_xai_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Expert\b(?!\d)")
+    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Expert\b(?!\d)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -197,7 +212,7 @@ def detect_grok_fast():
     soup = _get_xai_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d(?:\.\d)?)\s+Fast\b(?!\d)")
+    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Fast\b(?!\d)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
@@ -206,6 +221,7 @@ def detect_grok_fast():
 # ---------- tier detector registry ----------
 
 TIER_DETECTORS = {
+    ("Anthropic", "Fable"):   detect_anthropic_fable,
     ("Anthropic", "Opus"):    detect_anthropic_opus,
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
@@ -269,13 +285,25 @@ def recompute_rankings(data):
     ranked = [m for m in data["models"] if m["composite_overall"] is not None]
     if ranked:
         best = max(ranked, key=lambda m: m["composite_overall"])
+        if data["best_overall"]["model"] != best["name"]:
+            # New leader: the hand-written rationale describes the old one, replace
+            # with a factual auto-generated line rather than leave stale claims.
+            pp = best["per_priority"]
+            data["best_overall"]["rationale"] = (
+                f"Auto-ranked leader: accuracy {pp.get('accuracy', '—')}, "
+                f"long context {pp.get('long_context', '—')}, agent {pp.get('agent', '—')}. "
+                "Edit this rationale in data.json for a hand-written take."
+            )
         data["best_overall"]["model"] = best["name"]
         data["best_overall"]["composite"] = best["composite_overall"]
     for priority in ["agent", "accuracy", "long_context"]:
         scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
         if scoreable:
             top = max(scoreable, key=lambda m: m["per_priority"][priority])
-            data["best_per_priority"][priority]["model"] = top["name"]
+            entry = data["best_per_priority"][priority]
+            if entry["model"] != top["name"]:
+                entry["summary"] = f"Score {top['per_priority'][priority]} (auto-ranked; edit summary in data.json)"
+            entry["model"] = top["name"]
 
 # ---------- benchmark scrapers ----------
 
@@ -300,23 +328,37 @@ def _fmt_minutes(mins):
         return f"~{int(round(mins))}m"
     return f"~{mins:.1f}m"
 
+def _looks_like_model_name(s):
+    """A real model name contains letters, not just a rank digit or icon."""
+    return bool(re.search(r"[A-Za-z]{2,}", s))
+
+def _looks_like_arena_score(s):
+    """Arena scores are Elo-style integers, roughly 900-3000."""
+    return s.isdigit() and 900 <= int(s) <= 3000
+
 def scrape_lmarena():
-    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}."""
+    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}.
+
+    Scans every table and every column layout; only accepts rows where the model
+    cell contains an actual name and the score cell is a plausible Elo. Previously
+    this trusted fixed column positions and wrote junk like {model: "1", score: "3"}
+    when the page layout shifted. Requires >=3 valid rows or returns None."""
     url = "https://lmarena.ai/leaderboard"
     html = fetch(url)
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    tables = soup.find_all("table")
-    if not tables:
-        return None
-    rows = tables[0].find_all("tr")
-    out = []
-    for row in rows[1:]:
-        cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
-        if len(cols) >= 3 and cols[2].isdigit():
-            out.append({"model": cols[1], "score": cols[2]})
-    return out or None
+    for table in soup.find_all("table"):
+        out = []
+        for row in table.find_all("tr"):
+            cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
+            score = next((c for c in cols if _looks_like_arena_score(c)), None)
+            model = next((c for c in cols if _looks_like_model_name(c)), None)
+            if score and model:
+                out.append({"model": model, "score": score})
+        if len(out) >= 3:
+            return out[:10]
+    return None
 
 def scrape_metr():
     """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon.

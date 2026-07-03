@@ -157,10 +157,14 @@
 
 <script>
 const fmt = (d) => {
+  if (!d) return '—';
   const dt = new Date(d);
-  return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return isNaN(dt) ? '—' : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 };
-const daysSince = (d) => Math.floor((Date.now() - new Date(d)) / 86400000);
+const daysSince = (d) => {
+  if (!d) return NaN;
+  return Math.floor((Date.now() - new Date(d)) / 86400000);
+};
 
 async function load() {
   try {
@@ -177,7 +181,10 @@ function render(d) {
   const w = d.weights;
   const wPct = (k) => Math.round(w[k] * 100);
   const overall = d.best_overall;
-  const overallModel = d.models.find(m => m.name === overall.model);
+  // Fall back to the top composite model if best_overall.model doesn't match
+  // any entry (e.g. a rename landed in models[] but not in best_overall yet).
+  const overallModel = d.models.find(m => m.name === overall.model)
+    || [...d.models].sort((a,b) => (b.composite_overall ?? -1) - (a.composite_overall ?? -1))[0];
   const ranked = (priority) => [...d.models].sort((a,b) => {
     const sa = a.per_priority[priority];
     const sb = b.per_priority[priority];
@@ -188,7 +195,7 @@ function render(d) {
   });
   const rank = (model, priority) => ranked(priority).findIndex(m => m.name === model.name) + 1;
 
-  const others = d.models.filter(m => m.name !== overall.model).sort((a,b) => b.composite_overall - a.composite_overall);
+  const others = d.models.filter(m => m.name !== overallModel.name).sort((a,b) => (b.composite_overall ?? -1) - (a.composite_overall ?? -1));
 
   const html = `
     <p class="section-label">Best overall · ${wPct('accuracy')}/${wPct('long_context')}/${wPct('agent')}</p>
@@ -197,7 +204,7 @@ function render(d) {
         <div>
           <span class="badge">Recommended</span>
           <p class="winner-name">${overall.model}</p>
-          <p class="winner-vendor">${overallModel.vendor} · released ${daysSince(overallModel.released)}d ago</p>
+          <p class="winner-vendor">${overallModel.vendor}${isNaN(daysSince(overallModel.released)) ? '' : ` · released ${daysSince(overallModel.released)}d ago`}</p>
         </div>
         <div class="composite">
           <p class="composite-label">Composite</p>
@@ -238,7 +245,7 @@ function render(d) {
     </div>
 
     <div id="pane-models" class="tab-pane active">
-      ${['Anthropic', 'OpenAI', 'Google', 'xAI'].map(vendor => {
+      ${[...new Set(d.models.map(m => m.vendor))].map(vendor => {
         const tiers = d.models.filter(m => m.vendor === vendor);
         if (!tiers.length) return '';
         return `
@@ -251,7 +258,7 @@ function render(d) {
                     <div class="model-name-row">
                       <p class="model-name">${m.name}</p>
                       ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
-                      ${daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
+                      ${!isNaN(daysSince(m.released)) && daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
                     </div>
                     <p class="model-vendor">${fmt(m.released)}</p>
                   </div>
@@ -298,7 +305,9 @@ function render(d) {
         </div>
         <p class="bench-desc">${d.lmarena_vibe_check.note}</p>
         <table class="bench-table">
-          ${d.lmarena_vibe_check.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.score}</td></tr>`).join('')}
+          ${d.lmarena_vibe_check.top3.length
+            ? d.lmarena_vibe_check.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.score}</td></tr>`).join('')
+            : '<tr><td style="color:var(--text-dim)">No data yet — scraper pending</td><td></td></tr>'}
         </table>
       </div>
     </div>

@@ -409,6 +409,18 @@
       }
     ]
   },
+  "claude_lens": {
+    "note": "Estimated capability and Claude Max quota-burn for each Claude model × reasoning-effort combo. Hand-maintained estimates, not benchmarked — capability base is each model's live composite; effort deltas and Max costs are tunable here.",
+    "tiers": ["Fable", "Opus", "Sonnet"],
+    "cost_base": { "Fable": 5.0, "Opus": 4.0, "Sonnet": 1.0 },
+    "efforts": [
+      { "level": "low",    "capability_delta": -6, "cost_mult": 1.0 },
+      { "level": "medium", "capability_delta": -3, "cost_mult": 1.4 },
+      { "level": "high",   "capability_delta": 0,  "cost_mult": 2.0 },
+      { "level": "xhigh",  "capability_delta": 2,  "cost_mult": 2.8 },
+      { "level": "max",    "capability_delta": 4,  "cost_mult": 4.0 }
+    ]
+  },
   "lmarena_vibe_check": {
     "url": "https://lmarena.ai/leaderboard",
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",

@@ -31,6 +31,15 @@ To change weights, edit `data.json` and re-run `refresh.py`.
 | `CLAUDE.md` | Project context for Claude |
 | `.github/workflows/daily-refresh.yml` | Cron config |
 
+## Claude tab
+
+A Claude-only view with two sub-tabs:
+
+- **Capability** — every Claude tier (Fable/Opus/Sonnet) × reasoning-effort level (low → max), ranked by estimated capability. A lower model at high effort can outrank a higher model at low effort.
+- **Max plan cost** — the same combos ranked by relative Claude Max quota burn (× the lightest combo).
+
+These are hand-maintained estimates, not benchmarks. Model names + capability base come live from the `models` block (so a version bump flows through automatically); tune the effort deltas and per-tier `cost_base` in the `claude_lens` block of `data.json`.
+
 ## Tracked benchmarks
 
 **Agent:** METR Time Horizon, τ-bench, BrowseComp

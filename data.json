@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-05T03:42:20Z",
+  "last_updated": "2026-07-06T03:51:29Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -411,14 +411,42 @@
   },
   "claude_lens": {
     "note": "Estimated capability and Claude Max quota-burn for each Claude model × reasoning-effort combo. Hand-maintained estimates, not benchmarked — capability base is each model's live composite; effort deltas and Max costs are tunable here.",
-    "tiers": ["Fable", "Opus", "Sonnet"],
-    "cost_base": { "Fable": 5.0, "Opus": 4.0, "Sonnet": 1.0 },
+    "tiers": [
+      "Fable",
+      "Opus",
+      "Sonnet"
+    ],
+    "cost_base": {
+      "Fable": 5.0,
+      "Opus": 4.0,
+      "Sonnet": 1.0
+    },
     "efforts": [
-      { "level": "low",    "capability_delta": -6, "cost_mult": 1.0 },
-      { "level": "medium", "capability_delta": -3, "cost_mult": 1.4 },
-      { "level": "high",   "capability_delta": 0,  "cost_mult": 2.0 },
-      { "level": "xhigh",  "capability_delta": 2,  "cost_mult": 2.8 },
-      { "level": "max",    "capability_delta": 4,  "cost_mult": 4.0 }
+      {
+        "level": "low",
+        "capability_delta": -6,
+        "cost_mult": 1.0
+      },
+      {
+        "level": "medium",
+        "capability_delta": -3,
+        "cost_mult": 1.4
+      },
+      {
+        "level": "high",
+        "capability_delta": 0,
+        "cost_mult": 2.0
+      },
+      {
+        "level": "xhigh",
+        "capability_delta": 2,
+        "cost_mult": 2.8
+      },
+      {
+        "level": "max",
+        "capability_delta": 4,
+        "cost_mult": 4.0
+      }
     ]
   },
   "lmarena_vibe_check": {

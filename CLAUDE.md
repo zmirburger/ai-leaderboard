@@ -12,7 +12,7 @@ Personal dashboard tracking the current leading AI model across Zmir's three pri
 - `index.html` — static dashboard, fetches data.json on load
 - `refresh.py` — Python scraper that hits all sources in `sources.md`, recomputes composites, writes new data.json
 - `.github/workflows/daily-refresh.yml` — runs refresh.py daily at 00:00 UTC (8am MYT) via GitHub Actions, commits any changes
-- Hosted at: https://zmirburger.github.io/ai-leaderboard/
+- Hosted at: https://airank.zmirburger.com/ (Cloudflare Pages, auto-deploys on every push to main)
 
 ## Common requests from Zmir
 
@@ -36,7 +36,7 @@ Per-priority scores are normalized to 0-100 from each benchmark's raw output. De
 
 - Static HTML/CSS/JS, no build step
 - Python 3.11+ for scraper (requests, beautifulsoup4, lxml)
-- GitHub Pages for hosting (free)
+- Cloudflare Pages for hosting at airank.zmirburger.com (free)
 - GitHub Actions for daily cron (free for public repos)
 
 ## Repo

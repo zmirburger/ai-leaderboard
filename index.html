@@ -127,6 +127,20 @@
   .footer-note a { color: var(--text-muted); text-decoration: none; }
   .footer-note a:hover { color: var(--text); }
   .lmarena-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 24px; }
+  .subtabs { display: flex; gap: 6px; margin: 6px 0 10px; }
+  .subtab-btn { background: var(--surface-2); border: 0.5px solid var(--border); color: var(--text-muted); font-size: 12.5px; padding: 6px 13px; cursor: pointer; border-radius: var(--radius-sm); font-family: inherit; font-weight: 500; }
+  .subtab-btn.active { color: var(--text); border-color: var(--border-strong); background: var(--surface); }
+  .subpane { display: none; }
+  .subpane.active { display: block; }
+  .cl-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 8px 16px 12px; }
+  .cl-table { width: 100%; border-collapse: collapse; }
+  .cl-table td { padding: 7px 0; font-size: 13px; border-bottom: 0.5px solid var(--border); vertical-align: baseline; }
+  .cl-table tr:last-child td { border-bottom: 0; }
+  .cl-table td:last-child { text-align: right; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cl-table tr:first-child td:last-child { color: var(--accent); font-weight: 600; }
+  .cl-rank { color: var(--text-dim); font-variant-numeric: tabular-nums; margin-right: 6px; }
+  .effort-chip { background: var(--surface-2); color: var(--text-dim); font-size: 10px; padding: 1px 6px; border-radius: var(--radius-sm); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; margin-left: 6px; }
+  .cl-note { font-size: 11px; color: var(--text-dim); margin: 8px 2px 0; line-height: 1.5; }
   .loading { text-align: center; color: var(--text-dim); padding: 60px 0; font-size: 13px; }
   @media (max-width: 580px) {
     body { padding: 16px 12px 32px; font-size: 14px; }
@@ -197,6 +211,29 @@ function render(d) {
 
   const others = d.models.filter(m => m.name !== overallModel.name).sort((a,b) => (b.composite_overall ?? -1) - (a.composite_overall ?? -1));
 
+  // Claude lens: expand each tier × effort into a combo. Model name + capability
+  // base are resolved live from d.models so a version bump flows through here;
+  // effort deltas and Max costs come from data.json's claude_lens block.
+  const cl = d.claude_lens;
+  const claudeCombos = [];
+  if (cl) {
+    cl.tiers.forEach(tier => {
+      const model = d.models.find(m => m.vendor === 'Anthropic' && m.tier === tier);
+      const name = model ? model.name : `Claude ${tier}`;
+      const base = model && model.composite_overall != null ? model.composite_overall : 0;
+      cl.efforts.forEach(e => {
+        claudeCombos.push({
+          name, effort: e.level,
+          capability: Math.round(base + e.capability_delta),
+          cost: +(((cl.cost_base || {})[tier] ?? 1) * e.cost_mult).toFixed(1),
+        });
+      });
+    });
+  }
+  const byCapability = [...claudeCombos].sort((a,b) => b.capability - a.capability);
+  const byCost = [...claudeCombos].sort((a,b) => a.cost - b.cost);
+  const clRow = (c, i, val) => `<tr><td><span class="cl-rank">${i+1}.</span>${c.name}<span class="effort-chip">${c.effort}</span></td><td>${val}</td></tr>`;
+
   const html = `
     <p class="section-label">Best overall · ${wPct('accuracy')}/${wPct('long_context')}/${wPct('agent')}</p>
     <div class="winner-card">
@@ -242,6 +279,7 @@ function render(d) {
     <div class="tabs">
       <button class="tab-btn active" data-tab="models">Latest releases</button>
       <button class="tab-btn" data-tab="details">Benchmark details</button>
+      ${cl ? '<button class="tab-btn" data-tab="claude">Claude</button>' : ''}
     </div>
 
     <div id="pane-models" class="tab-pane active">
@@ -312,6 +350,36 @@ function render(d) {
       </div>
     </div>
 
+    ${cl ? `
+    <div id="pane-claude" class="tab-pane">
+      <div class="subtabs">
+        <button class="subtab-btn active" data-sub="cap">Capability</button>
+        <button class="subtab-btn" data-sub="cost">Max plan cost</button>
+      </div>
+
+      <div id="sub-cap" class="subpane active">
+        <p class="section-label" style="margin-top:4px;">Model × effort — most capable first</p>
+        <div class="cl-card">
+          <table class="cl-table">
+            ${byCapability.map((c,i) => clRow(c, i, c.capability)).join('')}
+          </table>
+        </div>
+        <p class="cl-note">Estimated capability (0–100), each Claude tier run at every reasoning-effort level. A lower model at high effort can outrank a higher model at low effort.</p>
+      </div>
+
+      <div id="sub-cost" class="subpane">
+        <p class="section-label" style="margin-top:4px;">Claude Max quota burn — lightest first</p>
+        <div class="cl-card">
+          <table class="cl-table">
+            ${byCost.map((c,i) => clRow(c, i, c.cost + '×')).join('')}
+          </table>
+        </div>
+        <p class="cl-note">Relative session usage against your Claude Max limits, × the lightest combo (${byCost[0] ? byCost[0].name + ' at ' + byCost[0].effort : '—'}). Higher = burns your 5-hour / weekly caps faster. Bigger models and higher effort cost more.</p>
+      </div>
+
+      <p class="cl-note" style="margin-top:14px;">${cl.note}</p>
+    </div>` : ''}
+
     <p class="footer-note">${d.data_status === 'initial_estimates' ? 'Showing seeded estimates — scraper will replace with live numbers on first run. ' : ''}<a href="https://github.com/zmirburger/ai-leaderboard" target="_blank" rel="noopener">Source on GitHub</a></p>
   `;
   document.getElementById('content').innerHTML = html;
@@ -327,6 +395,14 @@ function render(d) {
   });
   document.querySelectorAll('[data-toggle]').forEach(card => {
     card.addEventListener('click', () => card.classList.toggle('open'));
+  });
+  document.querySelectorAll('.subtab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.subpane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('sub-' + btn.dataset.sub).classList.add('active');
+    });
   });
 }
 

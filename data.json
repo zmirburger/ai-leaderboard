@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-07T03:41:00Z",
+  "last_updated": "2026-07-08T02:55:56Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -398,12 +398,12 @@
             "value": "~83%"
           },
           {
-            "model": "MiniMax-M3",
-            "value": "~83%"
+            "model": "nemotron-cascade-2-30b-a3b",
+            "value": "~80%"
           },
           {
-            "model": "nemotron-3",
-            "value": "~81%"
+            "model": "nova-2",
+            "value": "~80%"
           }
         ]
       }

@@ -198,25 +198,17 @@ def _get_xai_soup():
         _xai_soup = BeautifulSoup(html, "html.parser") if html else None
     return _xai_soup
 
-def detect_grok_expert():
+def detect_grok():
+    # xAI dropped the Expert/Fast split with Grok 4.5 — one unified model line.
+    # Suffixed legacy names ("Grok 4.1 Fast") are excluded so they can't win.
     soup = _get_xai_soup()
     if not soup:
         return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Expert\b(?!\d)")
+    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)(?!\.?\d)(?!\s+(?:Expert|Fast)\b)")
     if not best:
         return None
     version = best if isinstance(best, str) else best[0]
-    return _result(f"Grok {version} Expert", soup.get_text(" ", strip=True), _XAI_URL)
-
-def detect_grok_fast():
-    soup = _get_xai_soup()
-    if not soup:
-        return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)\s+Fast\b(?!\d)")
-    if not best:
-        return None
-    version = best if isinstance(best, str) else best[0]
-    return _result(f"Grok {version} Fast", soup.get_text(" ", strip=True), _XAI_URL)
+    return _result(f"Grok {version}", soup.get_text(" ", strip=True), _XAI_URL)
 
 # ---------- tier detector registry ----------
 
@@ -229,8 +221,7 @@ TIER_DETECTORS = {
     ("Google",    "Thinking"):detect_gemini_thinking,
     ("Google",    "Flash"):   detect_gemini_flash,
     ("OpenAI",    "GPT"):     detect_openai,
-    ("xAI",       "Expert"):  detect_grok_expert,
-    ("xAI",       "Fast"):    detect_grok_fast,
+    ("xAI",       "Grok"):    detect_grok,
 }
 
 # ---------- main logic ----------

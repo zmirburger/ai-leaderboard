@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-10T03:36:16Z",
+  "last_updated": "2026-07-11T02:51:24Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -160,12 +160,12 @@
     },
     {
       "id": "grok_4_5",
-      "name": "Grok 4.5",
+      "name": "Grok 4.20",
       "vendor": "xAI",
       "tier": "Grok",
       "released": "2026-07-08",
-      "previous": "Grok 4.3 Expert",
-      "changelog": "First unified Grok — xAI dropped the Expert/Fast split. Built for coding and agentic work; billed as Opus-class at lower cost ($2/M input, $6/M output). Per-priority scores carried over from Grok 4.3 Expert as placeholders until benchmark results land.",
+      "previous": "Grok 4.5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
       "composite_overall": 74,
       "per_priority": {

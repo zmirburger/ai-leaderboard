@@ -60,16 +60,21 @@ def _extract_iso_date(text):
         return ""
 
 def _parse_version(name):
-    """Extract (major, minor) from a model name for downgrade protection."""
-    m = re.search(r'(\d+)(?:\.(\d+))?', name)
+    """Extract a comparable version number from a model name for downgrade protection.
+
+    These are decimal-style marketing versions, not semver: "4.5" is four-point-five
+    and ranks ABOVE "4.20" (four-point-two), while "5" ranks above both. Compare as a
+    float so 5 > 4.5 > 4.20. A (major, minor) tuple would wrongly rank 4.20 -> (4, 20)
+    above 4.5 -> (4, 5) and promote the older Grok 4.20 over the newer Grok 4.5."""
+    m = re.search(r'\d+(?:\.\d+)?', name)
     if not m:
-        return (0, 0)
-    return (int(m.group(1)), int(m.group(2)) if m.group(2) else 0)
+        return 0.0
+    return float(m.group(0))
 
 def _find_best_match(soup, pattern):
     """Find ALL matches in headings (preferred) or body; pick the highest version.
-    Compares parsed (major, minor) numerically so "5" beats "4.5" — ranking by
-    string length would keep a longer-but-older version like "4.5" forever."""
+    Compares versions as decimal floats so "5" beats "4.5" and "4.5" beats "4.20" —
+    a tuple compare would keep the older-but-numerically-larger "4.20" forever."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
     matches = re.findall(pattern, headings)
     if not matches:

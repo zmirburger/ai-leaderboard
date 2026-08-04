@@ -440,26 +440,21 @@
   },
   "cost_efficiency": {
     "url": "https://artificialanalysis.ai/leaderboards/models",
-    "note": "Intelligence Index vs blended cost-per-task (USD), pulled from Artificial Analysis' model leaderboard. Manually refreshed by pasting a fresh screenshot when the model roster shifts — the page is JS-rendered and not scraped automatically. Not in the composite; this is a separate ‘is the extra spend worth it’ lens. The dashboard computes the cost/intelligence frontier and flags dominated options client-side.",
+    "note": "Intelligence Index vs blended cost-per-task (USD), pulled from Artificial Analysis' model leaderboard. Scoped to Claude Sonnet & Opus (all reasoning efforts) vs Gemini vs Grok — Zmir's actual shortlist, not the full AA roster. Manually refreshed by pasting a fresh screenshot when numbers move — the page is JS-rendered and not scraped automatically. Entries with \"estimated\": true weren't in the last screenshot (AA doesn't publish every Claude effort level, and Gemini/Grok rows weren't captured) and are interpolated — see each entry's \"estimate_basis\". Replace with real numbers next time a screenshot covers them. Not in the composite; this is a separate 'is the extra spend worth it' lens. The dashboard computes the cost/intelligence frontier and flags dominated options client-side.",
     "last_manual_update": "2026-08-04",
     "entries": [
       { "model": "Claude Opus 5 (max)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 61, "cost_per_task_usd": 2.34 },
       { "model": "Claude Opus 5 (xhigh)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 60, "cost_per_task_usd": 1.80 },
-      { "model": "Claude Fable 5 (with fallback)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 60, "cost_per_task_usd": 3.15 },
-      { "model": "GPT-5.6 Sol (max)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 59, "cost_per_task_usd": 1.23 },
       { "model": "Claude Opus 5 (high)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 59, "cost_per_task_usd": 1.23 },
-      { "model": "GPT-5.6 Sol (xhigh)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 58, "cost_per_task_usd": 0.83 },
-      { "model": "Kimi K3 (max)", "vendor": "Kimi", "context_window": "1.05M", "intelligence_index": 57, "cost_per_task_usd": 0.86 },
       { "model": "Claude Opus 5 (medium)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 56, "cost_per_task_usd": 0.72 },
-      { "model": "GPT-5.6 Sol (high)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 56, "cost_per_task_usd": 0.55 },
-      { "model": "GPT-5.6 Terra (max)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 55, "cost_per_task_usd": 0.51 },
-      { "model": "Grok 4.5 (high)", "vendor": "xAI", "context_window": "500k", "intelligence_index": 54, "cost_per_task_usd": 0.36 },
-      { "model": "GPT-5.6 Sol (medium)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 54, "cost_per_task_usd": 0.39 },
-      { "model": "Qwen3.8 Max", "vendor": "Alibaba", "context_window": "1M", "intelligence_index": 53, "cost_per_task_usd": 1.76 },
+      { "model": "Claude Opus 5 (low)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 54, "cost_per_task_usd": 0.57, "estimated": true, "estimate_basis": "AA hasn't published Opus low yet. Fit a line through Opus's 4 known effort points (medium/high/xhigh/max) on cost and on intelligence, extrapolated down to low." },
       { "model": "Claude Sonnet 5 (max)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 53, "cost_per_task_usd": 1.72 },
-      { "model": "GPT-5.6 Terra (xhigh)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 52, "cost_per_task_usd": 0.31 },
-      { "model": "GPT-5.6 Luna (max)", "vendor": "OpenAI", "context_window": "1M", "intelligence_index": 51, "cost_per_task_usd": 0.05 },
-      { "model": "GLM-5.2 (max)", "vendor": "Z AI", "context_window": "1M", "intelligence_index": 51, "cost_per_task_usd": 0.59 }
+      { "model": "Claude Sonnet 5 (xhigh)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 52, "cost_per_task_usd": 1.32, "estimated": true, "estimate_basis": "AA hasn't published this Sonnet effort. Took Opus's cost/intelligence at the same effort level and scaled by the ratio observed at max (Sonnet/Opus = 0.74x cost, -8 intelligence points), the only effort where both are known." },
+      { "model": "Claude Sonnet 5 (high)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 51, "cost_per_task_usd": 0.90, "estimated": true, "estimate_basis": "AA hasn't published this Sonnet effort. Took Opus's cost/intelligence at the same effort level and scaled by the ratio observed at max (Sonnet/Opus = 0.74x cost, -8 intelligence points), the only effort where both are known." },
+      { "model": "Claude Sonnet 5 (medium)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 48, "cost_per_task_usd": 0.53, "estimated": true, "estimate_basis": "AA hasn't published this Sonnet effort. Took Opus's cost/intelligence at the same effort level and scaled by the ratio observed at max (Sonnet/Opus = 0.74x cost, -8 intelligence points), the only effort where both are known." },
+      { "model": "Claude Sonnet 5 (low)", "vendor": "Anthropic", "context_window": "1M", "intelligence_index": 46, "cost_per_task_usd": 0.42, "estimated": true, "estimate_basis": "AA hasn't published this Sonnet effort. Took the estimated Opus-low value and scaled by the same Sonnet/Opus ratio used for the other estimated Sonnet efforts." },
+      { "model": "Grok 4.5 (high)", "vendor": "xAI", "context_window": "500k", "intelligence_index": 54, "cost_per_task_usd": 0.36 },
+      { "model": "Gemini 3.1 Pro", "vendor": "Google", "context_window": "1M", "intelligence_index": 57, "cost_per_task_usd": 0.50, "estimated": true, "estimate_basis": "Not in the last AA screenshot. Intelligence Index (57) is from an Artificial Analysis writeup on Gemini 3.1 Pro's release; cost per task isn't published anywhere I could find, so $0.50 is a rough placement relative to similarly-scored Claude/GPT rows given Gemini 3.1 Pro's reported reputation for running well under half the cost of similarly-capable rivals. Lowest-confidence number on this chart — replace first." }
     ]
   }
 }

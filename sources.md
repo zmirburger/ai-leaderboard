@@ -21,6 +21,9 @@
 ### Vibe check (not in composite)
 - **LMArena** — https://lmarena.ai/leaderboard
 
+### Cost vs intelligence (not in composite — separate "is the spend worth it" lens)
+- **AA model leaderboard** — https://artificialanalysis.ai/leaderboards/models — Intelligence Index + $/task per model×reasoning-effort row. JS-rendered, not scraped by refresh.py; refresh manually by pasting a new screenshot into `data.json`'s `cost_efficiency.entries` (see CLAUDE.md). The dashboard computes the cost/intelligence Pareto frontier and flags dominated options client-side — no manual "which one wins" judgment needed once the raw numbers are in.
+
 ## Vendor release pages
 
 - **Anthropic** — https://platform.claude.com/docs/en/release-notes/overview

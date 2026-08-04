@@ -23,6 +23,7 @@ Personal dashboard tracking the current leading AI model across Zmir's three pri
 | "Add benchmark Y" | Add entry to benchmarks block in data.json (under right category), add scraper logic in refresh.py |
 | "Drop benchmark Z" | Remove entry from data.json + scraper |
 | "Change schedule" | Edit cron expression in `.github/workflows/daily-refresh.yml` |
+| "Update the cost/value table" (paste an Artificial Analysis leaderboard screenshot) | Transcribe rows into `data.json`'s `cost_efficiency.entries` (model, vendor, context_window, intelligence_index, cost_per_task_usd), bump `last_manual_update`. Frontier/dominated-option logic is computed client-side in index.html — no manual ranking needed. |
 
 ## Composite calculation
 
@@ -31,6 +32,10 @@ composite_overall = (accuracy_score * 0.45) + (long_context_score * 0.30) + (age
 ```
 
 Per-priority scores are normalized to 0-100 from each benchmark's raw output. Default weighting is in data.json.
+
+## Cost vs intelligence (`data.json` → `cost_efficiency`)
+
+Separate from the composite — this is a "given two options of similar capability, which one is wasting money" lens, sourced from Artificial Analysis' model leaderboard (Intelligence Index vs $/task per model×reasoning-effort row). Manually refreshed (the AA page is JS-rendered) by pasting a fresh screenshot and transcribing rows into `cost_efficiency.entries`. The dashboard's "Cost vs intelligence" tab computes the cost/intelligence Pareto frontier client-side and flags every dominated entry with which frontier option beats it outright (cheaper, smarter, or both) — e.g. it's how "Opus xhigh over Fable 5" or "Opus medium over Sonnet max" type calls get surfaced automatically instead of eyeballed.
 
 ## Stack
 

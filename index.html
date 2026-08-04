@@ -150,7 +150,19 @@
   .vc-dot-dominated { fill: var(--text-dim); opacity: 0.55; cursor: pointer; }
   .vc-dot-frontier { fill: var(--accent); cursor: pointer; }
   .vc-dot-frontier:hover, .vc-dot-dominated:hover { opacity: 1; }
+  .vc-dot-estimated-ring { fill: none; stroke: var(--text-dim); stroke-width: 1; stroke-dasharray: 2 2; pointer-events: none; }
   .vc-label { fill: var(--text-muted); font-size: 9.5px; font-weight: 500; pointer-events: none; }
+  .est-chip { color: var(--text-dim); font-size: 10px; font-weight: 500; border: 0.5px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0 5px; margin-left: 5px; cursor: help; }
+  .top3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .top3-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 14px; position: relative; }
+  .top3-rank { position: absolute; top: 10px; right: 12px; font-size: 20px; font-weight: 700; color: var(--border-strong); }
+  .top3-model { font-size: 14px; font-weight: 600; margin: 0 0 2px; padding-right: 20px; }
+  .top3-vendor { font-size: 11px; color: var(--text-muted); margin: 0 0 10px; }
+  .top3-stats { display: flex; gap: 14px; margin-bottom: 8px; }
+  .top3-stat .n { font-size: 16px; font-weight: 600; }
+  .top3-stat .l { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.4px; }
+  .top3-why { font-size: 11px; color: var(--text-muted); margin: 0; line-height: 1.45; }
+  @media (max-width: 580px) { .top3-grid { grid-template-columns: 1fr; } }
   .value-tooltip { position: absolute; pointer-events: none; background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); padding: 6px 9px; font-size: 11.5px; line-height: 1.5; color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: none; white-space: nowrap; z-index: 5; }
   .value-tooltip .vt-name { font-weight: 600; }
   .value-tooltip .vt-sub { color: var(--text-muted); }
@@ -256,24 +268,30 @@ function renderValueChart(annotated) {
     const cx = xPx(e.cost_per_task_usd).toFixed(1), cy = yPx(e.intelligence_index).toFixed(1);
     const cls = e.frontier ? 'vc-dot-frontier' : 'vc-dot-dominated';
     const r = e.frontier ? 5 : 3.5;
-    const tip = e.frontier
+    let tip = e.frontier
       ? `${e.model} · Intelligence ${e.intelligence_index} · $${e.cost_per_task_usd.toFixed(2)}/task`
       : `${e.model} · Intelligence ${e.intelligence_index} · $${e.cost_per_task_usd.toFixed(2)}/task ‒ use ${e.dominated_by.model} instead`;
-    return `<circle class="${cls}" cx="${cx}" cy="${cy}" r="${r}" data-tip="${tip.replace(/"/g, '&quot;')}"></circle>`;
+    if (e.estimated) tip += ' (estimated, not directly sourced)';
+    const ring = e.estimated ? `<circle class="vc-dot-estimated-ring" cx="${cx}" cy="${cy}" r="${r + 3}"></circle>` : '';
+    return `<circle class="${cls}" cx="${cx}" cy="${cy}" r="${r}" data-tip="${tip.replace(/"/g, '&quot;')}"></circle>${ring}`;
   }).join('');
 
-  // Label only points with enough horizontal room to avoid overlap; always keep
-  // the priciest point so the top of the frontier is never unlabeled.
-  let lastLabelX = -Infinity, labelCount = 0;
+  // Center each label above its point (so it never collides with the marker
+  // itself), staggered at two heights and skipped when it would overlap the
+  // previous label's span (estimated from character count, ~9.5px font).
+  // Always keep the priciest point so the top of the frontier is never unlabeled.
+  let lastLabelRight = -Infinity, labelCount = 0;
   const labels = frontierPts.map((p, i) => {
     const cx = xPx(p.cost_per_task_usd), cy = yPx(p.intelligence_index);
     const isLast = i === frontierPts.length - 1;
-    if (cx - lastLabelX < 55 && !isLast) return '';
-    lastLabelX = cx;
-    const dy = labelCount % 2 === 0 ? -7 : -16;
-    labelCount++;
     const short = p.model.replace('Claude ', '').replace('GPT-5.6 ', '');
-    return `<text class="vc-label" x="${(cx + 7).toFixed(1)}" y="${(cy + dy).toFixed(1)}">${short}</text>`;
+    const estWidth = short.length * 5.3;
+    const left = cx - estWidth / 2;
+    if (left < lastLabelRight + 8 && !isLast) return '';
+    lastLabelRight = left + estWidth;
+    const dy = labelCount % 2 === 0 ? -10 : -21;
+    labelCount++;
+    return `<text class="vc-label" x="${cx.toFixed(1)}" y="${(cy + dy).toFixed(1)}" text-anchor="middle">${short}</text>`;
   }).join('');
 
   return `
@@ -289,6 +307,7 @@ function renderValueChart(annotated) {
     <div class="value-legend">
       <span><i style="background:var(--accent)"></i>Frontier (worth the price)</span>
       <span><i style="background:var(--text-dim);opacity:0.55"></i>Dominated (skip it)</span>
+      <span><i style="background:transparent;border:1px dashed var(--text-dim);width:9px;height:9px;"></i>Estimated (see note)</span>
     </div>
   `;
 }
@@ -299,6 +318,12 @@ function renderValueTab(d) {
   const annotated = computeFrontier(ce.entries);
   const frontier = annotated.filter(e => e.frontier).sort((a, b) => a.cost_per_task_usd - b.cost_per_task_usd);
   const dominated = annotated.filter(e => !e.frontier).sort((a, b) => (b.dominated_by.intelligence_index - b.intelligence_index) - (a.dominated_by.intelligence_index - a.intelligence_index));
+  const estChip = (e) => e.estimated ? `<span class="est-chip" title="${(e.estimate_basis || 'Estimated — not directly sourced').replace(/"/g, '&quot;')}">est.</span>` : '';
+
+  // Top 3 for everyday use: highest intelligence-per-dollar among frontier options only
+  // (the frontier already screens out anything a cheaper/smarter pick beats outright;
+  // ranking by raw ratio there favors solid daily-driver picks over the priciest tip).
+  const top3 = [...frontier].sort((a, b) => (b.intelligence_index / b.cost_per_task_usd) - (a.intelligence_index / a.cost_per_task_usd)).slice(0, 3);
 
   const frontierRows = frontier.map((p, i) => {
     const prev = frontier[i - 1];
@@ -310,7 +335,7 @@ function renderValueTab(d) {
       delta = dIntel > 0 ? `+${dIntel} for +$${dCost.toFixed(2)}${perPoint}` : `+$${dCost.toFixed(2)}, no gain`;
     }
     return `<tr>
-      <td class="vt-model">${p.model}</td>
+      <td class="vt-model">${p.model}${estChip(p)}</td>
       <td>${p.intelligence_index}</td>
       <td>$${p.cost_per_task_usd.toFixed(2)}</td>
       <td class="vt-delta">${delta}</td>
@@ -319,15 +344,30 @@ function renderValueTab(d) {
 
   const skipRows = dominated.map(e => `
     <div class="skip-row">
-      <span class="sr-name">${e.model}</span> <span style="color:var(--text-dim)">($${e.cost_per_task_usd.toFixed(2)}, intelligence ${e.intelligence_index})</span>
+      <span class="sr-name">${e.model}</span>${estChip(e)} <span style="color:var(--text-dim)">($${e.cost_per_task_usd.toFixed(2)}, intelligence ${e.intelligence_index})</span>
       <span class="sr-arrow">→</span> use <span class="sr-target">${e.dominated_by.model}</span> instead
       <span style="color:var(--text-dim)">(${e.dominated_by.cost_per_task_usd < e.cost_per_task_usd ? 'cheaper' : 'same price'}${e.dominated_by.intelligence_index > e.intelligence_index ? ', smarter' : ', same score'})</span>
     </div>`).join('');
 
+  const top3Cards = top3.map((p, i) => `
+    <div class="top3-card">
+      <span class="top3-rank">${i + 1}</span>
+      <p class="top3-model">${p.model}${estChip(p)}</p>
+      <p class="top3-vendor">${p.vendor}</p>
+      <div class="top3-stats">
+        <div class="top3-stat"><div class="n">${p.intelligence_index}</div><div class="l">Intelligence</div></div>
+        <div class="top3-stat"><div class="n">$${p.cost_per_task_usd.toFixed(2)}</div><div class="l">Per task</div></div>
+      </div>
+      <p class="top3-why">${(p.intelligence_index / p.cost_per_task_usd).toFixed(0)} intelligence points per dollar — on the frontier, and not paying for headroom an everyday task won't use.</p>
+    </div>`).join('');
+
   return `
-    <p class="section-label" style="margin-top:8px;">Cost per task vs Intelligence Index</p>
+    <p class="section-label" style="margin-top:8px;">Top 3 for everyday tasks</p>
+    <div class="top3-grid" style="margin-bottom:24px;">${top3Cards}</div>
+
+    <p class="section-label">Cost per task vs Intelligence Index</p>
     <div class="value-card">
-      <p class="bench-desc" style="margin-bottom:12px;">Each point is a model at a given reasoning effort. The dashed line is the frontier — the cheapest way to buy any given intelligence level. Anything off the line has a frontier option that's cheaper, smarter, or both.</p>
+      <p class="bench-desc" style="margin-bottom:12px;">Claude Sonnet & Opus (every reasoning effort) vs Gemini vs Grok. Each point is a model at a given reasoning effort. The dashed line is the frontier — the cheapest way to buy any given intelligence level. Anything off the line has a frontier option that's cheaper, smarter, or both.</p>
       ${renderValueChart(annotated)}
     </div>
 

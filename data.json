@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-01T04:12:41Z",
+  "last_updated": "2026-09-02T03:35:06Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -8,19 +8,19 @@
     "agent": 0.25
   },
   "best_overall": {
-    "model": "Claude Fable 5",
+    "model": "Claude Fable 5.1",
     "composite": 94,
-    "rationale": "Mythos-class tier above Opus. Estimated leader on accuracy (97) and agent (92), strong long context (90). Scores are initial estimates - adjust as benchmark results land."
+    "rationale": "Auto-ranked leader: accuracy 97, long context 90, agent 92. Edit this rationale in data.json for a hand-written take."
   },
   "best_per_priority": {
     "agent": {
-      "model": "Claude Fable 5",
-      "summary": "Est. 92 agent score (initial estimate)",
+      "model": "Claude Fable 5.1",
+      "summary": "Score 92 (auto-ranked; edit summary in data.json)",
       "supporting": "METR · BrowseComp"
     },
     "accuracy": {
-      "model": "Claude Fable 5",
-      "summary": "Est. 97 accuracy (initial estimate)",
+      "model": "Claude Fable 5.1",
+      "summary": "Score 97 (auto-ranked; edit summary in data.json)",
       "supporting": "HHEM · Omniscience · Scale RLI"
     },
     "long_context": {
@@ -32,11 +32,11 @@
   "models": [
     {
       "id": "claude_fable_5",
-      "name": "Claude Fable 5",
+      "name": "Claude Fable 5.1",
       "vendor": "Anthropic",
       "tier": "Fable",
-      "released": "2026-07-01",
-      "previous": "Claude Fable",
+      "released": "2026-09-01",
+      "previous": "Claude Fable 5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "composite_overall": 94,

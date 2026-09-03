@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-02T03:35:06Z",
+  "last_updated": "2026-09-03T03:34:55Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -144,11 +144,11 @@
     },
     {
       "id": "gemini_3_1_flash",
-      "name": "Gemini 3.7 Flash",
+      "name": "Gemini 3.8 Flash",
       "vendor": "Google",
       "tier": "Flash",
       "released": "2026-04-15",
-      "previous": "Gemini 3.6 Flash",
+      "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
       "composite_overall": 72,

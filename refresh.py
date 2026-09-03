@@ -170,16 +170,6 @@ def detect_gemini_pro():
         return None
     return _result(f"Gemini {version} Pro", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
-def detect_gemini_thinking():
-    soup = _get_google_soup()
-    if not soup:
-        return None
-    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash Thinking\b")
-    if not best:
-        return None
-    version = best if isinstance(best, str) else best[0]
-    return _result(f"Gemini {version} Flash Thinking", soup.get_text(" ", strip=True), _GOOGLE_URL)
-
 def detect_gemini_flash():
     soup = _get_google_soup()
     if not soup:
@@ -223,7 +213,6 @@ TIER_DETECTORS = {
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
     ("Google",    "Pro"):     detect_gemini_pro,
-    ("Google",    "Thinking"):detect_gemini_thinking,
     ("Google",    "Flash"):   detect_gemini_flash,
     ("OpenAI",    "GPT"):     detect_openai,
     ("xAI",       "Grok"):    detect_grok,
@@ -256,6 +245,9 @@ def update_releases(data):
             existing["name"] = name
             if date:
                 existing["released"] = date
+            else:
+                print(f"  WARNING: {vendor}/{tier} renamed to {name} but no release date parsed - "
+                      f"'released' left at stale value {existing['released']}, check {url} manually")
             existing["changelog"] = changelog
             existing["release_notes_url"] = url
             changes.append(f"{vendor}/{tier}: {old} -> {name}")

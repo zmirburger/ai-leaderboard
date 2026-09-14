@@ -1,17 +1,17 @@
 {
-  "last_updated": "2026-09-14T06:54:41Z",
+  "last_updated": "2026-09-14T07:00:02Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
-    "accuracy": 0.35,
+    "accuracy": 0.25,
     "long_context": 0.25,
     "agent": 0.25,
-    "cost": 0.15
+    "cost": 0.25
   },
   "best_overall": {
-    "model": "Claude Fable 5.1",
-    "composite": 87,
-    "rationale": "Auto-ranked leader: accuracy 97, long context 90, agent 92, cost 52. Runners-up: Claude Opus 5 (85) and Gemini 3.8 Flash (85)."
+    "model": "Gemini 3.8 Flash",
+    "composite": 86,
+    "rationale": "Auto-ranked leader: cost 92 ($2.36/task on DeepSWE), agent 88, long context 86, accuracy 78. Runners-up: Claude Fable 5.1 (83) and Grok 4.6 (83)."
   },
   "best_per_priority": {
     "agent": {
@@ -45,7 +45,7 @@
       "previous": "Claude Fable 5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 87,
+      "composite_overall": 83,
       "per_priority": {
         "agent": 92,
         "accuracy": 97,
@@ -62,7 +62,7 @@
       "previous": "Claude Opus 4.8",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 85,
+      "composite_overall": 81,
       "per_priority": {
         "agent": 87,
         "accuracy": 95,
@@ -79,7 +79,7 @@
       "previous": "Claude Sonnet 4.6",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 74,
+      "composite_overall": 70,
       "per_priority": {
         "agent": 76,
         "accuracy": 80,
@@ -130,7 +130,7 @@
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 81,
+      "composite_overall": 82,
       "per_priority": {
         "agent": 72,
         "accuracy": 78,
@@ -147,7 +147,7 @@
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 85,
+      "composite_overall": 86,
       "per_priority": {
         "agent": 88,
         "accuracy": 78,
@@ -164,7 +164,7 @@
       "previous": "Grok 4.5",
       "changelog": "AA Intelligence Index 61 (tied GPT-5.6, 1-2pts behind Fable 5/Opus 5). GDPval-AA Elo 1753 - behind only Opus 5, on par with Fable 5. Non-hallucination rate 65.7% (AA), weaker than Claude on that specific measure - holds accuracy score down despite strong reasoning/agent numbers. 500K context window.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 82,
+      "composite_overall": 83,
       "per_priority": {
         "agent": 88,
         "accuracy": 76,

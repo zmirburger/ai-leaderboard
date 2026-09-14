@@ -8,10 +8,10 @@ Daily-refreshed view of the leading AI model across three priorities.
 
 | Priority | Weight |
 |----------|--------|
-| Accuracy & low hallucination | 35% |
+| Accuracy & low hallucination | 25% |
 | Long context & instructions | 25% |
 | Autonomous agent | 25% |
-| Cost efficiency (cost / task) | 15% |
+| Cost efficiency (cost / task) | 25% |
 
 To change weights, edit `data.json` and re-run `refresh.py`.
 

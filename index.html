@@ -73,14 +73,17 @@
   .composite-label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin: 0; }
   .composite-value { font-size: 24px; font-weight: 600; margin: 4px 0 0; letter-spacing: -0.015em; }
   .composite-value .denom { font-size: 14px; color: var(--text-muted); font-weight: 400; }
-  .winner-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 14px; border-top: 0.5px solid var(--border); }
+  .winner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; padding-top: 14px; border-top: 0.5px solid var(--border); }
   .winner-grid .label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 4px; }
   .winner-grid .val { font-size: 14px; font-weight: 500; margin: 0; }
   .winner-grid .val .rank { font-size: 12px; color: var(--text-muted); font-weight: 400; }
   .rationale { font-size: 13px; color: var(--text-muted); margin: 14px 0 0; line-height: 1.55; }
   .runners { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
   .chip { background: var(--surface-2); color: var(--text-muted); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-sm); }
-  .priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+  .priority-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 28px; }
+  @media (max-width: 520px) { .priority-grid { grid-template-columns: 1fr; } }
+  .calibrating-chip { background: rgba(234, 179, 8, 0.15); color: #ca8a04; font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .calibrating-chip { background: rgba(234, 179, 8, 0.2); color: #facc15; } }
   .pri-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
   .pri-tag { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px; }
   .pri-name { font-size: 16px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.005em; }
@@ -204,7 +207,7 @@
   <div class="meta">
     <span id="last-updated">Loading…</span>
     <span style="color: var(--text-dim);">·</span>
-    <span>Weights: 45 acc · 30 ctx · 25 agent</span>
+    <span id="weights-meta">Weights: 35 acc · 25 ctx · 25 agent · 15 cost</span>
     <button class="refresh-btn" onclick="location.reload()">Reload</button>
   </div>
   <div id="content" class="loading">Loading dashboard data…</div>
@@ -395,6 +398,12 @@ async function load() {
     const res = await fetch('data.json?_=' + Date.now());
     const data = await res.json();
     document.getElementById('last-updated').textContent = 'Updated ' + fmt(data.last_updated);
+    if (data.weights) {
+      const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
+      const wStr = Object.entries(data.weights).map(([k, v]) => `${Math.round(v * 100)} ${wMap[k] || k}`).join(' · ');
+      const wEl = document.getElementById('weights-meta');
+      if (wEl) wEl.textContent = 'Weights: ' + wStr;
+    }
     render(data);
   } catch (e) {
     document.getElementById('content').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;">Could not load data.json — has the scraper run yet?</p>';
@@ -444,8 +453,9 @@ function render(d) {
   const byCost = [...claudeCombos].sort((a,b) => a.cost - b.cost);
   const clRow = (c, i, val) => `<tr><td><span class="cl-rank">${i+1}.</span>${c.name}<span class="effort-chip">${c.effort}</span></td><td>${val}</td></tr>`;
 
+  const wSummary = Object.keys(w).map(k => `${wPct(k)} ${k === 'long_context' ? 'ctx' : k}`).join('/');
   const html = `
-    <p class="section-label">Best overall · ${wPct('accuracy')}/${wPct('long_context')}/${wPct('agent')}</p>
+    <p class="section-label">Best overall · ${wSummary}</p>
     <div class="winner-card">
       <div class="winner-head">
         <div>
@@ -459,18 +469,15 @@ function render(d) {
         </div>
       </div>
       <div class="winner-grid">
-        <div>
-          <p class="label">Accuracy · ${wPct('accuracy')}%</p>
-          <p class="val">${overallModel.per_priority.accuracy ?? '—'} <span class="rank">${overallModel.per_priority.accuracy != null ? `· #${rank(overallModel,'accuracy')}` : ''}</span></p>
-        </div>
-        <div>
-          <p class="label">Long context · ${wPct('long_context')}%</p>
-          <p class="val">${overallModel.per_priority.long_context ?? '—'} <span class="rank">${overallModel.per_priority.long_context != null ? `· #${rank(overallModel,'long_context')}` : ''}</span></p>
-        </div>
-        <div>
-          <p class="label">Agent · ${wPct('agent')}%</p>
-          <p class="val">${overallModel.per_priority.agent ?? '—'} <span class="rank">${overallModel.per_priority.agent != null ? `· #${rank(overallModel,'agent')}` : ''}</span></p>
-        </div>
+        ${Object.keys(w).map(k => {
+          const dimLabels = { accuracy: 'Accuracy', long_context: 'Long context', agent: 'Agent', cost: 'Cost' };
+          return `
+            <div>
+              <p class="label">${dimLabels[k] || k} · ${wPct(k)}%</p>
+              <p class="val">${overallModel.per_priority[k] ?? '—'} <span class="rank">${overallModel.per_priority[k] != null ? `· #${rank(overallModel, k)}` : ''}</span></p>
+            </div>
+          `;
+        }).join('')}
       </div>
       <p class="rationale">${overall.rationale}</p>
       <div class="runners">
@@ -480,9 +487,14 @@ function render(d) {
 
     <p class="section-label">Best per priority</p>
     <div class="priority-grid">
-      ${['agent','accuracy','long_context'].map(k => {
-        const labels = {agent:'Autonomous agent', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context'};
-        return `<div class="pri-card"><p class="pri-tag">${labels[k]}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; return `<tr><td>${i+1}. ${m.name}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
+      ${Object.keys(w).map(k => {
+        const labels = {
+          agent: 'Autonomous agent',
+          accuracy: 'Accuracy & low hallucination',
+          long_context: 'Long instructions & context',
+          cost: 'Cost efficiency (cost / task)'
+        };
+        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; return `<tr><td>${i+1}. ${m.name}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
       }).join('')}
     </div>
 
@@ -507,6 +519,7 @@ function render(d) {
                     <div class="model-name-row">
                       <p class="model-name">${m.name}</p>
                       ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
+                      ${m.needs_calibration ? `<span class="calibrating-chip">Calibrating</span>` : ''}
                       ${!isNaN(daysSince(m.released)) && daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
                     </div>
                     <p class="model-vendor">${fmt(m.released)}</p>

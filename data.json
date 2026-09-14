@@ -1,32 +1,38 @@
 {
-  "last_updated": "2026-09-14T06:33:56Z",
+  "last_updated": "2026-09-14T06:54:41Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
-    "accuracy": 0.45,
-    "long_context": 0.3,
-    "agent": 0.25
+    "accuracy": 0.35,
+    "long_context": 0.25,
+    "agent": 0.25,
+    "cost": 0.15
   },
   "best_overall": {
     "model": "Claude Fable 5.1",
-    "composite": 94,
-    "rationale": "Auto-ranked leader: accuracy 97, long context 90, agent 92. Edit this rationale in data.json for a hand-written take."
+    "composite": 87,
+    "rationale": "Auto-ranked leader: accuracy 97, long context 90, agent 92, cost 52. Runners-up: Claude Opus 5 (85) and Gemini 3.8 Flash (85)."
   },
   "best_per_priority": {
     "agent": {
       "model": "Claude Fable 5.1",
       "summary": "Score 92 (auto-ranked; edit summary in data.json)",
-      "supporting": "METR · BrowseComp"
+      "supporting": "METR · DeepSWE · BrowseComp"
     },
     "accuracy": {
       "model": "Claude Fable 5.1",
       "summary": "Score 97 (auto-ranked; edit summary in data.json)",
-      "supporting": "HHEM · Omniscience · Scale RLI"
+      "supporting": "BenchLM · HHEM · Omniscience · Scale RLI"
     },
     "long_context": {
       "model": "Gemini 3.1 Pro",
       "summary": "94.3% GPQA Diamond, 77.1% ARC-AGI-2",
       "supporting": "Fiction.Live · AA Long-Context"
+    },
+    "cost": {
+      "model": "Gemini 3.8 Flash",
+      "summary": "$2.36/task on DeepSWE, $0.75/$3.75 per MTok",
+      "supporting": "DeepSWE · BenchLM · AA"
     }
   },
   "models": [
@@ -39,11 +45,12 @@
       "previous": "Claude Fable 5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 94,
+      "composite_overall": 87,
       "per_priority": {
         "agent": 92,
         "accuracy": 97,
-        "long_context": 90
+        "long_context": 90,
+        "cost": 52
       }
     },
     {
@@ -55,11 +62,12 @@
       "previous": "Claude Opus 4.8",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 90,
+      "composite_overall": 85,
       "per_priority": {
         "agent": 87,
         "accuracy": 95,
-        "long_context": 85
+        "long_context": 85,
+        "cost": 58
       }
     },
     {
@@ -71,11 +79,12 @@
       "previous": "Claude Sonnet 4.6",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 85,
+      "composite_overall": 74,
       "per_priority": {
-        "agent": 82,
-        "accuracy": 88,
-        "long_context": 82
+        "agent": 76,
+        "accuracy": 80,
+        "long_context": 80,
+        "cost": 45
       }
     },
     {
@@ -87,11 +96,12 @@
       "previous": "Claude Haiku 4.4",
       "changelog": "Fastest and most compact Claude model. Sub-second responses, lowest cost per token. Good for high-volume, low-latency tasks.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 74,
+      "composite_overall": 76,
       "per_priority": {
         "agent": 72,
         "accuracy": 76,
-        "long_context": 72
+        "long_context": 72,
+        "cost": 86
       }
     },
     {
@@ -103,11 +113,12 @@
       "previous": "GPT-5.5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://help.openai.com/en/articles/9624314-model-release-notes",
-      "composite_overall": 83,
+      "composite_overall": 82,
       "per_priority": {
         "agent": 92,
         "accuracy": 80,
-        "long_context": 80
+        "long_context": 80,
+        "cost": 76
       }
     },
     {
@@ -119,11 +130,12 @@
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 82,
+      "composite_overall": 81,
       "per_priority": {
-        "agent": 78,
+        "agent": 72,
         "accuracy": 78,
-        "long_context": 92
+        "long_context": 92,
+        "cost": 85
       }
     },
     {
@@ -135,11 +147,12 @@
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 72,
+      "composite_overall": 85,
       "per_priority": {
-        "agent": 65,
-        "accuracy": 70,
-        "long_context": 80
+        "agent": 88,
+        "accuracy": 78,
+        "long_context": 86,
+        "cost": 92
       }
     },
     {
@@ -151,11 +164,12 @@
       "previous": "Grok 4.5",
       "changelog": "AA Intelligence Index 61 (tied GPT-5.6, 1-2pts behind Fable 5/Opus 5). GDPval-AA Elo 1753 - behind only Opus 5, on par with Fable 5. Non-hallucination rate 65.7% (AA), weaker than Claude on that specific measure - holds accuracy score down despite strong reasoning/agent numbers. 500K context window.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 80,
+      "composite_overall": 82,
       "per_priority": {
         "agent": 88,
         "accuracy": 76,
-        "long_context": 80
+        "long_context": 80,
+        "cost": 88
       }
     }
   ],

@@ -243,6 +243,8 @@ def update_releases(data):
                 continue
             existing["previous"] = old
             existing["name"] = name
+            existing["needs_calibration"] = True
+            existing["previous_scores"] = dict(existing.get("per_priority", {}))
             if date:
                 existing["released"] = date
             else:
@@ -250,11 +252,23 @@ def update_releases(data):
                       f"'released' left at stale value {existing['released']}, check {url} manually")
             existing["changelog"] = changelog
             existing["release_notes_url"] = url
-            changes.append(f"{vendor}/{tier}: {old} -> {name}")
-            print(f"  NEW RELEASE: {old} -> {name}")
+            changes.append(f"{vendor}/{tier}: {old} -> {name} (flagged for calibration)")
+            print(f"  NEW RELEASE: {old} -> {name} [DRIFT GUARD: needs_calibration set]")
         else:
             print(f"  no change ({name})")
     return changes
+
+def check_data_drift(data):
+    """Anti-drift audit: warns if any active model has stale calibration or unverified scores."""
+    drift_warnings = []
+    for m in data["models"]:
+        if m.get("needs_calibration"):
+            drift_warnings.append(f"{m['name']}: flagged needs_calibration (new release detected, verify per_priority scores)")
+    if drift_warnings:
+        print("\n=== Data Drift Warnings ===")
+        for w in drift_warnings:
+            print(f"  [!] {w}")
+    return drift_warnings
 
 def recompute_rankings(data):
     """Recompute composite_overall for all models and update best_overall/best_per_priority.
@@ -274,22 +288,23 @@ def recompute_rankings(data):
     if ranked:
         best = max(ranked, key=lambda m: m["composite_overall"])
         if data["best_overall"]["model"] != best["name"]:
-            # New leader: the hand-written rationale describes the old one, replace
-            # with a factual auto-generated line rather than leave stale claims.
             pp = best["per_priority"]
+            dim_summary = ", ".join(f"{k} {pp.get(k, '—')}" for k in w.keys())
             data["best_overall"]["rationale"] = (
-                f"Auto-ranked leader: accuracy {pp.get('accuracy', '—')}, "
-                f"long context {pp.get('long_context', '—')}, agent {pp.get('agent', '—')}. "
+                f"Auto-ranked leader: {dim_summary}. "
                 "Edit this rationale in data.json for a hand-written take."
             )
         data["best_overall"]["model"] = best["name"]
         data["best_overall"]["composite"] = best["composite_overall"]
-    for priority in ["agent", "accuracy", "long_context"]:
+
+    for priority in w.keys():
         scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
         if scoreable:
             top = max(scoreable, key=lambda m: m["per_priority"][priority])
+            if priority not in data["best_per_priority"]:
+                data["best_per_priority"][priority] = {}
             entry = data["best_per_priority"][priority]
-            if entry["model"] != top["name"]:
+            if entry.get("model") != top["name"]:
                 entry["summary"] = f"Score {top['per_priority'][priority]} (auto-ranked; edit summary in data.json)"
             entry["model"] = top["name"]
 
@@ -637,6 +652,8 @@ def main():
 
     print("\n=== Rankings ===")
     recompute_rankings(data)
+
+    check_data_drift(data)
 
     print("\n=== Summary ===")
     # Always update last_updated so the dashboard shows today's check date,

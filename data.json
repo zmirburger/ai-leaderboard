@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-14T07:00:02Z",
+  "last_updated": "2026-09-14T07:40:10Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -433,7 +433,7 @@
       }
     ]
   },
-  "claude_lens": {
+  "_archived_claude_lens": {
     "note": "Estimated capability and Claude Max quota-burn for each Claude model × reasoning-effort combo. Hand-maintained estimates, not benchmarked — capability base is each model's live composite; effort deltas and Max costs are tunable here.",
     "tiers": [
       "Fable",
@@ -478,7 +478,7 @@
     "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
     "top3": []
   },
-  "cost_efficiency": {
+  "_archived_cost_efficiency": {
     "url": "https://artificialanalysis.ai/leaderboards/models",
     "note": "Intelligence Index vs blended cost-per-task (USD), pulled from Artificial Analysis' model leaderboard. Scoped to Claude Sonnet & Opus (all reasoning efforts) vs Gemini vs Grok — Zmir's actual shortlist, not the full AA roster. Manually refreshed by pasting a fresh screenshot when numbers move — the page is JS-rendered and not scraped automatically. Entries with \"estimated\": true weren't in the last screenshot (AA doesn't publish every Claude effort level, and Gemini/Grok rows weren't captured) and are interpolated — see each entry's \"estimate_basis\". Replace with real numbers next time a screenshot covers them. Not in the composite; this is a separate 'is the extra spend worth it' lens. The dashboard computes the cost/intelligence frontier and flags dominated options client-side.",
     "last_manual_update": "2026-08-04",

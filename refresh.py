@@ -415,6 +415,106 @@ def scrape_aa_field(url, field, value_fmt=lambda v: f"{v:.1f}", scale=1.0):
     sorted_models = sorted(extracted.items(), key=lambda kv: kv[1], reverse=True)
     return [{"model": slug, "value": value_fmt(score * scale)} for slug, score in sorted_models[:10]]
 
+def _clean_model_name(name):
+    clean = name.replace("_", "-").strip()
+    clean = re.sub(r'(\d+)-(\d+)', r'\1.\2', clean)
+    mapping = {
+        "gpt-6-astra": "GPT-6 Astra",
+        "gpt-5.6-sol": "GPT-5.6 Sol",
+        "gpt-5.6-luna": "GPT-5.6 Luna",
+        "gpt-5.6-terra": "GPT-5.6 Terra",
+        "gpt-5.5": "GPT-5.5",
+        "gpt-5.4": "GPT-5.4",
+        "claude-opus-5": "Claude Opus 5",
+        "claude-fable-5": "Claude Fable 5",
+        "claude-fable-5.1": "Claude Fable 5.1",
+        "claude-sonnet-5": "Claude Sonnet 5",
+        "claude-opus-4.8": "Claude Opus 4.8",
+        "claude-opus-4.7": "Claude Opus 4.7",
+        "gemini-3.8-flash": "Gemini 3.8 Flash",
+        "gemini-3.7-flash": "Gemini 3.7 Flash",
+        "gemini-3.6-flash": "Gemini 3.6 Flash",
+        "gemini-3.5-flash": "Gemini 3.5 Flash",
+        "gemini-3.1-pro": "Gemini 3.1 Pro",
+        "grok-4.6": "Grok 4.6",
+        "grok-4.5": "Grok 4.5",
+        "kimi-k3": "Kimi K3",
+        "glm-5.3": "GLM-5.3",
+        "glm-5.3-flash": "GLM-5.3 Flash",
+        "glm-5.2": "GLM-5.2",
+        "deepseek-v4-pro": "DeepSeek V4 Pro",
+        "deepseek-v4-flash": "DeepSeek V4 Flash",
+        "qwen3.8-max": "Qwen 3.8 Max",
+        "muse-spark-1.2": "Muse Spark 1.2",
+    }
+    slug = clean.lower()
+    if slug in mapping:
+        return mapping[slug]
+    parts = clean.split("-")
+    return " ".join(p.upper() if p.lower() in ("gpt", "glm", "aa", "swe", "ai") else p.capitalize() for p in parts)
+
+def scrape_deepswe():
+    """Scrapes DeepSWE live leaderboard artifact for pass@1 scores.
+    Keeps the highest pass@1 score across reasoning efforts for each model."""
+    url = "https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json"
+    raw = fetch(url)
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+
+    rows = data.get("rows", [])
+    if not rows:
+        return None
+
+    best_per_model = {}
+    for r in rows:
+        raw_name = r.get("model")
+        p1 = r.get("pass_at_1")
+        if not raw_name or p1 is None:
+            continue
+        c_name = _clean_model_name(raw_name)
+        if c_name not in best_per_model or p1 > best_per_model[c_name]["pass_at_1"]:
+            effort = r.get("reasoning_effort", "")
+            best_per_model[c_name] = {
+                "model": c_name + (f" ({effort})" if effort and effort != "none" else ""),
+                "pass_at_1": p1,
+                "value": f"~{round(p1 * 100)}%",
+            }
+
+    sorted_models = sorted(best_per_model.values(), key=lambda x: x["pass_at_1"], reverse=True)
+    return [{"model": m["model"], "value": m["value"]} for m in sorted_models[:10]]
+
+def scrape_benchlm():
+    """Scrapes BenchLM leaderboard API for overall verified benchmark scores."""
+    url = "https://benchlm.ai/api/leaderboard"
+    raw = fetch(url)
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+
+    models = data.get("models", [])
+    if not models:
+        return None
+
+    results = []
+    for m in models:
+        name = m.get("model")
+        score = m.get("overallScore")
+        if not name or score is None:
+            continue
+        results.append({
+            "model": name.strip(),
+            "value": f"~{score:.1f}",
+        })
+
+    return results[:10]
+
 def update_benchmarks(data):
     changes = []
 
@@ -426,6 +526,28 @@ def update_benchmarks(data):
             data["lmarena_vibe_check"]["top3"] = lmarena[:3]
             changes.append(f"lmarena_vibe_check: top3 updated -> {lmarena[0]['model']} @ {lmarena[0]['score']}")
             print(f"  updated. top: {lmarena[0]['model']} ({lmarena[0]['score']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    print("Scraping DeepSWE...")
+    deepswe = scrape_deepswe()
+    if deepswe:
+        ch = _set_top3(data, "agent", "deepswe", deepswe[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {deepswe[0]['model']} ({deepswe[0]['value']})")
+        else:
+            print("  no change")
+    else:
+        print("  skipped (no parse)")
+
+    print("Scraping BenchLM...")
+    benchlm = scrape_benchlm()
+    if benchlm:
+        ch = _set_top3(data, "accuracy", "benchlm", benchlm[:3])
+        if ch:
+            changes.append(ch); print(f"  updated. top: {benchlm[0]['model']} ({benchlm[0]['value']})")
         else:
             print("  no change")
     else:

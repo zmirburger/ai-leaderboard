@@ -4,10 +4,12 @@
 
 ### Agent (25% weight)
 - **METR Time Horizon** — https://metr.org/time-horizons/
+- **DeepSWE** — https://deepswe.datacurve.ai/ (artifacts JSON API: https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json)
 - **τ-bench** — https://github.com/sierra-research/tau-bench (README) + cross-check on Artificial Analysis if listed
 - **BrowseComp** — https://artificialanalysis.ai/ (search) + https://openai.com/index/browsecomp/
 
 ### Accuracy & low hallucination (45% weight)
+- **BenchLM** — https://benchlm.ai/compare (API: https://benchlm.ai/api/leaderboard)
 - **Vectara HHEM** — https://huggingface.co/spaces/vectara/leaderboard
 - **AA Omniscience** — https://artificialanalysis.ai/evaluations/omniscience
 - **AA Intelligence Index** — https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index

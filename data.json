@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-14T04:01:01Z",
+  "last_updated": "2026-09-14T06:33:56Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -183,6 +183,27 @@
         ]
       },
       {
+        "id": "deepswe",
+        "name": "DeepSWE",
+        "url": "https://deepswe.datacurve.ai/",
+        "description": "Long-horizon real-world SWE tasks (pass@1)",
+        "lower_better": false,
+        "top3": [
+          {
+            "model": "GPT-6 Astra (xhigh)",
+            "value": "~74%"
+          },
+          {
+            "model": "Gemini 3.8 Flash (high)",
+            "value": "~74%"
+          },
+          {
+            "model": "Claude Opus 5 (max)",
+            "value": "~74%"
+          }
+        ]
+      },
+      {
         "id": "tau_bench",
         "name": "τ-bench (retail)",
         "url": "https://github.com/sierra-research/tau-bench",
@@ -226,6 +247,27 @@
       }
     ],
     "accuracy": [
+      {
+        "id": "benchlm",
+        "name": "BenchLM",
+        "url": "https://benchlm.ai/compare",
+        "description": "Composite across 112 verified benchmarks",
+        "lower_better": false,
+        "top3": [
+          {
+            "model": "Claude Fable 5.1",
+            "value": "~84.6"
+          },
+          {
+            "model": "GPT-6 Astra",
+            "value": "~84.1"
+          },
+          {
+            "model": "Claude Opus 5",
+            "value": "~82.0"
+          }
+        ]
+      },
       {
         "id": "vectara_hhem",
         "name": "Vectara HHEM",

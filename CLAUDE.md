@@ -1,10 +1,11 @@
 # AI Leader Dashboard — project context
 
-Personal dashboard tracking the current leading AI model across Zmir's three priorities:
+Personal dashboard tracking the current leading AI model across Zmir's four priorities:
 
-1. **Accuracy & low hallucination** — 45% weight
-2. **Long context & instructions** — 30% weight
+1. **Accuracy & low hallucination** — 25% weight
+2. **Long context & instructions** — 25% weight
 3. **Autonomous agent capability** — 25% weight
+4. **Cost efficiency (cost / task)** — 25% weight
 
 ## How it works
 
@@ -28,12 +29,12 @@ Personal dashboard tracking the current leading AI model across Zmir's three pri
 ## Composite calculation
 
 ```
-composite_overall = (accuracy_score * 0.45) + (long_context_score * 0.30) + (agent_score * 0.25)
+composite_overall = (accuracy_score * 0.25) + (long_context_score * 0.25) + (agent_score * 0.25) + (cost_score * 0.25)
 ```
 
 Per-priority scores are normalized to 0-100 from each benchmark's raw output. Default weighting is in data.json.
 
-## Cost vs intelligence (`data.json` → `cost_efficiency`)
+## Cost vs intelligence (`data.json` → `_archived_cost_efficiency`) [Archived / Hidden]
 
 Separate from the composite — this is a "given two options of similar capability, which one is wasting money" lens, sourced from Artificial Analysis' model leaderboard (Intelligence Index vs $/task per model×reasoning-effort row). Manually refreshed (the AA page is JS-rendered) by pasting a fresh screenshot and transcribing rows into `cost_efficiency.entries`. The dashboard's "Cost vs intelligence" tab computes the cost/intelligence Pareto frontier client-side and flags every dominated entry with which frontier option beats it outright (cheaper, smarter, or both) — e.g. it's how "Opus xhigh over Fable 5" or "Opus medium over Sonnet max" type calls get surfaced automatically instead of eyeballed. It also ranks the frontier by intelligence-per-dollar to surface a "Top 3 for everyday tasks" pick.
 

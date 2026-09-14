@@ -8,9 +8,10 @@ Daily-refreshed view of the leading AI model across three priorities.
 
 | Priority | Weight |
 |----------|--------|
-| Accuracy & low hallucination | 45% |
-| Long context & instructions | 30% |
+| Accuracy & low hallucination | 35% |
+| Long context & instructions | 25% |
 | Autonomous agent | 25% |
+| Cost efficiency (cost / task) | 15% |
 
 To change weights, edit `data.json` and re-run `refresh.py`.
 
@@ -42,8 +43,8 @@ These are hand-maintained estimates, not benchmarks. Model names + capability ba
 
 ## Tracked benchmarks
 
-**Agent:** METR Time Horizon, τ-bench, BrowseComp
-**Accuracy:** Vectara HHEM, AA Omniscience, AA Intelligence Index, Scale SEAL (RLI)
+**Agent:** METR Time Horizon, DeepSWE, τ-bench, BrowseComp
+**Accuracy:** BenchLM, Vectara HHEM, AA Omniscience, AA Intelligence Index, Scale SEAL (RLI)
 **Long context:** Fiction.LiveBench, AA Long-Context, AA IFBench
 **Vibe check:** LMArena (kept but not in composite)
 

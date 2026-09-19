@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-18T03:50:26Z",
+  "last_updated": "2026-09-19T03:47:06Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -270,15 +270,15 @@
         "top3": [
           {
             "model": "Claude Fable 5.1",
-            "value": "~84.8"
+            "value": "~84.7"
           },
           {
             "model": "GPT-6 Astra",
-            "value": "~83.0"
+            "value": "~82.8"
           },
           {
             "model": "Claude Opus 5",
-            "value": "~81.8"
+            "value": "~81.9"
           }
         ]
       },

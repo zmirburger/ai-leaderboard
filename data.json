@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-21T04:00:48Z",
+  "last_updated": "2026-09-22T03:58:06Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
   "weights": {
@@ -157,15 +157,22 @@
     },
     {
       "id": "grok_4_5",
-      "name": "Grok 4.6",
+      "name": "Grok 4.7",
       "vendor": "xAI",
       "tier": "Grok",
       "released": "2026-08-12",
-      "previous": "Grok 4.5",
-      "changelog": "AA Intelligence Index 61 (tied GPT-5.6, 1-2pts behind Fable 5/Opus 5). GDPval-AA Elo 1753 - behind only Opus 5, on par with Fable 5. Non-hallucination rate 65.7% (AA), weaker than Claude on that specific measure - holds accuracy score down despite strong reasoning/agent numbers. 500K context window.",
+      "previous": "Grok 4.6",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
       "composite_overall": 83,
       "per_priority": {
+        "agent": 88,
+        "accuracy": 76,
+        "long_context": 80,
+        "cost": 88
+      },
+      "needs_calibration": true,
+      "previous_scores": {
         "agent": 88,
         "accuracy": 76,
         "long_context": 80,
@@ -270,11 +277,11 @@
         "top3": [
           {
             "model": "Claude Fable 5.1",
-            "value": "~84.7"
+            "value": "~84.6"
           },
           {
             "model": "GPT-6 Astra",
-            "value": "~82.8"
+            "value": "~83.8"
           },
           {
             "model": "Claude Opus 5",

@@ -11,13 +11,13 @@
   "best_overall": {
     "model": "Gemini 3.8 Flash",
     "composite": 86,
-    "rationale": "Auto-ranked leader: cost 92 ($2.36/task on DeepSWE), agent 88, long context 86, accuracy 78. Runners-up: Claude Fable 5.1 (83) and Grok 4.6 (83)."
+    "rationale": "Auto-ranked leader: cost 92 ($2.36/task on DeepSWE), agent 88, long context 86, accuracy 78. Runner-up: Claude Opus 5.5 (86, just behind at 85.75 unrounded), then Claude Fable 5.1 (83)."
   },
   "best_per_priority": {
     "agent": {
-      "model": "Claude Fable 5.1",
-      "summary": "Score 92 (auto-ranked; edit summary in data.json)",
-      "supporting": "METR · DeepSWE · BrowseComp"
+      "model": "GPT-6",
+      "summary": "Terminal-bench 4.0 60%, #1 DeepSWE, BenchLM 88.7",
+      "supporting": "Terminal-bench · DeepSWE · BenchLM"
     },
     "accuracy": {
       "model": "Claude Fable 5.1",
@@ -30,9 +30,9 @@
       "supporting": "Fiction.Live · AA Long-Context"
     },
     "cost": {
-      "model": "Gemini 3.8 Flash",
-      "summary": "$2.36/task on DeepSWE, $0.75/$3.75 per MTok",
-      "supporting": "DeepSWE · BenchLM · AA"
+      "model": "Grok 4.7",
+      "summary": "$2/$6 per MTok, cached input $0.50",
+      "supporting": "xAI pricing · AA"
     }
   },
   "models": [
@@ -60,21 +60,14 @@
       "tier": "Opus",
       "released": "2026-09-22",
       "previous": "Claude Opus 5",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 81,
+      "composite_overall": 86,
       "per_priority": {
-        "agent": 87,
-        "accuracy": 95,
-        "long_context": 85,
-        "cost": 58
-      },
-      "needs_calibration": true,
-      "previous_scores": {
-        "agent": 87,
-        "accuracy": 95,
-        "long_context": 85,
-        "cost": 58
+        "agent": 93,
+        "accuracy": 96,
+        "long_context": 88,
+        "cost": 66
       }
     },
     {
@@ -113,19 +106,19 @@
     },
     {
       "id": "gpt_5_5",
-      "name": "GPT-5.6",
+      "name": "GPT-6",
       "vendor": "OpenAI",
       "tier": "GPT",
-      "released": "2026-07-09",
-      "previous": "GPT-5.5",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
-      "release_notes_url": "https://help.openai.com/en/articles/9624314-model-release-notes",
-      "composite_overall": 82,
+      "released": "2026-09-03",
+      "previous": "GPT-5.6",
+      "changelog": "GPT-6 Astra: #1 on BenchLM (88.7), AA Intelligence Index 53, Terminal-bench 4.0 60%, top of DeepSWE. Hallucination 4.2%. 1.05M context. $10/$50 per MTok (2x above 272K input).",
+      "release_notes_url": "https://openai.com/index/gpt-6-astra/",
+      "composite_overall": 81,
       "per_priority": {
-        "agent": 92,
-        "accuracy": 80,
-        "long_context": 80,
-        "cost": 76
+        "agent": 94,
+        "accuracy": 90,
+        "long_context": 86,
+        "cost": 55
       }
     },
     {
@@ -169,21 +162,14 @@
       "tier": "Grok",
       "released": "2026-08-12",
       "previous": "Grok 4.6",
-      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 83,
+      "composite_overall": 81,
       "per_priority": {
-        "agent": 88,
+        "agent": 74,
         "accuracy": 76,
         "long_context": 80,
-        "cost": 88
-      },
-      "needs_calibration": true,
-      "previous_scores": {
-        "agent": 88,
-        "accuracy": 76,
-        "long_context": 80,
-        "cost": 88
+        "cost": 93
       }
     }
   ],

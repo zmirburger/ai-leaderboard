@@ -71,14 +71,22 @@ def _parse_version(name):
         return 0.0
     return float(m.group(0))
 
-def _find_best_match(soup, pattern):
+_UNICODE_HYPHENS = re.compile("[\u2010\u2011\u2012\u2013\u2014\u2212]")
+
+def _find_best_match(soup, pattern, include_body=False):
     """Find ALL matches in headings (preferred) or body; pick the highest version.
     Compares versions as decimal floats so "5" beats "4.5" and "4.5" beats "4.20" —
-    a tuple compare would keep the older-but-numerically-larger "4.20" forever."""
+    a tuple compare would keep the older-but-numerically-larger "4.20" forever.
+    Unicode hyphens are normalized first: OpenAI writes "GPT\u20116" with a
+    non-breaking hyphen, which an ASCII "GPT-" pattern silently misses.
+    include_body=True searches headings AND body, for pages whose newest release
+    isn't in a heading while older ones are (headings-only would never see it)."""
     headings = " | ".join(h.get_text(" ", strip=True) for h in soup.find_all(["h1", "h2", "h3"]))
+    headings = _UNICODE_HYPHENS.sub("-", headings)
+    body = _UNICODE_HYPHENS.sub("-", soup.get_text(" ", strip=True))
     matches = re.findall(pattern, headings)
-    if not matches:
-        matches = re.findall(pattern, soup.get_text(" ", strip=True))
+    if include_body or not matches:
+        matches += re.findall(pattern, body)
     if not matches:
         return None
     if isinstance(matches[0], tuple):
@@ -144,7 +152,7 @@ def detect_openai():
     if not html:
         return None
     soup = BeautifulSoup(html, "html.parser")
-    version = _find_best_match(soup, r"GPT-(\d+(?:\.\d+)?)\b(?!\d)")
+    version = _find_best_match(soup, r"GPT-(\d+(?:\.\d+)?)\b(?!\d)", include_body=True)
     if not version:
         return None
     return _result(f"GPT-{version}", soup.get_text(" ", strip=True), url)
@@ -274,6 +282,7 @@ def recompute_rankings(data):
     """Recompute composite_overall for all models and update best_overall/best_per_priority.
     Null per_priority scores are skipped (weight→0); composite is None when all scores are null."""
     w = data["weights"]
+    raw = {}
     for m in data["models"]:
         pp = m["per_priority"]
         total = 0
@@ -283,10 +292,13 @@ def recompute_rankings(data):
                 total += score * weight
         has_any = any(v is not None for v in pp.values())
         m["composite_overall"] = round(total) if has_any else None
+        raw[m["name"]] = total
 
     ranked = [m for m in data["models"] if m["composite_overall"] is not None]
     if ranked:
-        best = max(ranked, key=lambda m: m["composite_overall"])
+        # Rank on the unrounded total: 85.75 and 86.0 both display as 86, and
+        # ranking on the rounded value would let list order pick the leader.
+        best = max(ranked, key=lambda m: raw[m["name"]])
         if data["best_overall"]["model"] != best["name"]:
             pp = best["per_priority"]
             dim_summary = ", ".join(f"{k} {pp.get(k, '—')}" for k in w.keys())

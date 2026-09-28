@@ -94,7 +94,7 @@
   .pri-rank td:last-child { text-align: right; color: var(--text-muted); font-variant-numeric: tabular-nums; }
   .pri-rank tr:first-child td { font-weight: 600; color: var(--text); }
   .pri-rank tr:first-child td:last-child { color: var(--accent); }
-  .tabs { display: flex; gap: 4px; border-bottom: 0.5px solid var(--border); margin-bottom: 18px; }
+  .tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 0.5px solid var(--border); margin-bottom: 18px; }
   .tab-btn { background: transparent; border: 0; color: var(--text-muted); font-size: 13.5px; padding: 9px 14px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; font-weight: 500; }
   .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
   .tab-pane { display: none; }
@@ -185,6 +185,19 @@
   .skip-row .sr-name { color: var(--text); }
   .skip-row .sr-arrow { color: var(--text-dim); margin: 0 4px; }
   .skip-row .sr-target { color: var(--accent); font-weight: 500; }
+  .dbg-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+  .dbg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .dbg-total { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dbg-total b { color: var(--text); font-size: 15px; }
+  .dbg-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .dbg-table th { text-align: right; font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 500; padding: 0 0 6px 8px; border-bottom: 0.5px solid var(--border); }
+  .dbg-table th:first-child, .dbg-table td:first-child { text-align: left; padding-left: 0; }
+  .dbg-table td { text-align: right; padding: 6px 0 6px 8px; font-size: 12.5px; border-bottom: 0.5px solid var(--border); vertical-align: top; }
+  .dbg-table tr.dbg-sum td { border-bottom: 0; font-weight: 600; }
+  .dbg-table tr.dbg-main td { border-bottom: 0; padding-bottom: 0; }
+  .dbg-table td.dbg-basis { font-size: 11px; color: var(--text-dim); line-height: 1.45; text-align: left; padding: 2px 0 7px; }
+  td.dbg-basis .ev { color: var(--text-muted); }
+  .dbg-formula { font-size: 11.5px; color: var(--text-muted); margin: 8px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
   .loading { text-align: center; color: var(--text-dim); padding: 60px 0; font-size: 13px; }
   @media (max-width: 580px) {
     body { padding: 16px 12px 32px; font-size: 14px; }
@@ -393,6 +406,88 @@ function renderValueTab(d) {
   `;
 }
 
+// ---------- score breakdown (debug) ----------
+// Shows exactly how each number on the dashboard is produced: per-priority
+// scores are hand-set in data.json (optionally with a score_basis note per
+// dimension); composite = Σ score × weight, ranked on the unrounded total.
+// Evidence rows are benchmark top-3 entries that name this exact model version.
+const DIM_LABELS = { accuracy: 'Accuracy', long_context: 'Long context', agent: 'Agent', cost: 'Cost' };
+const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const normName = (s) => String(s).toLowerCase().replace(/\(.*?\)/g, '').replace(/\s+/g, ' ').trim();
+function benchEvidence(d, model, dim) {
+  const target = normName(model.name);
+  const out = [];
+  (d.benchmarks[dim] || []).forEach(b => (b.top3 || []).forEach((row, i) => {
+    const n = normName(row.model);
+    if (n === target || n.startsWith(target + ' ')) out.push(`${b.name} #${i + 1} (${row.value})`);
+  }));
+  return out;
+}
+
+function renderDebugTab(d) {
+  const w = d.weights;
+  const dims = Object.keys(w);
+  const rows = d.models.map(m => {
+    const pp = m.per_priority;
+    const raw = dims.reduce((t, k) => t + (pp[k] != null ? pp[k] * w[k] : 0), 0);
+    return { m, raw };
+  }).sort((a, b) => b.raw - a.raw);
+  const rankIn = (m, k) => 1 + d.models.filter(o => o.per_priority[k] != null && o.per_priority[k] > m.per_priority[k]).length;
+
+  const leaderRows = rows.map((r, i) => `<tr><td>${i + 1}. ${esc(r.m.name)}</td><td>${r.raw.toFixed(2)}</td><td>${r.m.composite_overall ?? '—'}</td></tr>`).join('');
+
+  const cards = rows.map(({ m, raw }, idx) => {
+    const pp = m.per_priority;
+    const basis = m.score_basis || {};
+    const lines = dims.map(k => {
+      const v = pp[k];
+      const contrib = v != null ? v * w[k] : null;
+      const ev = benchEvidence(d, m, k);
+      const prev = m.previous_scores && m.previous_scores[k] != null && m.previous_scores[k] !== v ? ` Was ${m.previous_scores[k]} before ${esc(m.name)} was detected.` : '';
+      const parts = [];
+      if (basis[k]) parts.push(esc(basis[k]));
+      if (ev.length) parts.push(`<span class="ev">Evidence: ${esc(ev.join(' · '))}</span>`);
+      else if (k === 'cost') parts.push('No cost benchmark is scraped; see changelog for pricing.');
+      else parts.push('No benchmark top-3 lists this exact version.');
+      if (!basis[k]) parts.push('Hand-set, no score_basis note.');
+      return `<tr class="dbg-main">
+        <td>${DIM_LABELS[k] || k}</td>
+        <td>${v ?? '—'}</td>
+        <td>${v != null ? '#' + rankIn(m, k) : '—'}</td>
+        <td>× ${w[k]}</td>
+        <td>${contrib != null ? contrib.toFixed(2) : '—'}</td>
+      </tr><tr><td colspan="5" class="dbg-basis">${parts.join('<br>')}${prev}</td></tr>`;
+    }).join('');
+    const formula = dims.map(k => `${pp[k] ?? 0}×${w[k]}`).join(' + ') + ` = ${raw.toFixed(2)} → round → ${m.composite_overall ?? '—'}`;
+    return `<div class="dbg-card">
+      <div class="dbg-head">
+        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${m.needs_calibration ? '<span class="calibrating-chip">Calibrating</span>' : ''}</div>
+        <span class="dbg-total">Composite <b>${m.composite_overall ?? '—'}</b></span>
+      </div>
+      <table class="dbg-table">
+        <thead><tr><th>Priority</th><th>Score</th><th>Rank</th><th>Weight</th><th>Adds</th></tr></thead>
+        <tbody>${lines}<tr class="dbg-sum"><td>Composite (unrounded)</td><td></td><td></td><td></td><td>${raw.toFixed(2)}</td></tr></tbody>
+      </table>
+      <p class="dbg-formula">${formula}</p>
+    </div>`;
+  }).join('');
+
+  return `
+    <p class="section-label" style="margin-top:8px;">Best overall card: how the winner is picked</p>
+    <div class="dbg-card">
+      <table class="dbg-table">
+        <thead><tr><th>Model</th><th>Unrounded</th><th>Shown</th></tr></thead>
+        <tbody>${leaderRows}</tbody>
+      </table>
+      <p class="cl-note">refresh.py ranks on the unrounded total, so two models that both show ${rows[0] ? rows[0].m.composite_overall : ''} are separated by the decimals. Runner-up and 3rd chips are the next two rows.</p>
+    </div>
+
+    <p class="section-label">Best per priority cards &amp; composite: per model</p>
+    ${cards}
+    <p class="cl-note">Per-priority scores (0–100) are hand-maintained in data.json → models[].per_priority; the scraper never changes them. It only recomputes composites and rankings. Add a <code>score_basis</code> object per model (e.g. <code>{"agent": "Terminal-bench 4.0 66.4% → 93"}</code>) and the note shows here instead of "Hand-set, no score_basis note".</p>
+  `;
+}
+
 async function load() {
   try {
     const res = await fetch('data.json?_=' + Date.now());
@@ -503,6 +598,7 @@ function render(d) {
       <button class="tab-btn" data-tab="details">Benchmark details</button>
       ${d.cost_efficiency ? '<button class="tab-btn" data-tab="value">Cost vs intelligence</button>' : ''}
       ${cl ? '<button class="tab-btn" data-tab="claude">Claude</button>' : ''}
+      <button class="tab-btn" data-tab="debug">Score breakdown</button>
     </div>
 
     <div id="pane-models" class="tab-pane active">
@@ -608,6 +704,10 @@ function render(d) {
 
       <p class="cl-note" style="margin-top:14px;">${cl.note}</p>
     </div>` : ''}
+
+    <div id="pane-debug" class="tab-pane">
+      ${renderDebugTab(d)}
+    </div>
 
     <p class="footer-note">${d.data_status === 'initial_estimates' ? 'Showing seeded estimates — scraper will replace with live numbers on first run. ' : ''}<a href="https://github.com/zmirburger/ai-leaderboard" target="_blank" rel="noopener">Source on GitHub</a></p>
   `;

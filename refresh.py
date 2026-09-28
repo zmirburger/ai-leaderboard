@@ -276,7 +276,6 @@ def update_releases(data):
 AA_URL = "https://artificialanalysis.ai/api/v2/data/llms/models"
 AA_EVAL_KEYS = {
     "aa_intelligence_index": ["artificial_analysis_intelligence_index"],
-    "aa_omniscience": ["artificial_analysis_omniscience_index", "omniscience_index", "omniscience", "aa_omniscience"],
     "aa_lcr": ["lcr", "aa_lcr"],
     "aa_ifbench": ["ifbench"],
     "aa_terminalbench": ["terminalbench_hard", "terminal_bench_hard"],
@@ -419,8 +418,6 @@ BENCHMARKS = [
          url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in customer-service flows"),
     dict(id="aa_intelligence_index", priority="accuracy", name="AA Intelligence Index", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
-    dict(id="aa_omniscience", priority="accuracy", name="AA Omniscience", unit="score", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/omniscience", description="Knowledge, punishing confident wrong answers"),
     dict(id="vectara", priority="accuracy", name="Vectara HHEM", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://github.com/vectara/hallucination-leaderboard", description="Factual consistency when summarizing (100 − hallucination rate)"),
     dict(id="benchlm", priority="accuracy", name="BenchLM", unit="score", scale="linear", higher_better=True, reference="board",

@@ -6,7 +6,7 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 | Source | Endpoint | Feeds | Key? |
 |--------|----------|-------|------|
-| Artificial Analysis API | https://artificialanalysis.ai/api/v2/data/llms/models | Intelligence Index, Omniscience (accuracy) · Long-Context Reasoning, IFBench (long context) · Terminal-Bench Hard, τ²-Bench (agent) · blended $/MTok (cost) | `AA_API_KEY` secret |
+| Artificial Analysis API | https://artificialanalysis.ai/api/v2/data/llms/models | Intelligence Index (accuracy) · Long-Context Reasoning, IFBench (long context) · Terminal-Bench Hard, τ²-Bench (agent) · blended $/MTok (cost) | `AA_API_KEY` secret |
 | BenchLM | https://benchlm.ai/api/leaderboard | accuracy | no |
 | DeepSWE | https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json | agent (pass@1) · cost ($/task, if the row publishes it) | no |
 | METR | https://metr.org/time-horizons/ (`thData` JSON) | agent (50% time horizon) | no |
@@ -21,7 +21,7 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 ## Dropped
 
-- Scraping AA's HTML pages, LMArena, τ-bench README, BrowseComp, Scale SEAL, and Fiction.LiveBench. They were either never fetched automatically (their top-3 lists were typed in by hand) or failed to parse on every run. The AA API replaces the AA pages and supplies τ²-Bench.
+- Scraping AA's HTML pages, LMArena, τ-bench README, BrowseComp, Scale SEAL, and Fiction.LiveBench. They were either never fetched automatically (their top-3 lists were typed in by hand) or failed to parse on every run. The AA API replaces the AA pages and supplies τ²-Bench. AA Omniscience isn't in the API, so it's dropped.
 
 ## Cost vs intelligence (archived, not in composite)
 

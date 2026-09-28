@@ -352,8 +352,8 @@ def fetch_deepswe():
     pass1, cost = {}, {}
     for name, r in best.items():
         pass1[name] = r["pass_at_1"] * 100 if r["pass_at_1"] <= 1 else float(r["pass_at_1"])
-        c = next((r[k] for k in r if "cost" in k.lower() and isinstance(r[k], (int, float)) and r[k] > 0), None)
-        if c is not None:
+        c = r.get("mean_cost_usd")
+        if isinstance(c, (int, float)) and c > 0:
             cost[name] = float(c)
     return {"deepswe": pass1, "deepswe_cost": cost}
 
@@ -607,25 +607,30 @@ def compute_scores(data):
             m["score_basis"][dim] = " · ".join(parts) if parts else "No benchmark data yet."
 
 def recompute_rankings(data):
-    """Composite = weighted mean over the priorities EVERY model has a score for, so all
-    models are compared on the same basis. A priority with a gap for any model is left
-    out for everyone (and listed in composite_basis) instead of letting a model with
-    fewer measured priorities rank on a different mix. Ranked on the unrounded value."""
+    """Composite = weighted mean over the priorities at least half the models have a
+    score for, so every ranked model is compared on the same mix. A model missing one
+    of those priorities is left unranked (composite None) rather than ranked on fewer
+    priorities; a priority most models lack is left out for everyone. Both are listed
+    in composite_basis. Ranked on the unrounded value."""
     w = data["weights"]
     labels = {"accuracy": "accuracy", "long_context": "long context", "agent": "agent", "cost": "cost"}
-    included = {k: wt for k, wt in w.items() if all(m["per_priority"].get(k) is not None for m in data["models"])}
+    models = data["models"]
+    has = lambda m, k: m["per_priority"].get(k) is not None
+    included = {k: wt for k, wt in w.items() if sum(has(m, k) for m in models) * 2 >= len(models) and any(has(m, k) for m in models)}
+    unranked = {m["name"]: [k for k in included if not has(m, k)] for m in models}
+    unranked = {n: ks for n, ks in unranked.items() if ks}
     data["composite_basis"] = {
         "included": list(included),
-        "excluded": {k: [m["name"] for m in data["models"] if m["per_priority"].get(k) is None]
-                     for k in w if k not in included},
+        "excluded": {k: [m["name"] for m in models if not has(m, k)] for k in w if k not in included},
+        "unranked": unranked,
     }
     total_w = sum(included.values())
     raw = {}
-    for m in data["models"]:
-        pp = m["per_priority"]
-        raw[m["name"]] = sum(pp[k] * wt for k, wt in included.items()) / total_w if total_w else None
-        m["composite_unrounded"] = round(raw[m["name"]], 2) if total_w else None
-        m["composite_overall"] = round(raw[m["name"]]) if total_w else None
+    for m in models:
+        ok = total_w and m["name"] not in unranked
+        raw[m["name"]] = sum(m["per_priority"][k] * wt for k, wt in included.items()) / total_w if ok else None
+        m["composite_unrounded"] = round(raw[m["name"]], 2) if ok else None
+        m["composite_overall"] = round(raw[m["name"]]) if ok else None
 
     ranked = sorted((m for m in data["models"] if raw[m["name"]] is not None), key=lambda m: -raw[m["name"]])
     if ranked:
@@ -635,8 +640,10 @@ def recompute_rankings(data):
         runners = "; ".join(f"{m['name']} {raw[m['name']]:.2f}" for m in ranked[1:3])
         prov = [k for k in included if best["score_detail"][k]["status"] == "provisional"]
         note = f" Provisional on {', '.join(labels[k] for k in prov)} (inherited benchmark values)." if prov else ""
+        if unranked:
+            note += " Not ranked (missing data): " + "; ".join(f"{n} ({', '.join(labels[k] for k in ks)})" for n, ks in unranked.items()) + "."
         if data["composite_basis"]["excluded"]:
-            note += f" Not in composite (missing for some models): {', '.join(labels[k] for k in data['composite_basis']['excluded'])}."
+            note += f" Not in composite (missing for most models): {', '.join(labels[k] for k in data['composite_basis']['excluded'])}."
         data["best_overall"] = {
             "model": best["name"], "composite": best["composite_overall"],
             "rationale": f"Computed from benchmarks: {dims} → {raw[best['name']]:.2f}. Next: {runners}.{note}",

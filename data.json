@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-28T07:31:40Z",
+  "last_updated": "2026-09-28T07:34:11Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -9,9 +9,9 @@
     "cost": 0.25
   },
   "best_overall": {
-    "model": "GPT-6",
-    "composite": 96,
-    "rationale": "Computed from benchmarks: accuracy 96 → 96.00. Next: Claude Fable 5.1 94.00; Claude Opus 5.5 94.00. Not in composite (missing for some models): long context, agent, cost."
+    "model": "Gemini 3.8 Flash",
+    "composite": 94,
+    "rationale": "Computed from benchmarks: accuracy 85, agent 100, cost 96 → 93.67. Next: Grok 4.7 84.00; GPT-6 83.67. Provisional on accuracy (inherited benchmark values). Not ranked (missing data): Claude Haiku 4.5 (agent, cost). Not in composite (missing for most models): long context."
   },
   "best_per_priority": {
     "accuracy": {
@@ -40,7 +40,7 @@
       "previous": "Claude Fable 5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 94,
+      "composite_overall": 74,
       "per_priority": {
         "accuracy": 94,
         "long_context": null,
@@ -115,7 +115,7 @@
         "agent": "DeepSWE 69.9% → 94 (inherited from claude-fable-5) · not on METR Time Horizon",
         "cost": "DeepSWE $/task $13.41 → 34 (inherited from claude-fable-5)"
       },
-      "composite_unrounded": 94.0
+      "composite_unrounded": 74.0
     },
     {
       "id": "claude_opus_4_7",
@@ -126,7 +126,7 @@
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 94,
+      "composite_overall": 77,
       "per_priority": {
         "accuracy": 94,
         "long_context": null,
@@ -219,7 +219,7 @@
         "agent": "DeepSWE 73.6% → 99 (inherited from claude-opus-5) · METR Time Horizon 222h → 100 (inherited from Claude Opus 4.6 (Inspect))",
         "cost": "DeepSWE $/task $11.84 → 38 (inherited from claude-opus-5)"
       },
-      "composite_unrounded": 94.0
+      "composite_unrounded": 77.33
     },
     {
       "id": "claude_sonnet_4_6",
@@ -230,7 +230,7 @@
       "previous": "Claude Sonnet 4.6",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 83,
+      "composite_overall": 55,
       "per_priority": {
         "accuracy": 83,
         "long_context": null,
@@ -314,7 +314,7 @@
         "agent": "DeepSWE 53.8% → 73 · not on METR Time Horizon",
         "cost": "DeepSWE $/task $26.40 → 9"
       },
-      "composite_unrounded": 83.0
+      "composite_unrounded": 55.0
     },
     {
       "id": "claude_haiku_4_5",
@@ -325,7 +325,7 @@
       "previous": "Claude Haiku 4.4",
       "changelog": "Fastest and most compact Claude model. Sub-second responses, lowest cost per token. Good for high-volume, low-latency tasks.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 92,
+      "composite_overall": null,
       "per_priority": {
         "accuracy": 92,
         "long_context": null,
@@ -379,7 +379,7 @@
         "agent": "not on DeepSWE, METR Time Horizon",
         "cost": "not on DeepSWE $/task"
       },
-      "composite_unrounded": 92.0
+      "composite_unrounded": null
     },
     {
       "id": "gpt_5_5",
@@ -390,7 +390,7 @@
       "previous": "GPT-5.6",
       "changelog": "GPT-6 Astra: #1 on BenchLM (88.7), AA Intelligence Index 53, Terminal-bench 4.0 60%, top of DeepSWE. Hallucination 4.2%. 1.05M context. $10/$50 per MTok (2x above 272K input).",
       "release_notes_url": "https://openai.com/index/gpt-6-astra/",
-      "composite_overall": 96,
+      "composite_overall": 84,
       "per_priority": {
         "accuracy": 96,
         "long_context": null,
@@ -486,7 +486,7 @@
         "agent": "DeepSWE 74.1% → 100 · METR Time Horizon 76h → 61 (inherited from GPT-5.4)",
         "cost": "DeepSWE $/task $4.43 → 74"
       },
-      "composite_unrounded": 96.0
+      "composite_unrounded": 83.67
     },
     {
       "id": "gemini_3_1_pro",
@@ -497,7 +497,7 @@
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 82,
+      "composite_overall": 75,
       "per_priority": {
         "accuracy": 82,
         "long_context": null,
@@ -590,7 +590,7 @@
         "agent": "DeepSWE 11.7% → 16 · METR Time Horizon 89h → 67",
         "cost": "DeepSWE $/task $2.14 → 100"
       },
-      "composite_unrounded": 82.0
+      "composite_unrounded": 74.67
     },
     {
       "id": "gemini_3_1_flash",
@@ -601,7 +601,7 @@
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 85,
+      "composite_overall": 94,
       "per_priority": {
         "accuracy": 85,
         "long_context": null,
@@ -685,7 +685,7 @@
         "agent": "DeepSWE 73.8% → 100 · not on METR Time Horizon",
         "cost": "DeepSWE $/task $2.36 → 96"
       },
-      "composite_unrounded": 85.0
+      "composite_unrounded": 93.67
     },
     {
       "id": "grok_4_5",
@@ -696,7 +696,7 @@
       "previous": "Grok 4.6",
       "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 78,
+      "composite_overall": 84,
       "per_priority": {
         "accuracy": 78,
         "long_context": null,
@@ -771,7 +771,7 @@
         "agent": "DeepSWE 67.5% → 91 (inherited from grok-4-6) · not on METR Time Horizon",
         "cost": "DeepSWE $/task $3.45 → 83 (inherited from grok-4-6)"
       },
-      "composite_unrounded": 78.0
+      "composite_unrounded": 84.0
     }
   ],
   "benchmarks": {
@@ -1319,7 +1319,9 @@
   },
   "composite_basis": {
     "included": [
-      "accuracy"
+      "accuracy",
+      "agent",
+      "cost"
     ],
     "excluded": {
       "long_context": [
@@ -1331,12 +1333,12 @@
         "Gemini 3.1 Pro",
         "Gemini 3.8 Flash",
         "Grok 4.7"
-      ],
-      "agent": [
-        "Claude Haiku 4.5"
-      ],
-      "cost": [
-        "Claude Haiku 4.5"
+      ]
+    },
+    "unranked": {
+      "Claude Haiku 4.5": [
+        "agent",
+        "cost"
       ]
     }
   }

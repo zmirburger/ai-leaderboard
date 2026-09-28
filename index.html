@@ -446,7 +446,7 @@ function renderDebugTab(d) {
       });
       if (det.inputs.length > 1) inputs.push(`mean of ${det.inputs.length} = ${v}`);
       if (det.missing.length) inputs.push(`not listed on ${esc(det.missing.join(', '))}`);
-      if (!inComp) inputs.push('not in composite: some models have no data for this priority');
+      if (!inComp) inputs.push('not in composite: most models have no data for this priority');
       return `<tr class="dbg-main">
         <td>${DIM_LABELS[k] || k} <span class="dbg-status dbg-${det.status}">${STATUS_TEXT[det.status]}</span></td>
         <td>${v ?? '—'}</td>
@@ -477,8 +477,10 @@ function renderDebugTab(d) {
         <tbody>${leaderRows}</tbody>
       </table>
       <p class="cl-note">Ranked on the unrounded composite. ${excluded.length
-        ? `Left out of every model's composite because some models have no data: ${excluded.map(([k, ms]) => `<b>${DIM_LABELS[k] || k}</b> (missing: ${esc(ms.join(', '))})`).join('; ')}. The remaining weights are rescaled to sum to 1.`
-        : 'All four priorities have data for every model.'}</p>
+        ? `Left out of every model's composite because most models have no data: ${excluded.map(([k, ms]) => `<b>${DIM_LABELS[k] || k}</b> (missing: ${esc(ms.join(', '))})`).join('; ')}. The remaining weights are rescaled to sum to 1. `
+        : ''}${Object.keys(cb.unranked || {}).length
+        ? `Not ranked, because data is missing for a priority the others are scored on: ${Object.entries(cb.unranked).map(([n, ks]) => `<b>${esc(n)}</b> (${ks.map(k => DIM_LABELS[k] || k).join(', ')})`).join('; ')}.`
+        : ''}${!excluded.length && !Object.keys(cb.unranked || {}).length ? 'All four priorities have data for every model.' : ''}</p>
     </div>
 
     <p class="section-label">Per model: every input behind every score</p>
@@ -588,6 +590,7 @@ function render(d) {
           long_context: 'Long instructions & context',
           cost: 'Cost efficiency (cost / task)'
         };
+        if (!d.models.some(m => m.per_priority[k] != null)) return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><p class="pri-summary">No benchmark data yet, so this priority is left out of the composite.</p></div>`;
         return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; const st = ((m.score_detail || {})[k] || {}).status; return `<tr><td>${i+1}. ${m.name}${st === 'provisional' ? '<span class="est-chip" title="Uses an older version&#39;s benchmark results">prov.</span>' : ''}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
       }).join('')}
     </div>

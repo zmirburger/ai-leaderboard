@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-09-28T04:24:45Z",
   "data_status": "auto_refreshed",
-  "note": "Per-priority scores are manually maintained estimates. Model names/versions are auto-detected from vendor release pages by daily scraper.",
+  "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
     "accuracy": 0.25,
     "long_context": 0.25,
@@ -119,7 +119,10 @@
         "accuracy": 90,
         "long_context": 86,
         "cost": 55
-      }
+      },
+      "aliases": [
+        "GPT-6 Astra"
+      ]
     },
     {
       "id": "gemini_3_1_pro",
@@ -472,11 +475,6 @@
         "cost_mult": 4.0
       }
     ]
-  },
-  "lmarena_vibe_check": {
-    "url": "https://lmarena.ai/leaderboard",
-    "note": "Blind human pairwise preference. Not in composite (style bias documented), kept as a casual signal.",
-    "top3": []
   },
   "_archived_cost_efficiency": {
     "url": "https://artificialanalysis.ai/leaderboards/models",

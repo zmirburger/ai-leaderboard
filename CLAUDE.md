@@ -20,21 +20,27 @@ Personal dashboard tracking the current leading AI model across Zmir's four prio
 | Request | What to do |
 |---------|-----------|
 | "Refresh my AI dashboard" | `cd C:\Users\User\cowork\ai_leaderboard && python refresh.py && git add -A && git commit -m "manual refresh" && git push` |
-| "Change weights to X/Y/Z" | Edit `weights` block in data.json, then recompute composite_overall for each model |
-| "Add benchmark Y" | Add entry to benchmarks block in data.json (under right category), add scraper logic in refresh.py |
-| "Drop benchmark Z" | Remove entry from data.json + scraper |
+| "Change weights to X/Y/Z" | Edit `weights` block in data.json, then run `python refresh.py` (it recomputes composites) |
+| "Add benchmark Y" | Add a fetcher returning `{bench_id: {model_name: value}}` for the whole board to `SOURCES`, and a `BENCHMARKS` entry (priority, unit, scale, direction) in refresh.py |
+| "Drop benchmark Z" | Remove its `BENCHMARKS` entry (and fetcher if unused) in refresh.py; its `raw_benchmarks` cache entry is then ignored |
+| "A score looks wrong" | Open the dashboard's Score breakdown tab: it lists every raw input. Fix the source or name matching (add to the model's `aliases` in data.json); never hand-edit `per_priority` |
 | "Change schedule" | Edit cron expression in `.github/workflows/daily-refresh.yml` |
 | "Update the cost/value table" (paste an Artificial Analysis leaderboard screenshot) | Transcribe rows into `data.json`'s `cost_efficiency.entries` (model, vendor, context_window, intelligence_index, cost_per_task_usd), bump `last_manual_update`. Frontier/dominated-option logic is computed client-side in index.html — no manual ranking needed. |
 
 ## Composite calculation
 
-```
-composite_overall = (accuracy_score * 0.25) + (long_context_score * 0.25) + (agent_score * 0.25) + (cost_score * 0.25)
-```
+All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 
-Per-priority scores are normalized to 0-100 from each benchmark's raw output. Default weighting is in data.json.
+1. **Raw values:** each source's full leaderboard goes into `data.json` → `raw_benchmarks` (a cache with `fetched_at`). A failed fetch, or one that returns fewer than half the cached rows, keeps the old values, which are shown with "as of <date>" once more than 14 days old.
+2. **Name matching:** `norm_name()` strips vendor prefixes, dates, effort/preview suffixes and reorders "Claude 4.5 Haiku" → "claude haiku 4.5". Board variants of one model keep the best value. Use a model's `aliases` in data.json for naming mismatches (e.g. GPT-6 ↔ "GPT-6 Astra").
+3. **Normalization (0–100):** linear benchmarks = value ÷ best on the whole board × 100. Log-scale ones (METR hours, cost) = −25 per doubling from the best. Cost's "best" is the cheapest tracked model.
+4. **Priority score** = mean of that priority's benchmark scores. Status is `measured`, `partial` (some boards don't list the model), `provisional` (uses inherited values) or `none`.
+5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board, but only when that version is less than 1.0 older (Opus 4.7 → 5.5 yes, Grok 3 → 4.7 no). It's flagged Provisional and replaced automatically once the board lists the model.
+6. **Composite** = weighted mean over the priorities that every model has a score for (`composite_basis.included`), with the weights rescaled. A priority missing for any model is excluded for all models, so everyone is compared on the same basis.
 
-The dashboard's "Score breakdown" tab shows the math behind every card (score × weight per priority, unrounded composite, benchmark top-3 evidence for that exact model version). When you set or change a `per_priority` score, add a one-line note per dimension in the model's optional `score_basis` object (e.g. `"score_basis": {"agent": "Terminal-bench 4.0 66.4% → 93"}`) so the tab shows why.
+Artificial Analysis data needs the `AA_API_KEY` repo secret (free key from artificialanalysis.ai). Without it the AA benchmarks keep their cached values, and long context has no source at all.
+
+The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority.
 
 ## Cost vs intelligence (`data.json` → `_archived_cost_efficiency`) [Archived / Hidden]
 

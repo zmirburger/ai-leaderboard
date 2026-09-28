@@ -8,12 +8,16 @@ Strategy:
 - Each (vendor, tier) pair has its own detector function.
 - Downgrade guard: only accept a detected name if version is strictly newer.
 - Version picking is numeric on (major, minor), so 5 beats 4.5.
+- Per-priority scores are computed from raw benchmark values (see BENCHMARKS);
+  nothing is hand-set. A model a board hasn't measured yet inherits the value of
+  the newest older version of the same family on that board, flagged provisional.
 - recompute_rankings() auto-updates best_overall and best_per_priority from scores.
 """
 
 from __future__ import annotations
 import json
 import math
+import os
 import re
 import sys
 import time
@@ -31,10 +35,10 @@ TIMEOUT = 20
 
 # ---------- helpers ----------
 
-def fetch(url, retries=2):
+def fetch(url, retries=2, extra_headers=None):
     for attempt in range(retries + 1):
         try:
-            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            r = requests.get(url, headers={**HEADERS, **(extra_headers or {})}, timeout=TIMEOUT)
             r.raise_for_status()
             return r.text
         except Exception as e:
@@ -251,8 +255,6 @@ def update_releases(data):
                 continue
             existing["previous"] = old
             existing["name"] = name
-            existing["needs_calibration"] = True
-            existing["previous_scores"] = dict(existing.get("per_priority", {}))
             if date:
                 existing["released"] = date
             else:
@@ -260,397 +262,412 @@ def update_releases(data):
                       f"'released' left at stale value {existing['released']}, check {url} manually")
             existing["changelog"] = changelog
             existing["release_notes_url"] = url
-            changes.append(f"{vendor}/{tier}: {old} -> {name} (flagged for calibration)")
-            print(f"  NEW RELEASE: {old} -> {name} [DRIFT GUARD: needs_calibration set]")
+            changes.append(f"{vendor}/{tier}: {old} -> {name}")
+            print(f"  NEW RELEASE: {old} -> {name} (scores inherit from older versions until benchmarked)")
         else:
             print(f"  no change ({name})")
     return changes
 
-def check_data_drift(data):
-    """Anti-drift audit: warns if any active model has stale calibration or unverified scores."""
-    drift_warnings = []
-    for m in data["models"]:
-        if m.get("needs_calibration"):
-            drift_warnings.append(f"{m['name']}: flagged needs_calibration (new release detected, verify per_priority scores)")
-    if drift_warnings:
-        print("\n=== Data Drift Warnings ===")
-        for w in drift_warnings:
-            print(f"  [!] {w}")
-    return drift_warnings
+# ---------- benchmark sources ----------
+# Each fetcher returns {bench_id: {board_model_name: value}} covering EVERY model on
+# the board (not just a top 3), or None when the fetch/parse fails. Values are in
+# natural units: percentages 0-100, hours, USD.
 
-def recompute_rankings(data):
-    """Recompute composite_overall for all models and update best_overall/best_per_priority.
-    Null per_priority scores are skipped (weight→0); composite is None when all scores are null."""
-    w = data["weights"]
-    raw = {}
-    for m in data["models"]:
-        pp = m["per_priority"]
-        total = 0
-        for dim, weight in w.items():
-            score = pp.get(dim)
-            if score is not None:
-                total += score * weight
-        has_any = any(v is not None for v in pp.values())
-        m["composite_overall"] = round(total) if has_any else None
-        raw[m["name"]] = total
+AA_URL = "https://artificialanalysis.ai/api/v2/data/llms/models"
+AA_EVAL_KEYS = {
+    "aa_intelligence_index": ["artificial_analysis_intelligence_index"],
+    "aa_omniscience": ["artificial_analysis_omniscience_index", "omniscience_index", "omniscience", "aa_omniscience"],
+    "aa_lcr": ["lcr", "aa_lcr"],
+    "aa_ifbench": ["ifbench"],
+    "aa_terminalbench": ["terminalbench_hard", "terminal_bench_hard"],
+    "aa_tau2": ["tau2", "tau2_bench"],
+}
 
-    ranked = [m for m in data["models"] if m["composite_overall"] is not None]
-    if ranked:
-        # Rank on the unrounded total: 85.75 and 86.0 both display as 86, and
-        # ranking on the rounded value would let list order pick the leader.
-        best = max(ranked, key=lambda m: raw[m["name"]])
-        if data["best_overall"]["model"] != best["name"]:
-            pp = best["per_priority"]
-            dim_summary = ", ".join(f"{k} {pp.get(k, '—')}" for k in w.keys())
-            data["best_overall"]["rationale"] = (
-                f"Auto-ranked leader: {dim_summary}. "
-                "Edit this rationale in data.json for a hand-written take."
-            )
-        data["best_overall"]["model"] = best["name"]
-        data["best_overall"]["composite"] = best["composite_overall"]
-
-    for priority in w.keys():
-        scoreable = [m for m in data["models"] if m["per_priority"].get(priority) is not None]
-        if scoreable:
-            top = max(scoreable, key=lambda m: m["per_priority"][priority])
-            if priority not in data["best_per_priority"]:
-                data["best_per_priority"][priority] = {}
-            entry = data["best_per_priority"][priority]
-            if entry.get("model") != top["name"]:
-                entry["summary"] = f"Score {top['per_priority'][priority]} (auto-ranked; edit summary in data.json)"
-            entry["model"] = top["name"]
-
-# ---------- benchmark scrapers ----------
-
-def _set_top3(data, category, bench_id, new_top3):
-    """Replace top3 for a given benchmark id; returns change description or None."""
-    for bench in data["benchmarks"].get(category, []):
-        if bench["id"] == bench_id:
-            old = bench.get("top3", [])
-            if old == new_top3:
-                return None
-            bench["top3"] = new_top3
-            return f"{category}/{bench_id}: top3 updated ({len(new_top3)} entries)"
-    return None
-
-def _fmt_minutes(mins):
-    if mins >= 60:
-        hours = mins / 60
-        if hours >= 10:
-            return f"~{hours:.0f}h"
-        return f"~{hours:.1f}h"
-    if mins >= 1:
-        return f"~{int(round(mins))}m"
-    return f"~{mins:.1f}m"
-
-def _looks_like_model_name(s):
-    """A real model name contains letters, not just a rank digit or icon."""
-    return bool(re.search(r"[A-Za-z]{2,}", s))
-
-def _looks_like_arena_score(s):
-    """Arena scores are Elo-style integers, roughly 900-3000."""
-    return s.isdigit() and 900 <= int(s) <= 3000
-
-def scrape_lmarena():
-    """Returns top-10 from LMArena overall text leaderboard as list of {model, score}.
-
-    Scans every table and every column layout; only accepts rows where the model
-    cell contains an actual name and the score cell is a plausible Elo. Previously
-    this trusted fixed column positions and wrote junk like {model: "1", score: "3"}
-    when the page layout shifted. Requires >=3 valid rows or returns None."""
-    url = "https://lmarena.ai/leaderboard"
-    html = fetch(url)
-    if not html:
+def fetch_aa():
+    """Artificial Analysis free data API. Needs AA_API_KEY (repo secret)."""
+    key = os.environ.get("AA_API_KEY")
+    if not key:
+        print("  skipped (AA_API_KEY not set)")
         return None
-    soup = BeautifulSoup(html, "html.parser")
-    for table in soup.find_all("table"):
-        out = []
-        for row in table.find_all("tr"):
-            cols = [td.get_text(" ", strip=True) for td in row.find_all(["td", "th"])]
-            score = next((c for c in cols if _looks_like_arena_score(c)), None)
-            model = next((c for c in cols if _looks_like_model_name(c)), None)
-            if score and model:
-                out.append({"model": model, "score": score})
-        if len(out) >= 3:
-            return out[:10]
-    return None
+    raw = fetch(AA_URL, extra_headers={"x-api-key": key})
+    if not raw:
+        return None
+    try:
+        items = json.loads(raw).get("data") or []
+    except (json.JSONDecodeError, AttributeError):
+        return None
+    out = {b: {} for b in list(AA_EVAL_KEYS) + ["aa_price"]}
+    seen_keys = set()
+    for it in items:
+        name = it.get("name")
+        if not name:
+            continue
+        evals = it.get("evaluations") or {}
+        seen_keys.update(evals.keys())
+        for bench, candidates in AA_EVAL_KEYS.items():
+            v = next((evals[k] for k in candidates if isinstance(evals.get(k), (int, float))), None)
+            if v is not None:
+                out[bench][name] = float(v)
+        price = (it.get("pricing") or {}).get("price_1m_blended_3_to_1")
+        if isinstance(price, (int, float)) and price > 0:
+            out["aa_price"][name] = float(price)
+    print(f"  {len(items)} models; evaluation fields: {sorted(seen_keys)}")
+    # AA reports most evals as 0-1 fractions; store as percentages.
+    for bench in ("aa_lcr", "aa_ifbench", "aa_terminalbench", "aa_tau2"):
+        vals = out[bench]
+        if vals and max(vals.values()) <= 1.0:
+            out[bench] = {k: v * 100 for k, v in vals.items()}
+    return out
 
-def scrape_metr():
-    """Parses METR's `var thData` JSON and returns top agents by 50%-reliability horizon.
-    Filters out pre-release '(early)' models which have unreliable extrapolated estimates."""
-    url = "https://metr.org/time-horizons/"
-    html = fetch(url)
+def fetch_benchlm():
+    raw = fetch("https://benchlm.ai/api/leaderboard")
+    if not raw:
+        return None
+    try:
+        models = json.loads(raw).get("models") or []
+    except (json.JSONDecodeError, AttributeError):
+        return None
+    vals = {m["model"].strip(): float(m["overallScore"]) for m in models
+            if m.get("model") and isinstance(m.get("overallScore"), (int, float))}
+    return {"benchlm": vals}
+
+def fetch_deepswe():
+    """pass@1 per model (best reasoning effort) and, when published, the $/task of that same run."""
+    raw = fetch("https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json")
+    if not raw:
+        return None
+    try:
+        rows = json.loads(raw).get("rows") or []
+    except (json.JSONDecodeError, AttributeError):
+        return None
+    if rows:
+        print(f"  row fields: {sorted(rows[0].keys())}")
+    best = {}
+    for r in rows:
+        name, p1 = r.get("model"), r.get("pass_at_1")
+        if not name or not isinstance(p1, (int, float)):
+            continue
+        if name not in best or p1 > best[name].get("pass_at_1", -1):
+            best[name] = r
+    pass1, cost = {}, {}
+    for name, r in best.items():
+        pass1[name] = r["pass_at_1"] * 100 if r["pass_at_1"] <= 1 else float(r["pass_at_1"])
+        c = r.get("mean_cost_usd")
+        if isinstance(c, (int, float)) and c > 0:
+            cost[name] = float(c)
+    return {"deepswe": pass1, "deepswe_cost": cost}
+
+def fetch_metr():
+    """50%-reliability time horizon in hours. Pre-release '(early)' entries are skipped."""
+    html = fetch("https://metr.org/time-horizons/")
     if not html:
         return None
     m = re.search(r'var\s+thData\s*=\s*(\{.*?\})\s*;', html, re.DOTALL)
     if not m:
         return None
     try:
-        thdata = json.loads(m.group(1))
+        agents = json.loads(m.group(1)).get("agents", {})
     except json.JSONDecodeError:
         return None
-    horizons = []
-    for name, info in thdata.get("agents", {}).items():
-        # Skip pre-release models — their coefficients are extrapolated from limited data
-        if "(early)" in name.lower():
-            continue
-        coef = info.get("coefficient")
-        intercept = info.get("intercept")
-        if not coef or coef == 0 or intercept is None:
+    out = {}
+    for name, info in agents.items():
+        coef, intercept = info.get("coefficient"), info.get("intercept")
+        if "(early)" in name.lower() or not coef or intercept is None:
             continue
         try:
-            mins = math.exp(-intercept / coef)
+            out[name] = math.exp(-intercept / coef) / 60
         except (OverflowError, ValueError):
             continue
-        horizons.append((name, mins))
-    if not horizons:
-        return None
-    horizons.sort(key=lambda x: x[1], reverse=True)
-    return [{"model": name, "value": _fmt_minutes(mins)} for name, mins in horizons[:10]]
+    return {"metr": out}
 
-def _extract_aa_models(html, field):
-    """Regex-extract (model_family_slug, field_value) pairs from AA's JS bundle.
-    Each model object is escaped JSON inside the React bundle; we match nearby
-    field/slug pairs without trying to parse the whole object."""
-    results = {}
-    pattern = re.compile(
-        r'\\"' + re.escape(field) + r'\\":([\d.]+)[^{}]{0,800}?\\"model_family_slug\\":\\"([^"\\]+)\\"'
-        r'|\\"model_family_slug\\":\\"([^"\\]+)\\"[^{}]{0,800}?\\"' + re.escape(field) + r'\\":([\d.]+)'
-    )
-    for m in pattern.finditer(html):
-        if m.group(2):
-            slug, val = m.group(2), m.group(1)
-        else:
-            slug, val = m.group(3), m.group(4)
-        try:
-            val_f = float(val)
-        except ValueError:
+def fetch_vectara():
+    """Factual consistency rate (100 - hallucination rate) from the HHEM README table."""
+    text = fetch("https://raw.githubusercontent.com/vectara/hallucination-leaderboard/main/README.md")
+    if not text:
+        return None
+    out = {}
+    for line in text.splitlines():
+        cols = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cols) < 3 or "/" not in cols[0]:
             continue
-        # Keep best score per family
-        if slug not in results or val_f > results[slug]:
-            results[slug] = val_f
-    return results
+        m = re.match(r"([\d.]+)\s*%", cols[2])
+        if m:
+            out[cols[0]] = float(m.group(1))
+    return {"vectara": out}
 
-def scrape_aa_field(url, field, value_fmt=lambda v: f"{v:.1f}", scale=1.0):
-    """Fetch an AA evaluation page, regex-extract model_family_slug→field, return top 10."""
-    html = fetch(url)
-    if not html:
-        return None
-    extracted = _extract_aa_models(html, field)
-    if not extracted:
-        return None
-    sorted_models = sorted(extracted.items(), key=lambda kv: kv[1], reverse=True)
-    return [{"model": slug, "value": value_fmt(score * scale)} for slug, score in sorted_models[:10]]
+SOURCES = [
+    ("Artificial Analysis API", fetch_aa),
+    ("BenchLM", fetch_benchlm),
+    ("DeepSWE", fetch_deepswe),
+    ("METR time horizons", fetch_metr),
+    ("Vectara HHEM", fetch_vectara),
+]
 
-def _clean_model_name(name):
-    clean = name.replace("_", "-").strip()
-    clean = re.sub(r'(\d+)-(\d+)', r'\1.\2', clean)
-    mapping = {
-        "gpt-6-astra": "GPT-6 Astra",
-        "gpt-5.6-sol": "GPT-5.6 Sol",
-        "gpt-5.6-luna": "GPT-5.6 Luna",
-        "gpt-5.6-terra": "GPT-5.6 Terra",
-        "gpt-5.5": "GPT-5.5",
-        "gpt-5.4": "GPT-5.4",
-        "claude-opus-5": "Claude Opus 5",
-        "claude-fable-5": "Claude Fable 5",
-        "claude-fable-5.1": "Claude Fable 5.1",
-        "claude-sonnet-5": "Claude Sonnet 5",
-        "claude-opus-4.8": "Claude Opus 4.8",
-        "claude-opus-4.7": "Claude Opus 4.7",
-        "gemini-3.8-flash": "Gemini 3.8 Flash",
-        "gemini-3.7-flash": "Gemini 3.7 Flash",
-        "gemini-3.6-flash": "Gemini 3.6 Flash",
-        "gemini-3.5-flash": "Gemini 3.5 Flash",
-        "gemini-3.1-pro": "Gemini 3.1 Pro",
-        "grok-4.6": "Grok 4.6",
-        "grok-4.5": "Grok 4.5",
-        "kimi-k3": "Kimi K3",
-        "glm-5.3": "GLM-5.3",
-        "glm-5.3-flash": "GLM-5.3 Flash",
-        "glm-5.2": "GLM-5.2",
-        "deepseek-v4-pro": "DeepSeek V4 Pro",
-        "deepseek-v4-flash": "DeepSeek V4 Flash",
-        "qwen3.8-max": "Qwen 3.8 Max",
-        "muse-spark-1.2": "Muse Spark 1.2",
-    }
-    slug = clean.lower()
-    if slug in mapping:
-        return mapping[slug]
-    parts = clean.split("-")
-    return " ".join(p.upper() if p.lower() in ("gpt", "glm", "aa", "swe", "ai") else p.capitalize() for p in parts)
+# scale: "linear" -> score = value / best x 100.
+#        "log"    -> -25 points per doubling away from best (for metrics spanning
+#                    orders of magnitude: time horizons, prices).
+# reference: "board" = best on the whole leaderboard; "tracked" = best among the
+#            dashboard's own models (cost: the board's cheapest is a tiny model).
+BENCHMARKS = [
+    dict(id="deepswe", priority="agent", name="DeepSWE", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://deepswe.datacurve.ai/", description="Long-horizon real-world SWE tasks (pass@1, best effort)"),
+    dict(id="metr", priority="agent", name="METR Time Horizon", unit="hours", scale="log", higher_better=True, reference="board",
+         url="https://metr.org/time-horizons/", description="Task length completed at 50% reliability"),
+    dict(id="aa_terminalbench", priority="agent", name="Terminal-Bench Hard (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/terminalbench-hard", description="Agentic terminal tasks"),
+    dict(id="aa_tau2", priority="agent", name="τ²-Bench (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in customer-service flows"),
+    dict(id="aa_intelligence_index", priority="accuracy", name="AA Intelligence Index", unit="score", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
+    dict(id="aa_omniscience", priority="accuracy", name="AA Omniscience", unit="score", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/omniscience", description="Knowledge, punishing confident wrong answers"),
+    dict(id="vectara", priority="accuracy", name="Vectara HHEM", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://github.com/vectara/hallucination-leaderboard", description="Factual consistency when summarizing (100 − hallucination rate)"),
+    dict(id="benchlm", priority="accuracy", name="BenchLM", unit="score", scale="linear", higher_better=True, reference="board",
+         url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
+    dict(id="aa_lcr", priority="long_context", name="AA Long-Context Reasoning", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning", description="Reasoning over ~100k-token document sets"),
+    dict(id="aa_ifbench", priority="long_context", name="AA IFBench", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/ifbench", description="Instruction-following compliance"),
+    dict(id="deepswe_cost", priority="cost", name="DeepSWE $/task", unit="usd", scale="log", higher_better=False, reference="tracked",
+         url="https://deepswe.datacurve.ai/", description="Cost per task on the model's best DeepSWE run"),
+    dict(id="aa_price", priority="cost", name="AA blended price", unit="usd_mtok", scale="log", higher_better=False, reference="tracked",
+         url="https://artificialanalysis.ai/models", description="$/1M tokens, 3:1 input:output blend"),
+]
+BENCH_BY_ID = {b["id"]: b for b in BENCHMARKS}
+STALE_DAYS = 14
 
-def scrape_deepswe():
-    """Scrapes DeepSWE live leaderboard artifact for pass@1 scores.
-    Keeps the highest pass@1 score across reasoning efforts for each model."""
-    url = "https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json"
-    raw = fetch(url)
-    if not raw:
-        return None
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError:
-        return None
+def fmt_value(bench, v):
+    u = bench["unit"]
+    if u == "pct":
+        return f"{v:.1f}%"
+    if u == "hours":
+        return f"{v:.0f}h" if v >= 10 else (f"{v:.1f}h" if v >= 1 else f"{v * 60:.0f}m")
+    if u == "usd":
+        return f"${v:.2f}"
+    if u == "usd_mtok":
+        return f"${v:.2f}/MTok"
+    return f"{v:.1f}"
 
-    rows = data.get("rows", [])
-    if not rows:
-        return None
+# ---------- model-name matching ----------
 
-    best_per_model = {}
-    for r in rows:
-        raw_name = r.get("model")
-        p1 = r.get("pass_at_1")
-        if not raw_name or p1 is None:
+_NOISE_WORDS = {"low", "medium", "high", "xhigh", "max", "minimal", "none", "thinking", "reasoning",
+                "non", "adaptive", "preview", "latest", "exp", "experimental", "instruct", "inspect"}
+
+def norm_name(s):
+    """Canonical form shared by every board: 'anthropic/claude-opus-4-7-20260101 (max)' and
+    'Claude 4.7 Opus' both become 'claude opus 4.7'. Effort/preview/date suffixes are dropped,
+    so a board's variants of one model collapse together (best value kept)."""
+    s = _UNICODE_HYPHENS.sub("-", str(s)).lower().split("/")[-1]
+    s = re.sub(r"\(.*?\)", " ", s)
+    s = re.sub(r"\b20\d\d-?\d\d-?\d\d\b", " ", s)
+    s = re.sub(r"(?<=\d)[-_](?=\d)", ".", s)
+    s = re.sub(r"[-_:]", " ", s)
+    s = " ".join(w for w in s.split() if w not in _NOISE_WORDS)
+    return re.sub(r"^claude (\d+(?:\.\d+)?) (opus|sonnet|haiku|fable)\b", r"claude \2 \1", s)
+
+def _family(n):
+    return " ".join(re.sub(r"\b\d+(?:\.\d+)?\b", " ", n).split())
+
+def build_index(bench, values):
+    """{norm_name: (value, board_name)}, keeping each model's best variant."""
+    idx = {}
+    for name, v in values.items():
+        k = norm_name(name)
+        if not k:
             continue
-        c_name = _clean_model_name(raw_name)
-        if c_name not in best_per_model or p1 > best_per_model[c_name]["pass_at_1"]:
-            effort = r.get("reasoning_effort", "")
-            best_per_model[c_name] = {
-                "model": c_name + (f" ({effort})" if effort and effort != "none" else ""),
-                "pass_at_1": p1,
-                "value": f"~{round(p1 * 100)}%",
-            }
+        if k not in idx or ((v > idx[k][0]) if bench["higher_better"] else (v < idx[k][0])):
+            idx[k] = (v, name)
+    return idx
 
-    sorted_models = sorted(best_per_model.values(), key=lambda x: x["pass_at_1"], reverse=True)
-    return [{"model": m["model"], "value": m["value"]} for m in sorted_models[:10]]
-
-def scrape_benchlm():
-    """Scrapes BenchLM leaderboard API for overall verified benchmark scores."""
-    url = "https://benchlm.ai/api/leaderboard"
-    raw = fetch(url)
-    if not raw:
+def resolve(model, idx):
+    """Exact match on name/aliases -> measured. Otherwise the newest OLDER version of the
+    same family on this board -> inherited (provisional). None if neither exists."""
+    keys = [norm_name(model["name"])] + [norm_name(a) for a in model.get("aliases", [])]
+    for k in keys:
+        if k in idx:
+            return idx[k][0], idx[k][1], False
+    mine = _parse_version(model["name"])
+    fams = {_family(k) for k in keys}
+    # Only inherit across a gap of less than one major version (Opus 4.7 -> 5.5 yes,
+    # Grok 3 -> 4.7 no): an older-generation model says little about a new one.
+    older = [(k, _parse_version(k)) for k in idx
+             if _family(k) in fams and 0 < _parse_version(k) < mine and mine - _parse_version(k) < 1.0]
+    if not older:
         return None
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError:
-        return None
+    k = max(older, key=lambda kv: kv[1])[0]
+    return idx[k][0], idx[k][1], True
 
-    models = data.get("models", [])
-    if not models:
-        return None
+def normalize(bench, v, best):
+    if bench["scale"] == "log":
+        ratio = (best / v) if bench["higher_better"] else (v / best)
+        return max(0.0, min(100.0, 100 - 25 * math.log2(max(ratio, 1e-9))))
+    return max(0.0, min(100.0, 100 * v / best)) if best > 0 else 0.0
 
-    results = []
-    for m in models:
-        name = m.get("model")
-        score = m.get("overallScore")
-        if not name or score is None:
-            continue
-        results.append({
-            "model": name.strip(),
-            "value": f"~{score:.1f}",
-        })
-
-    return results[:10]
+# ---------- pipeline ----------
 
 def update_benchmarks(data):
+    """Fetch every source into data['raw_benchmarks'] (a cache). A failed or suspiciously
+    short fetch keeps the previous values and their original date, so a slow or broken
+    board shows as 'as of <date>' instead of silently vanishing."""
+    cache = data.setdefault("raw_benchmarks", {})
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     changes = []
-
-    print("Scraping LMArena leaderboard...")
-    lmarena = scrape_lmarena()
-    if lmarena:
-        old = data["lmarena_vibe_check"].get("top3", [])
-        if old != lmarena[:3]:
-            data["lmarena_vibe_check"]["top3"] = lmarena[:3]
-            changes.append(f"lmarena_vibe_check: top3 updated -> {lmarena[0]['model']} @ {lmarena[0]['score']}")
-            print(f"  updated. top: {lmarena[0]['model']} ({lmarena[0]['score']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
-    print("Scraping DeepSWE...")
-    deepswe = scrape_deepswe()
-    if deepswe:
-        ch = _set_top3(data, "agent", "deepswe", deepswe[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {deepswe[0]['model']} ({deepswe[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
-    print("Scraping BenchLM...")
-    benchlm = scrape_benchlm()
-    if benchlm:
-        ch = _set_top3(data, "accuracy", "benchlm", benchlm[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {benchlm[0]['model']} ({benchlm[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
-    print("Scraping METR time horizons...")
-    metr = scrape_metr()
-    if metr:
-        ch = _set_top3(data, "agent", "metr_time_horizon", metr[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {metr[0]['model']} ({metr[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
-    print("Scraping AA Intelligence Index...")
-    aa_intel = scrape_aa_field(
-        "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
-        "intelligence_index",
-        value_fmt=lambda v: f"~{v:.0f}",
-    )
-    if aa_intel:
-        ch = _set_top3(data, "accuracy", "aa_intelligence_index", aa_intel[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {aa_intel[0]['model']} ({aa_intel[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
-    print("Scraping AA Omniscience...")
-    aa_omni = None
-    omni_url = "https://artificialanalysis.ai/evaluations/omniscience"
-    omni_html = fetch(omni_url)
-    if omni_html:
-        # Values must be in 0–100 range (normalized benchmark, not Elo-style)
-        for field_candidate in ["omniscience", "omniscience_index", "omniscience_score", "knowledge"]:
-            extracted = _extract_aa_models(omni_html, field_candidate)
-            in_range = {s: v for s, v in extracted.items() if 0 <= v <= 100}
-            if in_range:
-                sorted_models = sorted(in_range.items(), key=lambda kv: kv[1], reverse=True)
-                aa_omni = [{"model": slug, "value": f"~{score:.0f}"} for slug, score in sorted_models[:10]]
-                print(f"  matched field: {field_candidate!r}")
-                break
-    if aa_omni:
-        ch = _set_top3(data, "accuracy", "aa_omniscience", aa_omni[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {aa_omni[0]['model']} ({aa_omni[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        # Dump a sample of field-like keys visible in the bundle to help identify the right name
-        if omni_html:
-            keys_found = re.findall(r'\\"([a-z][a-z0-9_]{3,30})\\":\d', omni_html)
-            unique_keys = sorted(set(keys_found))[:30]
-            print(f"  skipped (no match). Numeric field names in bundle: {unique_keys}")
-        else:
-            print("  skipped (fetch failed)")
-
-    print("Scraping AA IFBench...")
-    aa_if = scrape_aa_field(
-        "https://artificialanalysis.ai/evaluations/ifbench",
-        "ifbench",
-        value_fmt=lambda v: f"~{v*100:.0f}%",
-    )
-    if aa_if:
-        ch = _set_top3(data, "long_context", "aa_ifbench", aa_if[:3])
-        if ch:
-            changes.append(ch); print(f"  updated. top: {aa_if[0]['model']} ({aa_if[0]['value']})")
-        else:
-            print("  no change")
-    else:
-        print("  skipped (no parse)")
-
+    for label, fn in SOURCES:
+        print(f"Fetching {label}...")
+        result = fn()
+        if not result:
+            print("  kept cached values (no data)")
+            continue
+        for bench_id, values in result.items():
+            old = cache.get(bench_id, {}).get("values", {})
+            if not values:
+                print(f"  {bench_id}: empty, kept cache ({len(old)} rows)")
+                continue
+            if old and len(values) < len(old) / 2:
+                print(f"  {bench_id}: only {len(values)} rows vs {len(old)} cached, looks like a broken parse; kept cache")
+                continue
+            values = {k: round(v, 4) for k, v in values.items()}
+            if values != old:
+                changes.append(f"{bench_id}: {len(values)} rows")
+            cache[bench_id] = {"fetched_at": now, "values": values}
+            print(f"  {bench_id}: {len(values)} rows")
     return changes
+
+def compute_scores(data):
+    cache = data.get("raw_benchmarks", {})
+    today = datetime.now(timezone.utc).date()
+    models = data["models"]
+    for m in models:
+        m.pop("needs_calibration", None)
+        m.pop("previous_scores", None)
+        m["per_priority"], m["score_detail"], m["score_basis"] = {}, {}, {}
+
+    data["benchmarks"] = {}
+    for dim in data["weights"]:
+        benches = [b for b in BENCHMARKS if b["priority"] == dim and cache.get(b["id"], {}).get("values")]
+        per_model = {m["id"]: [] for m in models}
+        for b in benches:
+            entry = cache[b["id"]]
+            idx = build_index(b, entry["values"])
+            resolved = {m["id"]: resolve(m, idx) for m in models}
+            pool = [r[0] for r in resolved.values() if r] if b["reference"] == "tracked" else [v for v, _ in idx.values()]
+            if not pool:
+                continue
+            best = max(pool) if b["higher_better"] else min(pool)
+            as_of = entry["fetched_at"]
+            stale = (today - datetime.fromisoformat(as_of).date()).days > STALE_DAYS
+            for m in models:
+                r = resolved[m["id"]]
+                if not r:
+                    continue
+                v, board_name, inherited = r
+                per_model[m["id"]].append({
+                    "bench": b["id"], "name": b["name"], "value": v, "display": fmt_value(b, v),
+                    "score": round(normalize(b, v, best), 1), "board_name": board_name,
+                    "inherited": inherited, "as_of": as_of, "stale": stale,
+                })
+            # Details-tab card: top 3 on the board (or among tracked models for cost).
+            ranked = sorted(((v, n) for v, n in idx.values()), reverse=b["higher_better"])
+            if b["reference"] == "tracked":
+                ranked = sorted(((r[0], m["name"]) for m in models if (r := resolved[m["id"]])), reverse=b["higher_better"])
+            data["benchmarks"].setdefault(dim, []).append({
+                "id": b["id"], "name": b["name"], "url": b["url"], "description": b["description"],
+                "lower_better": not b["higher_better"], "as_of": as_of, "stale": stale,
+                "scope": "tracked models" if b["reference"] == "tracked" else "whole board",
+                "top3": [{"model": n, "value": fmt_value(b, v)} for v, n in ranked[:3]],
+            })
+
+        for m in models:
+            inputs = per_model[m["id"]]
+            if not inputs:
+                status, score = "none", None
+            else:
+                score = round(sum(i["score"] for i in inputs) / len(inputs))
+                if any(i["inherited"] for i in inputs):
+                    status = "provisional"
+                elif len(inputs) < len(benches):
+                    status = "partial"
+                else:
+                    status = "measured"
+            measured_ids = {i["bench"] for i in inputs}
+            missing = [b["name"] for b in benches if b["id"] not in measured_ids]
+            m["per_priority"][dim] = score
+            m["score_detail"][dim] = {"status": status, "inputs": inputs, "missing": missing}
+            parts = []
+            for i in inputs:
+                p = f"{i['name']} {i['display']} → {i['score']:.0f}"
+                if i["inherited"]:
+                    p += f" (inherited from {i['board_name']})"
+                if i["stale"]:
+                    p += f" (as of {i['as_of']})"
+                parts.append(p)
+            if missing:
+                parts.append("not on " + ", ".join(missing))
+            m["score_basis"][dim] = " · ".join(parts) if parts else "No benchmark data yet."
+
+def recompute_rankings(data):
+    """Composite = weighted mean over the priorities at least half the models have a
+    score for, so every ranked model is compared on the same mix. A model missing one
+    of those priorities is left unranked (composite None) rather than ranked on fewer
+    priorities; a priority most models lack is left out for everyone. Both are listed
+    in composite_basis. Ranked on the unrounded value."""
+    w = data["weights"]
+    labels = {"accuracy": "accuracy", "long_context": "long context", "agent": "agent", "cost": "cost"}
+    models = data["models"]
+    has = lambda m, k: m["per_priority"].get(k) is not None
+    included = {k: wt for k, wt in w.items() if sum(has(m, k) for m in models) * 2 >= len(models) and any(has(m, k) for m in models)}
+    unranked = {m["name"]: [k for k in included if not has(m, k)] for m in models}
+    unranked = {n: ks for n, ks in unranked.items() if ks}
+    data["composite_basis"] = {
+        "included": list(included),
+        "excluded": {k: [m["name"] for m in models if not has(m, k)] for k in w if k not in included},
+        "unranked": unranked,
+    }
+    total_w = sum(included.values())
+    raw = {}
+    for m in models:
+        ok = total_w and m["name"] not in unranked
+        raw[m["name"]] = sum(m["per_priority"][k] * wt for k, wt in included.items()) / total_w if ok else None
+        m["composite_unrounded"] = round(raw[m["name"]], 2) if ok else None
+        m["composite_overall"] = round(raw[m["name"]]) if ok else None
+
+    ranked = sorted((m for m in data["models"] if raw[m["name"]] is not None), key=lambda m: -raw[m["name"]])
+    if ranked:
+        best = ranked[0]
+        pp = best["per_priority"]
+        dims = ", ".join(f"{labels.get(k, k)} {pp[k]}" for k in included)
+        runners = "; ".join(f"{m['name']} {raw[m['name']]:.2f}" for m in ranked[1:3])
+        prov = [k for k in included if best["score_detail"][k]["status"] == "provisional"]
+        note = f" Provisional on {', '.join(labels[k] for k in prov)} (inherited benchmark values)." if prov else ""
+        if unranked:
+            note += " Not ranked (missing data): " + "; ".join(f"{n} ({', '.join(labels[k] for k in ks)})" for n, ks in unranked.items()) + "."
+        if data["composite_basis"]["excluded"]:
+            note += f" Not in composite (missing for most models): {', '.join(labels[k] for k in data['composite_basis']['excluded'])}."
+        data["best_overall"] = {
+            "model": best["name"], "composite": best["composite_overall"],
+            "rationale": f"Computed from benchmarks: {dims} → {raw[best['name']]:.2f}. Next: {runners}.{note}",
+        }
+
+    data["best_per_priority"] = {}
+    for dim in w:
+        scoreable = [m for m in data["models"] if m["per_priority"].get(dim) is not None]
+        if not scoreable:
+            continue
+        top = max(scoreable, key=lambda m: m["per_priority"][dim])
+        data["best_per_priority"][dim] = {
+            "model": top["name"],
+            "summary": top["score_basis"][dim],
+            "supporting": " · ".join(b["name"] for b in data["benchmarks"].get(dim, [])),
+        }
+
+def report_gaps(data):
+    gaps = [f"{m['name']} {dim}: {d['status']}" for m in data["models"]
+            for dim, d in m["score_detail"].items() if d["status"] in ("provisional", "none")]
+    if gaps:
+        print("\n=== Not fully measured ===")
+        for g in gaps:
+            print(f"  [~] {g}")
 
 def main():
     data = load_data()
@@ -659,26 +676,24 @@ def main():
     print("=== Vendor release detection ===")
     release_changes = update_releases(data)
 
-    print("\n=== Benchmark scores ===")
+    print("\n=== Benchmark data ===")
     benchmark_changes = update_benchmarks(data)
 
-    print("\n=== Rankings ===")
+    print("\n=== Scores & rankings ===")
+    compute_scores(data)
     recompute_rankings(data)
-
-    check_data_drift(data)
+    for m in sorted(data["models"], key=lambda m: -(m["composite_unrounded"] or -1)):
+        print(f"  {m['name']:<20} {m['composite_unrounded']}  {m['per_priority']}")
+    report_gaps(data)
 
     print("\n=== Summary ===")
-    # Always update last_updated so the dashboard shows today's check date,
-    # even when no model releases changed.
     data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     data["data_status"] = "auto_refreshed"
     save_data(data)
-    if release_changes or benchmark_changes:
-        print("Changes:")
-        for c in release_changes:
-            print(f"  - {c}")
-    else:
-        print("No model changes detected.")
+    for c in release_changes + benchmark_changes:
+        print(f"  - {c}")
+    if not (release_changes or benchmark_changes):
+        print("No source changes detected.")
     print(f"\ndata.json updated. Last refresh stamp: {data['last_updated']}")
     return 0
 

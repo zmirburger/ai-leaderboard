@@ -27,6 +27,8 @@ jobs:
 
       - name: Run refresh.py
         run: python refresh.py
+        env:
+          AA_API_KEY: ${{ secrets.AA_API_KEY }}
 
       - name: Commit changes if data.json updated
         run: |

@@ -129,7 +129,6 @@
   .footer-note { font-size: 11px; color: var(--text-dim); margin: 24px 0 0; text-align: center; line-height: 1.5; }
   .footer-note a { color: var(--text-muted); text-decoration: none; }
   .footer-note a:hover { color: var(--text); }
-  .lmarena-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 24px; }
   .subtabs { display: flex; gap: 6px; margin: 6px 0 10px; }
   .subtab-btn { background: var(--surface-2); border: 0.5px solid var(--border); color: var(--text-muted); font-size: 12.5px; padding: 6px 13px; cursor: pointer; border-radius: var(--radius-sm); font-family: inherit; font-weight: 500; }
   .subtab-btn.active { color: var(--text); border-color: var(--border-strong); background: var(--surface); }
@@ -197,6 +196,9 @@
   .dbg-table tr.dbg-main td { border-bottom: 0; padding-bottom: 0; }
   .dbg-table td.dbg-basis { font-size: 11px; color: var(--text-dim); line-height: 1.45; text-align: left; padding: 2px 0 7px; }
   td.dbg-basis .ev { color: var(--text-muted); }
+  .dbg-status { font-size: 10px; font-weight: 500; color: var(--text-dim); margin-left: 4px; white-space: nowrap; }
+  .dbg-status.dbg-provisional, .dbg-flag { color: #ca8a04; }
+  .dbg-status.dbg-none { color: #dc2626; }
   .dbg-formula { font-size: 11.5px; color: var(--text-muted); margin: 8px 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
   .loading { text-align: center; color: var(--text-dim); padding: 60px 0; font-size: 13px; }
   @media (max-width: 580px) {
@@ -407,68 +409,63 @@ function renderValueTab(d) {
 }
 
 // ---------- score breakdown (debug) ----------
-// Shows exactly how each number on the dashboard is produced: per-priority
-// scores are hand-set in data.json (optionally with a score_basis note per
-// dimension); composite = Σ score × weight, ranked on the unrounded total.
-// Evidence rows are benchmark top-3 entries that name this exact model version.
+// Everything here is written by refresh.py: each priority score is the mean of
+// normalized benchmark inputs (score_detail), and the composite is the weighted
+// mean over the priorities every model has (composite_basis).
 const DIM_LABELS = { accuracy: 'Accuracy', long_context: 'Long context', agent: 'Agent', cost: 'Cost' };
+const STATUS_TEXT = {
+  measured: 'Measured on every benchmark',
+  partial: 'Measured; some boards don\'t list it',
+  provisional: 'Provisional: uses an older version\'s results',
+  none: 'No benchmark data',
+};
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const normName = (s) => String(s).toLowerCase().replace(/\(.*?\)/g, '').replace(/\s+/g, ' ').trim();
-function benchEvidence(d, model, dim) {
-  const target = normName(model.name);
-  const out = [];
-  (d.benchmarks[dim] || []).forEach(b => (b.top3 || []).forEach((row, i) => {
-    const n = normName(row.model);
-    if (n === target || n.startsWith(target + ' ')) out.push(`${b.name} #${i + 1} (${row.value})`);
-  }));
-  return out;
-}
+const isProvisional = (m) => Object.values(m.score_detail || {}).some(x => x.status === 'provisional');
 
 function renderDebugTab(d) {
   const w = d.weights;
   const dims = Object.keys(w);
-  const rows = d.models.map(m => {
-    const pp = m.per_priority;
-    const raw = dims.reduce((t, k) => t + (pp[k] != null ? pp[k] * w[k] : 0), 0);
-    return { m, raw };
-  }).sort((a, b) => b.raw - a.raw);
+  const cb = d.composite_basis || { included: dims, excluded: {} };
+  const incW = cb.included.reduce((t, k) => t + w[k], 0);
+  const rows = [...d.models].sort((a, b) => (b.composite_unrounded ?? -1) - (a.composite_unrounded ?? -1));
   const rankIn = (m, k) => 1 + d.models.filter(o => o.per_priority[k] != null && o.per_priority[k] > m.per_priority[k]).length;
+  const excluded = Object.entries(cb.excluded || {});
 
-  const leaderRows = rows.map((r, i) => `<tr><td>${i + 1}. ${esc(r.m.name)}</td><td>${r.raw.toFixed(2)}</td><td>${r.m.composite_overall ?? '—'}</td></tr>`).join('');
+  const leaderRows = rows.map((m, i) => `<tr><td>${i + 1}. ${esc(m.name)}</td><td>${m.composite_unrounded ?? '—'}</td><td>${m.composite_overall ?? '—'}</td></tr>`).join('');
 
-  const cards = rows.map(({ m, raw }, idx) => {
+  const cards = rows.map((m, idx) => {
     const pp = m.per_priority;
-    const basis = m.score_basis || {};
     const lines = dims.map(k => {
       const v = pp[k];
-      const contrib = v != null ? v * w[k] : null;
-      const ev = benchEvidence(d, m, k);
-      const prev = m.previous_scores && m.previous_scores[k] != null && m.previous_scores[k] !== v ? ` Was ${m.previous_scores[k]} before ${esc(m.name)} was detected.` : '';
-      const parts = [];
-      if (basis[k]) parts.push(esc(basis[k]));
-      if (ev.length) parts.push(`<span class="ev">Evidence: ${esc(ev.join(' · '))}</span>`);
-      else if (k === 'cost') parts.push('No cost benchmark is scraped; see changelog for pricing.');
-      else parts.push('No benchmark top-3 lists this exact version.');
-      if (!basis[k]) parts.push('Hand-set, no score_basis note.');
+      const inComp = cb.included.includes(k);
+      const eff = inComp && incW ? w[k] / incW : 0;
+      const det = (m.score_detail || {})[k] || { status: 'none', inputs: [], missing: [] };
+      const inputs = det.inputs.map(i => {
+        const flags = [i.inherited ? `inherited from ${esc(i.board_name)}` : '', i.stale ? `as of ${i.as_of}` : ''].filter(Boolean).join(', ');
+        return `${esc(i.name)}: ${esc(i.display)} → <b>${Math.round(i.score)}</b>${flags ? ` <span class="dbg-flag">(${flags})</span>` : ''}`;
+      });
+      if (det.inputs.length > 1) inputs.push(`mean of ${det.inputs.length} = ${v}`);
+      if (det.missing.length) inputs.push(`not listed on ${esc(det.missing.join(', '))}`);
+      if (!inComp) inputs.push('not in composite: most models have no data for this priority');
       return `<tr class="dbg-main">
-        <td>${DIM_LABELS[k] || k}</td>
+        <td>${DIM_LABELS[k] || k} <span class="dbg-status dbg-${det.status}">${STATUS_TEXT[det.status]}</span></td>
         <td>${v ?? '—'}</td>
         <td>${v != null ? '#' + rankIn(m, k) : '—'}</td>
-        <td>× ${w[k]}</td>
-        <td>${contrib != null ? contrib.toFixed(2) : '—'}</td>
-      </tr><tr><td colspan="5" class="dbg-basis">${parts.join('<br>')}${prev}</td></tr>`;
+        <td>${inComp ? '× ' + eff.toFixed(2) : '—'}</td>
+        <td>${inComp && v != null ? (v * eff).toFixed(2) : '—'}</td>
+      </tr><tr><td colspan="5" class="dbg-basis">${inputs.join('<br>') || 'No benchmark data yet.'}</td></tr>`;
     }).join('');
-    const formula = dims.map(k => `${pp[k] ?? 0}×${w[k]}`).join(' + ') + ` = ${raw.toFixed(2)} → round → ${m.composite_overall ?? '—'}`;
+    const formula = cb.included.map(k => `${pp[k]}×${(w[k] / incW).toFixed(2)}`).join(' + ') + ` = ${m.composite_unrounded ?? '—'} → ${m.composite_overall ?? '—'}`;
     return `<div class="dbg-card">
       <div class="dbg-head">
-        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${m.needs_calibration ? '<span class="calibrating-chip">Calibrating</span>' : ''}</div>
+        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${isProvisional(m) ? '<span class="calibrating-chip">Provisional</span>' : ''}</div>
         <span class="dbg-total">Composite <b>${m.composite_overall ?? '—'}</b></span>
       </div>
       <table class="dbg-table">
         <thead><tr><th>Priority</th><th>Score</th><th>Rank</th><th>Weight</th><th>Adds</th></tr></thead>
-        <tbody>${lines}<tr class="dbg-sum"><td>Composite (unrounded)</td><td></td><td></td><td></td><td>${raw.toFixed(2)}</td></tr></tbody>
+        <tbody>${lines}<tr class="dbg-sum"><td>Composite (unrounded)</td><td></td><td></td><td></td><td>${m.composite_unrounded ?? '—'}</td></tr></tbody>
       </table>
-      <p class="dbg-formula">${formula}</p>
+      ${incW ? `<p class="dbg-formula">${formula}</p>` : ''}
     </div>`;
   }).join('');
 
@@ -479,12 +476,16 @@ function renderDebugTab(d) {
         <thead><tr><th>Model</th><th>Unrounded</th><th>Shown</th></tr></thead>
         <tbody>${leaderRows}</tbody>
       </table>
-      <p class="cl-note">refresh.py ranks on the unrounded total, so two models that both show ${rows[0] ? rows[0].m.composite_overall : ''} are separated by the decimals. Runner-up and 3rd chips are the next two rows.</p>
+      <p class="cl-note">Ranked on the unrounded composite. ${excluded.length
+        ? `Left out of every model's composite because most models have no data: ${excluded.map(([k, ms]) => `<b>${DIM_LABELS[k] || k}</b> (missing: ${esc(ms.join(', '))})`).join('; ')}. The remaining weights are rescaled to sum to 1. `
+        : ''}${Object.keys(cb.unranked || {}).length
+        ? `Not ranked, because data is missing for a priority the others are scored on: ${Object.entries(cb.unranked).map(([n, ks]) => `<b>${esc(n)}</b> (${ks.map(k => DIM_LABELS[k] || k).join(', ')})`).join('; ')}.`
+        : ''}${!excluded.length && !Object.keys(cb.unranked || {}).length ? 'All four priorities have data for every model.' : ''}</p>
     </div>
 
-    <p class="section-label">Best per priority cards &amp; composite: per model</p>
+    <p class="section-label">Per model: every input behind every score</p>
     ${cards}
-    <p class="cl-note">Per-priority scores (0–100) are hand-maintained in data.json → models[].per_priority; the scraper never changes them. It only recomputes composites and rankings. Add a <code>score_basis</code> object per model (e.g. <code>{"agent": "Terminal-bench 4.0 66.4% → 93"}</code>) and the note shows here instead of "Hand-set, no score_basis note".</p>
+    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons and prices span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. For cost, "best" means the cheapest of the models tracked here. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional</b> until the board lists it. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
   `;
 }
 
@@ -589,7 +590,8 @@ function render(d) {
           long_context: 'Long instructions & context',
           cost: 'Cost efficiency (cost / task)'
         };
-        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; return `<tr><td>${i+1}. ${m.name}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
+        if (!d.models.some(m => m.per_priority[k] != null)) return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><p class="pri-summary">No benchmark data yet, so this priority is left out of the composite.</p></div>`;
+        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; const st = ((m.score_detail || {})[k] || {}).status; return `<tr><td>${i+1}. ${m.name}${st === 'provisional' ? '<span class="est-chip" title="Uses an older version&#39;s benchmark results">prov.</span>' : ''}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
       }).join('')}
     </div>
 
@@ -615,7 +617,7 @@ function render(d) {
                     <div class="model-name-row">
                       <p class="model-name">${m.name}</p>
                       ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
-                      ${m.needs_calibration ? `<span class="calibrating-chip">Calibrating</span>` : ''}
+                      ${isProvisional(m) ? `<span class="calibrating-chip" title="Some scores use an older version's benchmark results until boards list this model">Provisional</span>` : ''}
                       ${!isNaN(daysSince(m.released)) && daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
                     </div>
                     <p class="model-vendor">${fmt(m.released)}</p>
@@ -634,8 +636,8 @@ function render(d) {
     </div>
 
     <div id="pane-details" class="tab-pane">
-      ${['agent','accuracy','long_context'].map(cat => {
-        const labels = {agent:'Autonomous agents', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context'};
+      ${['agent','accuracy','long_context','cost'].filter(cat => (d.benchmarks[cat] || []).length).map(cat => {
+        const labels = {agent:'Autonomous agents', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context', cost:'Cost'};
         return `
           <p class="section-label" style="margin-top:8px;">${labels[cat]}</p>
           <div class="bench-grid">
@@ -645,7 +647,7 @@ function render(d) {
                   <p class="bench-name">${b.name}</p>
                   <a class="bench-link" href="${b.url}" target="_blank" rel="noopener">open ↗</a>
                 </div>
-                <p class="bench-desc">${b.description}</p>
+                <p class="bench-desc">${b.description}${b.as_of ? ` · ${b.scope || 'whole board'} · fetched ${fmt(b.as_of)}` : ''}${b.stale ? ' <span class="calibrating-chip">stale</span>' : ''}</p>
                 <table class="bench-table">
                   ${b.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.value}</td></tr>`).join('')}
                 </table>
@@ -654,20 +656,6 @@ function render(d) {
           </div>
         `;
       }).join('')}
-
-      <p class="section-label">Vibe check (not in composite)</p>
-      <div class="lmarena-card">
-        <div class="bench-head">
-          <p class="bench-name">LMArena</p>
-          <a class="bench-link" href="${d.lmarena_vibe_check.url}" target="_blank" rel="noopener">open ↗</a>
-        </div>
-        <p class="bench-desc">${d.lmarena_vibe_check.note}</p>
-        <table class="bench-table">
-          ${d.lmarena_vibe_check.top3.length
-            ? d.lmarena_vibe_check.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.score}</td></tr>`).join('')
-            : '<tr><td style="color:var(--text-dim)">No data yet — scraper pending</td><td></td></tr>'}
-        </table>
-      </div>
     </div>
 
     ${d.cost_efficiency ? `

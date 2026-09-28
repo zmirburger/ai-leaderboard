@@ -36,7 +36,7 @@ All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 3. **Normalization (0–100):** linear benchmarks = value ÷ best on the whole board × 100. Log-scale ones (METR hours, cost) = −25 per doubling from the best. Cost's "best" is the cheapest tracked model.
 4. **Priority score** = mean of that priority's benchmark scores. Status is `measured`, `partial` (some boards don't list the model), `provisional` (uses inherited values) or `none`.
 5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board, but only when that version is less than 1.0 older (Opus 4.7 → 5.5 yes, Grok 3 → 4.7 no). It's flagged Provisional and replaced automatically once the board lists the model.
-6. **Composite** = weighted mean over the priorities that every model has a score for (`composite_basis.included`), with the weights rescaled. A priority missing for any model is excluded for all models, so everyone is compared on the same basis.
+6. **Composite** = weighted mean over the priorities at least half the models have a score for (`composite_basis.included`), with the weights rescaled. A model missing one of those priorities is unranked (`composite_basis.unranked`) rather than scored on fewer priorities, so every ranked model is compared on the same mix.
 
 Artificial Analysis data needs the `AA_API_KEY` repo secret (free key from artificialanalysis.ai). Without it the AA benchmarks keep their cached values, and long context has no source at all.
 

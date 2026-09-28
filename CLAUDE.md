@@ -34,6 +34,8 @@ composite_overall = (accuracy_score * 0.25) + (long_context_score * 0.25) + (age
 
 Per-priority scores are normalized to 0-100 from each benchmark's raw output. Default weighting is in data.json.
 
+The dashboard's "Score breakdown" tab shows the math behind every card (score × weight per priority, unrounded composite, benchmark top-3 evidence for that exact model version). When you set or change a `per_priority` score, add a one-line note per dimension in the model's optional `score_basis` object (e.g. `"score_basis": {"agent": "Terminal-bench 4.0 66.4% → 93"}`) so the tab shows why.
+
 ## Cost vs intelligence (`data.json` → `_archived_cost_efficiency`) [Archived / Hidden]
 
 Separate from the composite — this is a "given two options of similar capability, which one is wasting money" lens, sourced from Artificial Analysis' model leaderboard (Intelligence Index vs $/task per model×reasoning-effort row). Manually refreshed (the AA page is JS-rendered) by pasting a fresh screenshot and transcribing rows into `cost_efficiency.entries`. The dashboard's "Cost vs intelligence" tab computes the cost/intelligence Pareto frontier client-side and flags every dominated entry with which frontier option beats it outright (cheaper, smarter, or both) — e.g. it's how "Opus xhigh over Fable 5" or "Opus medium over Sonnet max" type calls get surfaced automatically instead of eyeballed. It also ranks the frontier by intelligence-per-dollar to surface a "Top 3 for everyday tasks" pick.

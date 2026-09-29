@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-28T07:40:21Z",
+  "last_updated": "2026-09-29T04:54:35Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -16,7 +16,7 @@
   "best_per_priority": {
     "accuracy": {
       "model": "Claude Opus 5.5",
-      "summary": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 87.0 → 98",
+      "summary": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 87.1 → 98",
       "supporting": "AA Intelligence Index · Vectara HHEM · BenchLM"
     },
     "long_context": {
@@ -64,18 +64,18 @@
               "score": 92.7,
               "board_name": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 83.0,
+              "value": 82.96,
               "display": "83.0",
-              "score": 93.6,
+              "score": 93.7,
               "board_name": "Claude Fable 5.1",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -94,7 +94,7 @@
               "score": 96.2,
               "board_name": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -105,7 +105,7 @@
               "score": 76.2,
               "board_name": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -122,7 +122,7 @@
               "score": 94.3,
               "board_name": "claude-fable-5",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -133,7 +133,7 @@
               "score": 95.4,
               "board_name": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -144,7 +144,7 @@
               "score": 99.4,
               "board_name": "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -163,7 +163,7 @@
               "score": 33.9,
               "board_name": "claude-fable-5",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -174,7 +174,7 @@
               "score": 6.6,
               "board_name": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -217,7 +217,7 @@
               "score": 100.0,
               "board_name": "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -228,18 +228,18 @@
               "score": 89.6,
               "board_name": "anthropic/claude-opus-4-7",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 86.98,
-              "display": "87.0",
-              "score": 98.1,
+              "value": 87.07,
+              "display": "87.1",
+              "score": 98.4,
               "board_name": "Claude Opus 5.5",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -256,7 +256,7 @@
               "score": 95.5,
               "board_name": "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -267,7 +267,7 @@
               "score": 74.7,
               "board_name": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -284,7 +284,7 @@
               "score": 99.4,
               "board_name": "claude-opus-5",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -295,7 +295,7 @@
               "score": 100.0,
               "board_name": "Claude Opus 4.6 (Inspect)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -306,7 +306,7 @@
               "score": 88.5,
               "board_name": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -317,7 +317,7 @@
               "score": 95.3,
               "board_name": "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -334,7 +334,7 @@
               "score": 38.4,
               "board_name": "claude-opus-5",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -345,7 +345,7 @@
               "score": 39.6,
               "board_name": "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -353,7 +353,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 87.0 → 98",
+        "accuracy": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 87.1 → 98",
         "long_context": "AA Long-Context Reasoning 84.7% → 96 · AA IFBench 62.2% → 75 (inherited from Claude Opus 4.8 (Adaptive Reasoning, Max Effort))",
         "agent": "DeepSWE 73.6% → 99 (inherited from claude-opus-5) · METR Time Horizon 222h → 100 (inherited from Claude Opus 4.6 (Inspect)) · Terminal-Bench Hard (AA) 58.3% → 88 (inherited from Claude Opus 4.8 (Adaptive Reasoning, Max Effort)) · τ²-Bench (AA) 94.4% → 95 (inherited from Claude Opus 4.8 (Adaptive Reasoning, Max Effort))",
         "cost": "DeepSWE $/task $11.84 → 38 (inherited from claude-opus-5) · AA blended price $8.00/MTok → 40"
@@ -362,17 +362,17 @@
     },
     {
       "id": "claude_sonnet_4_6",
-      "name": "Claude Sonnet 5",
+      "name": "Claude Sonnet 5.5",
       "vendor": "Anthropic",
       "tier": "Sonnet",
-      "released": "2026-07-01",
-      "previous": "Claude Sonnet 4.6",
+      "released": "2026-09-28",
+      "previous": "Claude Sonnet 5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 68,
+      "composite_overall": 72,
       "per_priority": {
-        "accuracy": 78,
-        "long_context": 80,
+        "accuracy": 93,
+        "long_context": 81,
         "agent": 78,
         "cost": 37
       },
@@ -383,12 +383,12 @@
             {
               "bench": "aa_intelligence_index",
               "name": "AA Intelligence Index",
-              "value": 38.2,
-              "display": "38.2",
-              "score": 66.3,
-              "board_name": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+              "value": 56.0,
+              "display": "56.0",
+              "score": 97.2,
+              "board_name": "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -399,18 +399,18 @@
               "score": 91.0,
               "board_name": "anthropic/claude-sonnet-4-6",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 67.01,
-              "display": "67.0",
-              "score": 75.6,
-              "board_name": "Claude Sonnet 5",
+              "value": 80.49,
+              "display": "80.5",
+              "score": 90.9,
+              "board_name": "Claude Sonnet 5.5",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -422,12 +422,12 @@
             {
               "bench": "aa_lcr",
               "name": "AA Long-Context Reasoning",
-              "value": 82.0,
-              "display": "82.0%",
-              "score": 92.5,
-              "board_name": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+              "value": 82.6667,
+              "display": "82.7%",
+              "score": 93.2,
+              "board_name": "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -438,7 +438,7 @@
               "score": 67.9,
               "board_name": "Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -454,8 +454,8 @@
               "display": "53.8%",
               "score": 72.7,
               "board_name": "claude-sonnet-5",
-              "inherited": false,
-              "as_of": "2026-09-28",
+              "inherited": true,
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -466,7 +466,7 @@
               "score": 80.5,
               "board_name": "Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -477,7 +477,7 @@
               "score": 80.2,
               "board_name": "Claude Sonnet 4.6 (Non-reasoning, High Effort)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -486,7 +486,7 @@
           ]
         },
         "cost": {
-          "status": "measured",
+          "status": "provisional",
           "inputs": [
             {
               "bench": "deepswe_cost",
@@ -495,8 +495,8 @@
               "display": "$26.40",
               "score": 9.4,
               "board_name": "claude-sonnet-5",
-              "inherited": false,
-              "as_of": "2026-09-28",
+              "inherited": true,
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -505,9 +505,9 @@
               "value": 4.0,
               "display": "$4.00/MTok",
               "score": 64.6,
-              "board_name": "Claude Sonnet 5 (Adaptive Reasoning, Max Effort)",
+              "board_name": "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -515,12 +515,12 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 38.2 → 66 · Vectara HHEM 89.4% → 91 (inherited from anthropic/claude-sonnet-4-6) · BenchLM 67.0 → 76",
-        "long_context": "AA Long-Context Reasoning 82.0% → 92 · AA IFBench 56.6% → 68 (inherited from Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort))",
-        "agent": "DeepSWE 53.8% → 73 · Terminal-Bench Hard (AA) 53.0% → 80 (inherited from Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)) · τ²-Bench (AA) 79.5% → 80 (inherited from Claude Sonnet 4.6 (Non-reasoning, High Effort)) · not on METR Time Horizon",
-        "cost": "DeepSWE $/task $26.40 → 9 · AA blended price $4.00/MTok → 65"
+        "accuracy": "AA Intelligence Index 56.0 → 97 · Vectara HHEM 89.4% → 91 (inherited from anthropic/claude-sonnet-4-6) · BenchLM 80.5 → 91",
+        "long_context": "AA Long-Context Reasoning 82.7% → 93 · AA IFBench 56.6% → 68 (inherited from Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort))",
+        "agent": "DeepSWE 53.8% → 73 (inherited from claude-sonnet-5) · Terminal-Bench Hard (AA) 53.0% → 80 (inherited from Claude Sonnet 4.6 (Adaptive Reasoning, Max Effort)) · τ²-Bench (AA) 79.5% → 80 (inherited from Claude Sonnet 4.6 (Non-reasoning, High Effort)) · not on METR Time Horizon",
+        "cost": "DeepSWE $/task $26.40 → 9 (inherited from claude-sonnet-5) · AA blended price $4.00/MTok → 65"
       },
-      "composite_unrounded": 68.25
+      "composite_unrounded": 72.25
     },
     {
       "id": "claude_haiku_4_5",
@@ -550,7 +550,7 @@
               "score": 29.3,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -561,7 +561,7 @@
               "score": 91.9,
               "board_name": "anthropic/claude-haiku-4-5-20251001",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -580,7 +580,7 @@
               "score": 83.8,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -591,7 +591,7 @@
               "score": 65.1,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -608,7 +608,7 @@
               "score": 41.4,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -619,7 +619,7 @@
               "score": 55.2,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -639,7 +639,7 @@
               "score": 89.6,
               "board_name": "Claude 4.5 Haiku (Reasoning)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -687,7 +687,7 @@
               "score": 91.5,
               "board_name": "GPT-6 Astra (max)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -698,18 +698,18 @@
               "score": 93.0,
               "board_name": "openai/gpt-6-astra",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 88.69,
-              "display": "88.7",
+              "value": 88.5,
+              "display": "88.5",
               "score": 100.0,
               "board_name": "GPT-6 Astra",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -726,7 +726,7 @@
               "score": 91.0,
               "board_name": "GPT-6 Astra (max)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -737,7 +737,7 @@
               "score": 91.0,
               "board_name": "GPT-5.5 (xhigh)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -754,7 +754,7 @@
               "score": 100.0,
               "board_name": "gpt-6-astra",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -765,7 +765,7 @@
               "score": 61.2,
               "board_name": "GPT-5.4",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -776,7 +776,7 @@
               "score": 92.0,
               "board_name": "GPT-5.5 (xhigh)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -787,7 +787,7 @@
               "score": 94.7,
               "board_name": "GPT-5.5 (xhigh)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -804,7 +804,7 @@
               "score": 73.8,
               "board_name": "gpt-6-astra",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -815,7 +815,7 @@
               "score": 6.6,
               "board_name": "GPT-6 Astra (max)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -823,7 +823,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 52.7 → 92 · Vectara HHEM 91.3% → 93 · BenchLM 88.7 → 100",
+        "accuracy": "AA Intelligence Index 52.7 → 92 · Vectara HHEM 91.3% → 93 · BenchLM 88.5 → 100",
         "long_context": "AA Long-Context Reasoning 80.7% → 91 · AA IFBench 75.9% → 91 (inherited from GPT-5.5 (xhigh))",
         "agent": "DeepSWE 74.1% → 100 · METR Time Horizon 76h → 61 (inherited from GPT-5.4) · Terminal-Bench Hard (AA) 60.6% → 92 (inherited from GPT-5.5 (xhigh)) · τ²-Bench (AA) 93.9% → 95 (inherited from GPT-5.5 (xhigh))",
         "cost": "DeepSWE $/task $4.43 → 74 · AA blended price $20.00/MTok → 7"
@@ -858,7 +858,7 @@
               "score": 51.6,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -869,18 +869,18 @@
               "score": 91.2,
               "board_name": "google/gemini-3.1-pro-preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 64.45,
+              "value": 64.46,
               "display": "64.5",
-              "score": 72.7,
+              "score": 72.8,
               "board_name": "Gemini 3.1 Pro",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -897,7 +897,7 @@
               "score": 92.5,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -908,7 +908,7 @@
               "score": 92.6,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -925,7 +925,7 @@
               "score": 15.8,
               "board_name": "gemini-3-1-pro-preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -936,7 +936,7 @@
               "score": 67.2,
               "board_name": "Gemini 3.1 Pro",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -947,7 +947,7 @@
               "score": 81.6,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -958,7 +958,7 @@
               "score": 96.5,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -975,7 +975,7 @@
               "score": 100.0,
               "board_name": "gemini-3-1-pro-preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -986,7 +986,7 @@
               "score": 60.4,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1029,7 +1029,7 @@
               "score": 71.0,
               "board_name": "Gemini 3.8 Flash (high)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1040,18 +1040,18 @@
               "score": 88.1,
               "board_name": "google/gemini-3-flash-preview",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 73.43,
-              "display": "73.4",
-              "score": 82.8,
+              "value": 73.49,
+              "display": "73.5",
+              "score": 83.0,
               "board_name": "Gemini 3.8 Flash",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1068,7 +1068,7 @@
               "score": 94.7,
               "board_name": "Gemini 3.8 Flash (medium)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1079,7 +1079,7 @@
               "score": 91.6,
               "board_name": "Gemini 3.5 Flash (high)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1096,7 +1096,7 @@
               "score": 99.6,
               "board_name": "gemini-3-8-flash",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1107,7 +1107,7 @@
               "score": 70.1,
               "board_name": "Gemini 3.5 Flash (minimal)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1118,7 +1118,7 @@
               "score": 96.5,
               "board_name": "Gemini 3.5 Flash (medium)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1137,7 +1137,7 @@
               "score": 96.5,
               "board_name": "gemini-3-8-flash",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1148,7 +1148,7 @@
               "score": 100.0,
               "board_name": "Gemini 3.8 Flash (high)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1156,7 +1156,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 40.9 → 71 · Vectara HHEM 86.5% → 88 (inherited from google/gemini-3-flash-preview) · BenchLM 73.4 → 83",
+        "accuracy": "AA Intelligence Index 40.9 → 71 · Vectara HHEM 86.5% → 88 (inherited from google/gemini-3-flash-preview) · BenchLM 73.5 → 83",
         "long_context": "AA Long-Context Reasoning 84.0% → 95 · AA IFBench 76.3% → 92 (inherited from Gemini 3.5 Flash (high))",
         "agent": "DeepSWE 73.8% → 100 · Terminal-Bench Hard (AA) 46.2% → 70 (inherited from Gemini 3.5 Flash (minimal)) · τ²-Bench (AA) 95.6% → 96 (inherited from Gemini 3.5 Flash (medium)) · not on METR Time Horizon",
         "cost": "DeepSWE $/task $2.36 → 96 · AA blended price $1.50/MTok → 100"
@@ -1191,18 +1191,18 @@
               "score": 80.6,
               "board_name": "Grok 4.7 (xhigh)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 69.19,
-              "display": "69.2",
+              "value": 69.02,
+              "display": "69.0",
               "score": 78.0,
               "board_name": "Grok 4.6",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1221,7 +1221,7 @@
               "score": 86.8,
               "board_name": "Grok 4.7 (high)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1232,7 +1232,7 @@
               "score": 100.0,
               "board_name": "Grok 4.3 (medium)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1249,7 +1249,7 @@
               "score": 91.0,
               "board_name": "grok-4-6",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1260,7 +1260,7 @@
               "score": 57.5,
               "board_name": "Grok 4.3 (high)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1271,7 +1271,7 @@
               "score": 98.5,
               "board_name": "Grok 4.3 (high)",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1290,7 +1290,7 @@
               "score": 82.8,
               "board_name": "grok-4-6",
               "inherited": true,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             },
             {
@@ -1301,7 +1301,7 @@
               "score": 75.0,
               "board_name": "Grok 4.7 (xhigh)",
               "inherited": false,
-              "as_of": "2026-09-28",
+              "as_of": "2026-09-29",
               "stale": false
             }
           ],
@@ -1309,7 +1309,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 46.4 → 81 · BenchLM 69.2 → 78 (inherited from Grok 4.6) · not on Vectara HHEM",
+        "accuracy": "AA Intelligence Index 46.4 → 81 · BenchLM 69.0 → 78 (inherited from Grok 4.6) · not on Vectara HHEM",
         "long_context": "AA Long-Context Reasoning 77.0% → 87 · AA IFBench 83.3% → 100 (inherited from Grok 4.3 (medium))",
         "agent": "DeepSWE 67.5% → 91 (inherited from grok-4-6) · Terminal-Bench Hard (AA) 37.9% → 58 (inherited from Grok 4.3 (high)) · τ²-Bench (AA) 97.7% → 98 (inherited from Grok 4.3 (high)) · not on METR Time Horizon",
         "cost": "DeepSWE $/task $3.45 → 83 (inherited from grok-4-6) · AA blended price $3.00/MTok → 75"
@@ -1325,7 +1325,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
         "description": "Composite of 10 hard evals",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1334,12 +1334,12 @@
             "value": "57.6"
           },
           {
-            "model": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
-            "value": "53.4"
+            "model": "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)",
+            "value": "56.0"
           },
           {
-            "model": "GPT-6 Astra (max)",
-            "value": "52.7"
+            "model": "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
+            "value": "53.4"
           }
         ]
       },
@@ -1349,7 +1349,7 @@
         "url": "https://github.com/vectara/hallucination-leaderboard",
         "description": "Factual consistency when summarizing (100 − hallucination rate)",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1373,17 +1373,17 @@
         "url": "https://benchlm.ai/compare",
         "description": "Composite across verified benchmarks",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
           {
             "model": "GPT-6 Astra",
-            "value": "88.7"
+            "value": "88.5"
           },
           {
             "model": "Claude Opus 5.5",
-            "value": "87.0"
+            "value": "87.1"
           },
           {
             "model": "Claude Fable 5.1",
@@ -1399,7 +1399,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning",
         "description": "Reasoning over ~100k-token document sets",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1423,7 +1423,7 @@
         "url": "https://artificialanalysis.ai/evaluations/ifbench",
         "description": "Instruction-following compliance",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1449,7 +1449,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Long-horizon real-world SWE tasks (pass@1, best effort)",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1473,7 +1473,7 @@
         "url": "https://metr.org/time-horizons/",
         "description": "Task length completed at 50% reliability",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1497,7 +1497,7 @@
         "url": "https://artificialanalysis.ai/evaluations/terminalbench-hard",
         "description": "Agentic terminal tasks",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1521,7 +1521,7 @@
         "url": "https://artificialanalysis.ai/evaluations/tau2-bench",
         "description": "Tool use in customer-service flows",
         "lower_better": false,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1547,7 +1547,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Cost per task on the model's best DeepSWE run",
         "lower_better": true,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "tracked models",
         "top3": [
@@ -1571,7 +1571,7 @@
         "url": "https://artificialanalysis.ai/models",
         "description": "$/1M tokens, 3:1 input:output blend",
         "lower_better": true,
-        "as_of": "2026-09-28",
+        "as_of": "2026-09-29",
         "stale": false,
         "scope": "tracked models",
         "top3": [
@@ -1745,62 +1745,62 @@
   },
   "raw_benchmarks": {
     "benchlm": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
-        "GPT-6 Astra": 88.69,
-        "Claude Opus 5.5": 86.98,
-        "Claude Fable 5.1": 83.0,
-        "GPT-6 Sol": 81.28,
-        "Claude Opus 5": 79.81,
-        "Claude Fable 5": 79.07,
-        "GPT-5.6 Sol": 78.49,
-        "Gemini 3.8 Flash": 73.43,
+        "GPT-6 Astra": 88.5,
+        "Claude Opus 5.5": 87.07,
+        "Claude Fable 5.1": 82.96,
+        "GPT-6 Sol": 81.08,
+        "Claude Sonnet 5.5": 80.49,
+        "Claude Opus 5": 79.64,
+        "Claude Fable 5": 78.89,
+        "GPT-5.6 Sol": 78.41,
+        "MiMo-V2.6-Pro": 74.71,
+        "Gemini 3.8 Flash": 73.49,
         "GPT-5.6 Terra": 72.58,
-        "GPT-5.5 Pro": 72.42,
-        "Kimi K3": 71.87,
-        "Qwen3.8 Max": 71.8,
-        "GPT-5.4 Pro": 70.88,
-        "Claude Opus 4.8": 70.46,
-        "Grok 4.6": 69.19,
-        "GPT-5.5": 69.13,
-        "Claude Opus 4.7 (Adaptive)": 68.56,
-        "GPT-5.4": 68.51,
-        "Gemini 3.7 Flash": 67.66,
-        "Claude Sonnet 5": 67.01,
-        "GPT-5.2 Pro": 66.71,
-        "GPT-6 Luna": 66.59,
-        "Claude Opus 4.7": 66.28,
+        "GPT-5.5 Pro": 72.36,
+        "Kimi K3": 71.88,
+        "Qwen3.8 Max": 71.69,
+        "GPT-5.4 Pro": 70.79,
+        "Claude Opus 4.8": 70.39,
+        "GPT-5.5": 69.02,
+        "Grok 4.6": 69.02,
+        "Claude Opus 4.7 (Adaptive)": 68.53,
+        "Step 5 Preview": 68.53,
+        "GPT-5.4": 68.42,
+        "Gemini 3.7 Flash": 67.53,
+        "Claude Sonnet 5": 66.98,
+        "GPT-5.2 Pro": 66.76,
+        "GPT-6 Luna": 66.45,
+        "Claude Opus 4.7": 66.29,
         "Muse Spark 1.1": 65.92,
-        "GPT-5.6 Luna": 65.6,
-        "GLM-5.3": 65.55,
-        "Grok 4.5": 65.27,
-        "Muse Spark 1.2": 64.99,
-        "Gemini 3.6 Flash": 64.58,
-        "Gemini 3.1 Pro": 64.45,
-        "Claude Opus 4.6": 63.64,
-        "Gemini 3.5 Flash": 63.49,
-        "DeepSeek V4 Pro 0813": 63.48,
-        "Qwen3.7 Max": 63.18,
-        "dots3-note Preview": 62.81,
-        "GLM-5.2": 62.52,
-        "GPT-5.3 Codex": 62.18,
-        "Ornith-1.5-397B": 61.76,
-        "GPT-5.2": 61.37,
-        "Gemini 3 Pro": 61.01,
-        "Muse Spark": 60.81,
-        "Qwen3.8-Flash-Next": 60.72,
-        "Grok 4.20": 59.66,
-        "Hy4 preview": 59.61,
-        "Kimi K2.6": 59.12,
-        "GPT-5.1": 58.28,
-        "GLM-5.3-Flash": 58.01,
-        "GLM-5.1": 57.14,
-        "Claude Sonnet 4.6": 56.35,
-        "Qwen3.7 Plus": 55.78
+        "GPT-5.6 Luna": 65.55,
+        "GLM-5.3": 65.44,
+        "Grok 4.5": 65.11,
+        "Muse Spark 1.2": 64.92,
+        "Gemini 3.6 Flash": 64.56,
+        "Gemini 3.1 Pro": 64.46,
+        "MiMo-V2.6-Flash": 64.06,
+        "DeepSeek V4 Pro 0813": 63.97,
+        "Claude Opus 4.6": 63.61,
+        "Gemini 3.5 Flash": 63.41,
+        "Qwen3.7 Max": 63.31,
+        "dots3-note Preview": 62.64,
+        "GLM-5.2": 62.62,
+        "GPT-5.3 Codex": 62.06,
+        "Ornith-1.5-397B": 61.78,
+        "GPT-5.2": 61.32,
+        "Gemini 3 Pro": 60.96,
+        "Qwen3.8-Flash-Next": 60.82,
+        "Muse Spark": 60.78,
+        "GLM-5.3-Flash": 60.62,
+        "Hy4 preview": 60.26,
+        "Grok 4.20": 59.76,
+        "Kimi K2.6": 59.22
       }
     },
     "deepswe": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "gpt-6-astra": 74.115,
         "gemini-3-8-flash": 73.8255,
@@ -1833,7 +1833,7 @@
       }
     },
     "deepswe_cost": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "gpt-6-astra": 4.4291,
         "gemini-3-8-flash": 2.3623,
@@ -1866,7 +1866,7 @@
       }
     },
     "metr": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "GPT-4 0314": 0.1224,
         "GPT-4 1106 (Inspect)": 0.1253,
@@ -1893,7 +1893,7 @@
       }
     },
     "vectara": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "antgroup/finix_s1_32b": 98.2,
         "openai/gpt-5.4-nano-2026-03-17": 96.9,
@@ -2006,15 +2006,17 @@
       }
     },
     "aa_intelligence_index": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 57.6,
         "Claude Opus 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 56.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 56.0,
         "Claude Opus 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 53.6,
         "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)": 53.4,
         "Claude Fable 5.1 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 53.2,
         "GPT-6 Astra (max)": 52.7,
         "GPT-6 Astra (xhigh)": 52.4,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 51.9,
         "Claude Opus 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 51.2,
         "Claude Fable 5.1 (Adaptive Reasoning, High Effort, Default Fallback)": 51.2,
         "GPT-6 Astra (high)": 50.9,
@@ -2028,6 +2030,7 @@
         "GPT-6 Sol (max)": 47.5,
         "GPT-5.6 Sol (max)": 47.0,
         "Claude Fable 5.1 (Adaptive Reasoning, Low Effort, Default Fallback)": 46.8,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 46.7,
         "Grok 4.7 (xhigh)": 46.4,
         "Grok 4.7 (high)": 46.3,
         "MiMo-V2.6-Pro": 46.3,
@@ -2050,6 +2053,7 @@
         "GLM 5.3 Flash": 41.8,
         "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)": 41.8,
         "Gemini 3.8 Flash (high)": 40.9,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 40.7,
         "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)": 40.7,
         "Qwen3.8 Max": 40.2,
         "Qwen3.8 2.4T A95B": 39.9,
@@ -2073,6 +2077,7 @@
         "GPT-5.5 (high)": 37.0,
         "Gemini 3.7 Flash (low)": 36.9,
         "DeepSeek V4 Pro 0813 (Reasoning, Max Effort)": 36.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Low Effort, Default Fallback)": 35.8,
         "Grok 4.6 (low)": 35.1,
         "DeepSeek V4 Flash Vision (Reasoning, Max Effort)": 34.8,
         "GPT-5.6 Luna (xhigh)": 34.6,
@@ -2302,7 +2307,6 @@
         "Apriel-v1.5-15B-Thinker": 13.8,
         "Mercury 2": 13.8,
         "DeepSeek V3.1 (Non-reasoning)": 13.7,
-        "Qwen3.5 9B (Reasoning)": 13.7,
         "Nova 2.0 Omni (medium)": 13.6,
         "DeepSeek V3.1 (Reasoning)": 13.5,
         "Qwen3 VL 235B A22B (Reasoning)": 13.4,
@@ -2359,6 +2363,7 @@
         "GLM-4.6V (Reasoning)": 11.2,
         "K-EXAONE (Non-reasoning)": 11.2,
         "Qwen3 Next 80B A3B (Reasoning)": 11.2,
+        "Qwen3.5 9B (Reasoning)": 11.2,
         "GPT-5.4 mini (Non-Reasoning)": 11.1,
         "Nova 2.0 Omni (low)": 11.1,
         "GLM-4.5-Air": 11.1,
@@ -2676,15 +2681,17 @@
       }
     },
     "aa_lcr": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 84.6667,
         "Claude Opus 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 84.6667,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 82.6667,
         "Claude Opus 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 82.6667,
         "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)": 85.3333,
         "Claude Fable 5.1 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 83.0,
         "GPT-6 Astra (max)": 80.6667,
         "GPT-6 Astra (xhigh)": 80.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 79.6667,
         "Claude Opus 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 84.3333,
         "Claude Fable 5.1 (Adaptive Reasoning, High Effort, Default Fallback)": 83.6667,
         "GPT-6 Astra (high)": 80.0,
@@ -2698,6 +2705,7 @@
         "GPT-6 Sol (max)": 83.6667,
         "GPT-5.6 Sol (max)": 84.0,
         "Claude Fable 5.1 (Adaptive Reasoning, Low Effort, Default Fallback)": 82.3333,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 78.0,
         "Grok 4.7 (xhigh)": 76.6667,
         "Grok 4.7 (high)": 77.0,
         "MiMo-V2.6-Pro": 86.3333,
@@ -2720,6 +2728,7 @@
         "GLM 5.3 Flash": 80.0,
         "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)": 77.6667,
         "Gemini 3.8 Flash (high)": 81.3333,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 76.3333,
         "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)": 78.6667,
         "Qwen3.8 Max": 78.3333,
         "Qwen3.8 2.4T A95B": 80.3333,
@@ -2743,6 +2752,7 @@
         "GPT-5.5 (high)": 84.3333,
         "Gemini 3.7 Flash (low)": 78.6667,
         "DeepSeek V4 Pro 0813 (Reasoning, Max Effort)": 80.3333,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Low Effort, Default Fallback)": 76.0,
         "Grok 4.6 (low)": 80.6667,
         "DeepSeek V4 Flash Vision (Reasoning, Max Effort)": 81.3333,
         "GPT-5.6 Luna (xhigh)": 81.6667,
@@ -2964,7 +2974,6 @@
         "Apriel-v1.5-15B-Thinker": 21.3333,
         "Mercury 2": 43.6667,
         "DeepSeek V3.1 (Non-reasoning)": 47.0,
-        "Qwen3.5 9B (Reasoning)": 70.0,
         "Nova 2.0 Omni (medium)": 59.6667,
         "DeepSeek V3.1 (Reasoning)": 56.6667,
         "Qwen3 VL 235B A22B (Reasoning)": 63.6667,
@@ -3014,6 +3023,7 @@
         "GLM-4.6V (Reasoning)": 48.6667,
         "K-EXAONE (Non-reasoning)": 53.3333,
         "Qwen3 Next 80B A3B (Reasoning)": 63.6667,
+        "Qwen3.5 9B (Reasoning)": 70.0,
         "GPT-5.4 mini (Non-Reasoning)": 37.0,
         "Nova 2.0 Omni (low)": 57.6667,
         "GLM-4.5-Air": 46.6667,
@@ -3229,7 +3239,7 @@
       }
     },
     "aa_ifbench": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)": 63.4694,
         "GPT-5.6 Sol (max)": 72.6531,
@@ -3408,7 +3418,6 @@
         "Apriel-v1.5-15B-Thinker": 61.7007,
         "Mercury 2": 69.7959,
         "DeepSeek V3.1 (Non-reasoning)": 37.8231,
-        "Qwen3.5 9B (Reasoning)": 66.7347,
         "Nova 2.0 Omni (medium)": 66.1905,
         "DeepSeek V3.1 (Reasoning)": 41.4966,
         "Qwen3 VL 235B A22B (Reasoning)": 56.4626,
@@ -3457,6 +3466,7 @@
         "GLM-4.6V (Reasoning)": 30.068,
         "K-EXAONE (Non-reasoning)": 39.5918,
         "Qwen3 Next 80B A3B (Reasoning)": 60.6803,
+        "Qwen3.5 9B (Reasoning)": 66.7347,
         "GPT-5.4 mini (Non-Reasoning)": 38.8435,
         "Nova 2.0 Omni (low)": 61.7687,
         "GLM-4.5-Air": 37.551,
@@ -3684,7 +3694,7 @@
       }
     },
     "aa_terminalbench": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)": 62.8788,
         "GPT-5.6 Sol (max)": 65.9091,
@@ -3860,7 +3870,6 @@
         "Apriel-v1.5-15B-Thinker": 10.6061,
         "Mercury 2": 26.5152,
         "DeepSeek V3.1 (Non-reasoning)": 24.2424,
-        "Qwen3.5 9B (Reasoning)": 24.2424,
         "Nova 2.0 Omni (medium)": 4.5455,
         "DeepSeek V3.1 (Reasoning)": 25.0,
         "Qwen3 VL 235B A22B (Reasoning)": 11.3636,
@@ -3910,6 +3919,7 @@
         "GLM-4.6V (Reasoning)": 14.3939,
         "K-EXAONE (Non-reasoning)": 6.8182,
         "Qwen3 Next 80B A3B (Reasoning)": 9.8485,
+        "Qwen3.5 9B (Reasoning)": 24.2424,
         "GPT-5.4 mini (Non-Reasoning)": 18.1818,
         "Nova 2.0 Omni (low)": 3.7879,
         "GLM-4.5-Air": 20.4545,
@@ -4121,7 +4131,7 @@
       }
     },
     "aa_tau2": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Fable 5 (Adaptive Reasoning, Max Effort, Opus 4.8 Fallback)": 98.538,
         "GPT-5.6 Sol (max)": 85.0877,
@@ -4299,7 +4309,6 @@
         "Apriel-v1.5-15B-Thinker": 68.4211,
         "Mercury 2": 70.7602,
         "DeepSeek V3.1 (Non-reasoning)": 34.7953,
-        "Qwen3.5 9B (Reasoning)": 86.8421,
         "Nova 2.0 Omni (medium)": 80.4094,
         "DeepSeek V3.1 (Reasoning)": 37.4269,
         "Qwen3 VL 235B A22B (Reasoning)": 54.0936,
@@ -4349,6 +4358,7 @@
         "GLM-4.6V (Reasoning)": 31.5789,
         "K-EXAONE (Non-reasoning)": 59.0643,
         "Qwen3 Next 80B A3B (Reasoning)": 41.5205,
+        "Qwen3.5 9B (Reasoning)": 86.8421,
         "GPT-5.4 mini (Non-Reasoning)": 23.3918,
         "Nova 2.0 Omni (low)": 67.8363,
         "GLM-4.5-Air": 46.4912,
@@ -4566,15 +4576,17 @@
       }
     },
     "aa_price": {
-      "fetched_at": "2026-09-28",
+      "fetched_at": "2026-09-29",
       "values": {
         "Claude Opus 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 8.0,
         "Claude Opus 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 8.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Max Effort, Default Fallback)": 4.0,
         "Claude Opus 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 8.0,
         "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)": 20.0,
         "Claude Fable 5.1 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 20.0,
         "GPT-6 Astra (max)": 20.0,
         "GPT-6 Astra (xhigh)": 20.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Xhigh Effort, Default Fallback)": 4.0,
         "Claude Opus 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 8.0,
         "Claude Fable 5.1 (Adaptive Reasoning, High Effort, Default Fallback)": 20.0,
         "GPT-6 Astra (high)": 20.0,
@@ -4588,6 +4600,7 @@
         "GPT-6 Sol (max)": 4.0,
         "GPT-5.6 Sol (max)": 8.0,
         "Claude Fable 5.1 (Adaptive Reasoning, Low Effort, Default Fallback)": 20.0,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, High Effort, Default Fallback)": 4.0,
         "Grok 4.7 (xhigh)": 3.0,
         "Grok 4.7 (high)": 3.0,
         "MiMo-V2.6-Pro": 0.544,
@@ -4610,6 +4623,7 @@
         "GLM 5.3 Flash": 0.237,
         "Claude Opus 4.8 (Adaptive Reasoning, Max Effort)": 10.0,
         "Gemini 3.8 Flash (high)": 1.5,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Medium Effort, Default Fallback)": 4.0,
         "Claude Opus 4.7 (Adaptive Reasoning, Max Effort)": 10.0,
         "Qwen3.8 Max": 3.0,
         "Qwen3.8 2.4T A95B": 3.0,
@@ -4633,6 +4647,7 @@
         "GPT-5.5 (high)": 11.25,
         "Gemini 3.7 Flash (low)": 1.5,
         "DeepSeek V4 Pro 0813 (Reasoning, Max Effort)": 1.98,
+        "Claude Sonnet 5.5 (Adaptive Reasoning, Low Effort, Default Fallback)": 4.0,
         "Grok 4.6 (low)": 3.0,
         "DeepSeek V4 Flash Vision (Reasoning, Max Effort)": 0.66,
         "GPT-5.6 Luna (xhigh)": 0.45,
@@ -4692,11 +4707,11 @@
         "Qwen3.8 27B (low)": 1.125,
         "GLM-5.1 (Reasoning)": 1.981,
         "GPT-5.5 Instant (June 2026)": 11.25,
-        "DeepSeek V4 Flash 0420 (Reasoning, High Effort)": 0.168,
+        "DeepSeek V4 Flash 0420 (Reasoning, High Effort)": 0.143,
         "MiMo-V2.5-Pro": 0.544,
         "Kimi K2.7 Code": 1.712,
         "Grok 4.20 0309 v2 (Reasoning)": 1.563,
-        "Hy3": 0.25,
+        "Hy3": 0.241,
         "Grok 4.20 0309 (Reasoning)": 3.0,
         "MiMo-V2.5": 0.175,
         "Qwen3.7 Plus": 0.7,
@@ -4769,7 +4784,7 @@
         "Claude 4.5 Sonnet (Non-reasoning)": 6.0,
         "Qwen3.5 35B A3B (Reasoning)": 0.688,
         "LongCat 2.0": 0.525,
-        "DeepSeek V4 Flash 0420 (Non-reasoning)": 0.119,
+        "DeepSeek V4 Flash 0420 (Non-reasoning)": 0.117,
         "MiniMax-M2": 0.525,
         "Claude 4.1 Opus (Non-reasoning)": 30.0,
         "GLM-4.6 (Reasoning)": 0.963,
@@ -4825,7 +4840,6 @@
         "DeepSeek V3.2 Exp (Non-reasoning)": 0.315,
         "Mercury 2": 0.375,
         "DeepSeek V3.1 (Non-reasoning)": 0.848,
-        "Qwen3.5 9B (Reasoning)": 0.151,
         "Nova 2.0 Omni (medium)": 0.85,
         "DeepSeek V3.1 (Reasoning)": 0.865,
         "Qwen3 VL 235B A22B (Reasoning)": 1.3,
@@ -4865,6 +4879,7 @@
         "Mistral Small 4 (Reasoning)": 0.262,
         "GLM-4.6V (Reasoning)": 0.45,
         "Qwen3 Next 80B A3B (Reasoning)": 0.412,
+        "Qwen3.5 9B (Reasoning)": 0.151,
         "GPT-5.4 mini (Non-Reasoning)": 1.688,
         "Nova 2.0 Omni (low)": 0.85,
         "GLM-4.5-Air": 0.372,
@@ -4959,7 +4974,6 @@
         "GPT-4o mini": 0.262,
         "Qwen3 30B A3B (Non-reasoning)": 0.35,
         "Llama 3.1 Instruct 70B": 0.56,
-        "Granite 4.1 8B": 0.063,
         "Sarvam 30B (high)": 0.047,
         "Qwen2.5 Turbo": 0.088,
         "Reka Flash (Sep '24)": 0.35,

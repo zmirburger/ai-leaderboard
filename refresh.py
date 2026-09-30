@@ -150,16 +150,35 @@ def detect_anthropic_haiku():
 
 # ---------- OpenAI ----------
 
-def detect_openai():
-    url = "https://help.openai.com/en/articles/9624314-model-release-notes"
-    html = fetch(url)
-    if not html:
+_OPENAI_URL = "https://help.openai.com/en/articles/9624314-model-release-notes"
+_openai_soup = None
+
+def _get_openai_soup():
+    global _openai_soup
+    if _openai_soup is None:
+        html = fetch(_OPENAI_URL)
+        _openai_soup = BeautifulSoup(html, "html.parser") if html else None
+    return _openai_soup
+
+def _detect_openai_tier(tier):
+    """GPT-6 ships as three tiers (Astra > Sol > Luna), versioned independently
+    (e.g. GPT-6.1 Sol next to GPT-6 Astra)."""
+    soup = _get_openai_soup()
+    if not soup:
         return None
-    soup = BeautifulSoup(html, "html.parser")
-    version = _find_best_match(soup, r"GPT-(\d+(?:\.\d+)?)\b(?!\d)", include_body=True)
+    version = _find_best_match(soup, rf"GPT-(\d+(?:\.\d+)?)[ -]{tier}\b", include_body=True)
     if not version:
         return None
-    return _result(f"GPT-{version}", soup.get_text(" ", strip=True), url)
+    return _result(f"GPT-{version} {tier}", soup.get_text(" ", strip=True), _OPENAI_URL)
+
+def detect_openai_astra():
+    return _detect_openai_tier("Astra")
+
+def detect_openai_sol():
+    return _detect_openai_tier("Sol")
+
+def detect_openai_luna():
+    return _detect_openai_tier("Luna")
 
 # ---------- Google ----------
 
@@ -226,7 +245,9 @@ TIER_DETECTORS = {
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
     ("Google",    "Pro"):     detect_gemini_pro,
     ("Google",    "Flash"):   detect_gemini_flash,
-    ("OpenAI",    "GPT"):     detect_openai,
+    ("OpenAI",    "Astra"):   detect_openai_astra,
+    ("OpenAI",    "Sol"):     detect_openai_sol,
+    ("OpenAI",    "Luna"):    detect_openai_luna,
     ("xAI",       "Grok"):    detect_grok,
 }
 
@@ -277,9 +298,8 @@ AA_URL = "https://artificialanalysis.ai/api/v2/data/llms/models"
 AA_EVAL_KEYS = {
     "aa_intelligence_index": ["artificial_analysis_intelligence_index"],
     "aa_lcr": ["lcr", "aa_lcr"],
-    "aa_ifbench": ["ifbench"],
-    "aa_terminalbench": ["terminalbench_hard", "terminal_bench_hard"],
-    "aa_tau2": ["tau2", "tau2_bench"],
+    "aa_terminalbench_v4": ["terminalbench_v4_0"],
+    "aa_tau_banking": ["tau_banking"],
 }
 
 def fetch_aa():
@@ -312,7 +332,7 @@ def fetch_aa():
             out["aa_price"][name] = float(price)
     print(f"  {len(items)} models; evaluation fields: {sorted(seen_keys)}")
     # AA reports most evals as 0-1 fractions; store as percentages.
-    for bench in ("aa_lcr", "aa_ifbench", "aa_terminalbench", "aa_tau2"):
+    for bench in ("aa_lcr", "aa_terminalbench_v4", "aa_tau_banking"):
         vals = out[bench]
         if vals and max(vals.values()) <= 1.0:
             out[bench] = {k: v * 100 for k, v in vals.items()}
@@ -405,17 +425,19 @@ SOURCES = [
 # scale: "linear" -> score = value / best x 100.
 #        "log"    -> -25 points per doubling away from best (for metrics spanning
 #                    orders of magnitude: time horizons, prices).
-# reference: "board" = best on the whole leaderboard; "tracked" = best among the
-#            dashboard's own models (cost: the board's cheapest is a tiny model).
+# reference: "board" = best on the whole leaderboard; "tracked" = the dashboard's own
+#            models (cost: the board's cheapest is a tiny model). A tracked log bench
+#            spans its range on a log scale instead: cheapest 100, priciest 0, so one
+#            tiny model (GPT-6 Luna at $0.20/MTok) can't clamp everyone else to 0.
 BENCHMARKS = [
     dict(id="deepswe", priority="agent", name="DeepSWE", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://deepswe.datacurve.ai/", description="Long-horizon real-world SWE tasks (pass@1, best effort)"),
     dict(id="metr", priority="agent", name="METR Time Horizon", unit="hours", scale="log", higher_better=True, reference="board",
          url="https://metr.org/time-horizons/", description="Task length completed at 50% reliability"),
-    dict(id="aa_terminalbench", priority="agent", name="Terminal-Bench Hard (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/terminalbench-hard", description="Agentic terminal tasks"),
-    dict(id="aa_tau2", priority="agent", name="τ²-Bench (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in customer-service flows"),
+    dict(id="aa_terminalbench_v4", priority="agent", name="Terminal-Bench 4.0 (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/terminalbench", description="Agentic terminal tasks"),
+    dict(id="aa_tau_banking", priority="agent", name="τ-Bench Banking (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in banking customer-service flows"),
     dict(id="aa_intelligence_index", priority="accuracy", name="AA Intelligence Index", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
     dict(id="vectara", priority="accuracy", name="Vectara HHEM", unit="pct", scale="linear", higher_better=True, reference="board",
@@ -424,8 +446,6 @@ BENCHMARKS = [
          url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
     dict(id="aa_lcr", priority="long_context", name="AA Long-Context Reasoning", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning", description="Reasoning over ~100k-token document sets"),
-    dict(id="aa_ifbench", priority="long_context", name="AA IFBench", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/ifbench", description="Instruction-following compliance"),
     dict(id="deepswe_cost", priority="cost", name="DeepSWE $/task", unit="usd", scale="log", higher_better=False, reference="tracked",
          url="https://deepswe.datacurve.ai/", description="Cost per task on the model's best DeepSWE run"),
     dict(id="aa_price", priority="cost", name="AA blended price", unit="usd_mtok", scale="log", higher_better=False, reference="tracked",
@@ -433,6 +453,10 @@ BENCHMARKS = [
 ]
 BENCH_BY_ID = {b["id"]: b for b in BENCHMARKS}
 STALE_DAYS = 14
+# A board that hasn't directly tested any tracked model released in this window has
+# stopped testing current models (AA retired IFBench, Terminal-Bench Hard and τ²-Bench
+# this way). It is dropped instead of feeding inherited values forever.
+LIVE_BOARD_DAYS = 90
 
 def fmt_value(bench, v):
     u = bench["unit"]
@@ -495,7 +519,10 @@ def resolve(model, idx):
     k = max(older, key=lambda kv: kv[1])[0]
     return idx[k][0], idx[k][1], True
 
-def normalize(bench, v, best):
+def normalize(bench, v, best, worst):
+    if bench["scale"] == "log" and bench["reference"] == "tracked":
+        span = math.log(worst / best) if best > 0 and worst > 0 else 0
+        return 100.0 if span == 0 else max(0.0, min(100.0, 100 * math.log(worst / v) / span))
     if bench["scale"] == "log":
         ratio = (best / v) if bench["higher_better"] else (v / best)
         return max(0.0, min(100.0, 100 - 25 * math.log2(max(ratio, 1e-9))))
@@ -540,18 +567,28 @@ def compute_scores(data):
         m.pop("previous_scores", None)
         m["per_priority"], m["score_detail"], m["score_basis"] = {}, {}, {}
 
+    recent = [m for m in models if m.get("released")
+              and (today - datetime.fromisoformat(m["released"]).date()).days <= LIVE_BOARD_DAYS]
     data["benchmarks"] = {}
+    data["dropped_benchmarks"] = {}
     for dim in data["weights"]:
-        benches = [b for b in BENCHMARKS if b["priority"] == dim and cache.get(b["id"], {}).get("values")]
         per_model = {m["id"]: [] for m in models}
-        for b in benches:
+        benches = []
+        for b in BENCHMARKS:
+            if b["priority"] != dim or not cache.get(b["id"], {}).get("values"):
+                continue
             entry = cache[b["id"]]
             idx = build_index(b, entry["values"])
             resolved = {m["id"]: resolve(m, idx) for m in models}
+            if recent and not any(resolved[m["id"]] and not resolved[m["id"]][2] for m in recent):
+                data["dropped_benchmarks"][b["name"]] = f"hasn't tested any tracked model released in the last {LIVE_BOARD_DAYS} days"
+                continue
+            benches.append(b)
             pool = [r[0] for r in resolved.values() if r] if b["reference"] == "tracked" else [v for v, _ in idx.values()]
             if not pool:
                 continue
             best = max(pool) if b["higher_better"] else min(pool)
+            worst = min(pool) if b["higher_better"] else max(pool)
             as_of = entry["fetched_at"]
             stale = (today - datetime.fromisoformat(as_of).date()).days > STALE_DAYS
             for m in models:
@@ -561,7 +598,7 @@ def compute_scores(data):
                 v, board_name, inherited = r
                 per_model[m["id"]].append({
                     "bench": b["id"], "name": b["name"], "value": v, "display": fmt_value(b, v),
-                    "score": round(normalize(b, v, best), 1), "board_name": board_name,
+                    "score": round(normalize(b, v, best, worst), 1), "board_name": board_name,
                     "inherited": inherited, "as_of": as_of, "stale": stale,
                 })
             # Details-tab card: top 3 on the board (or among tracked models for cost).
@@ -665,6 +702,8 @@ def report_gaps(data):
         print("\n=== Not fully measured ===")
         for g in gaps:
             print(f"  [~] {g}")
+    for name, why in data.get("dropped_benchmarks", {}).items():
+        print(f"  [x] {name} not scored: {why}")
 
 def main():
     data = load_data()

@@ -45,14 +45,14 @@ Archived in `data.json` under `_archived_cost_efficiency`. To restore, rename ba
 
 ## Tracked benchmarks
 
-**Agent:** METR Time Horizon, DeepSWE, τ-bench, BrowseComp
-**Accuracy:** BenchLM, Vectara HHEM, AA Omniscience, AA Intelligence Index, Scale SEAL (RLI)
-**Long context:** Fiction.LiveBench, AA Long-Context, AA IFBench
-**Vibe check:** LMArena (kept but not in composite)
+**Agent:** DeepSWE, Terminal-Bench 4.0 (AA), τ-Bench Banking (AA), METR Time Horizon
+**Accuracy:** AA Intelligence Index, BenchLM, Vectara HHEM
+**Long context:** AA Long-Context Reasoning
+**Cost:** DeepSWE $/task, AA blended $/MTok
 
 ## Tracked vendors
 
-Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT), Google (Gemini), xAI (Grok)
+Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT Astra/Sol/Luna), Google (Gemini), xAI (Grok)
 
 ## Hosting
 

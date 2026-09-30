@@ -480,12 +480,14 @@ function renderDebugTab(d) {
         ? `Left out of every model's composite because most models have no data: ${excluded.map(([k, ms]) => `<b>${DIM_LABELS[k] || k}</b> (missing: ${esc(ms.join(', '))})`).join('; ')}. The remaining weights are rescaled to sum to 1. `
         : ''}${Object.keys(cb.unranked || {}).length
         ? `Not ranked, because data is missing for a priority the others are scored on: ${Object.entries(cb.unranked).map(([n, ks]) => `<b>${esc(n)}</b> (${ks.map(k => DIM_LABELS[k] || k).join(', ')})`).join('; ')}.`
-        : ''}${!excluded.length && !Object.keys(cb.unranked || {}).length ? 'All four priorities have data for every model.' : ''}</p>
+        : ''}${!excluded.length && !Object.keys(cb.unranked || {}).length ? 'All four priorities have data for every model.' : ''}${Object.keys(d.dropped_benchmarks || {}).length
+        ? ` Not scored, because the board has stopped testing current models: ${Object.entries(d.dropped_benchmarks).map(([n, why]) => `<b>${esc(n)}</b> (${esc(why)})`).join('; ')}.`
+        : ''}</p>
     </div>
 
     <p class="section-label">Per model: every input behind every score</p>
     ${cards}
-    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons and prices span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. For cost, "best" means the cheapest of the models tracked here. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional</b> until the board lists it. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
+    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional</b> until the board lists it. A board that hasn't tested any model released in the last 90 days is dropped rather than left to feed old results. Cost is scaled across the tracked models on a log scale: the cheapest scores 100, the priciest 0. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
   `;
 }
 

@@ -6,7 +6,7 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 | Source | Endpoint | Feeds | Key? |
 |--------|----------|-------|------|
-| Artificial Analysis API | https://artificialanalysis.ai/api/v2/data/llms/models | Intelligence Index (accuracy) · Long-Context Reasoning, IFBench (long context) · Terminal-Bench Hard, τ²-Bench (agent) · blended $/MTok (cost) | `AA_API_KEY` secret |
+| Artificial Analysis API | https://artificialanalysis.ai/api/v2/data/llms/models | Intelligence Index (accuracy) · Long-Context Reasoning (long context) · Terminal-Bench 4.0, τ-Bench Banking (agent) · blended $/MTok (cost) | `AA_API_KEY` secret |
 | BenchLM | https://benchlm.ai/api/leaderboard | accuracy | no |
 | DeepSWE | https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json | agent (pass@1) · cost ($/task, if the row publishes it) | no |
 | METR | https://metr.org/time-horizons/ (`thData` JSON) | agent (50% time horizon) | no |
@@ -21,7 +21,8 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 ## Dropped
 
-- Scraping AA's HTML pages, LMArena, τ-bench README, BrowseComp, Scale SEAL, and Fiction.LiveBench. They were either never fetched automatically (their top-3 lists were typed in by hand) or failed to parse on every run. The AA API replaces the AA pages and supplies τ²-Bench. AA Omniscience isn't in the API, so it's dropped.
+- Scraping AA's HTML pages, LMArena, τ-bench README, BrowseComp, Scale SEAL, and Fiction.LiveBench. They were either never fetched automatically (their top-3 lists were typed in by hand) or failed to parse on every run. The AA API replaces the AA pages. AA Omniscience isn't in the API, so it's dropped.
+- AA IFBench, Terminal-Bench Hard and τ²-Bench (2026-09-30): AA stopped running them on new models (no Claude 5.x, GPT-6, Gemini 3.8 or Grok 4.7 rows), so every current model was scored on its predecessor's result. Terminal-Bench 4.0 and τ-Bench Banking replace the agent ones; IFBench has no AA successor.
 
 ## Cost vs intelligence (archived, not in composite)
 

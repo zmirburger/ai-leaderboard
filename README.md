@@ -46,7 +46,7 @@ Archived in `data.json` under `_archived_cost_efficiency`. To restore, rename ba
 ## Tracked benchmarks
 
 **Agent:** DeepSWE, Terminal-Bench 4.0 (AA), τ-Bench Banking (AA), METR Time Horizon
-**Accuracy:** AA Intelligence Index, BenchLM, Vectara HHEM
+**Accuracy:** AA Intelligence Index, BenchLM
 **Long context:** AA Long-Context Reasoning
 **Cost:** DeepSWE $/task, AA blended $/MTok
 

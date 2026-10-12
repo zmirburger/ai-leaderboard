@@ -156,7 +156,7 @@
   .vc-dot-estimated-ring { fill: none; stroke: var(--text-dim); stroke-width: 1; stroke-dasharray: 2 2; pointer-events: none; }
   .vc-label { fill: var(--text-muted); font-size: 9.5px; font-weight: 500; pointer-events: none; }
   .est-chip { color: var(--text-dim); font-size: 10px; font-weight: 500; border: 0.5px dashed var(--border-strong); border-radius: var(--radius-sm); padding: 0 5px; margin-left: 5px; cursor: help; }
-  .top3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .top3-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
   .top3-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 14px; position: relative; }
   .top3-rank { position: absolute; top: 10px; right: 12px; font-size: 20px; font-weight: 700; color: var(--border-strong); }
   .top3-model { font-size: 14px; font-weight: 600; margin: 0 0 2px; padding-right: 20px; }
@@ -339,10 +339,10 @@ function renderValueTab(d) {
   const dominated = annotated.filter(e => !e.frontier).sort((a, b) => (b.dominated_by.intelligence_index - b.intelligence_index) - (a.dominated_by.intelligence_index - a.intelligence_index));
   const estChip = (e) => e.estimated ? `<span class="est-chip" title="${(e.estimate_basis || 'Estimated — not directly sourced').replace(/"/g, '&quot;')}">est.</span>` : '';
 
-  // Top 3 for everyday use: highest intelligence-per-dollar among frontier options only
+  // Top 5 for everyday use: highest intelligence-per-dollar among frontier options only
   // (the frontier already screens out anything a cheaper/smarter pick beats outright;
   // ranking by raw ratio there favors solid daily-driver picks over the priciest tip).
-  const top3 = [...frontier].sort((a, b) => (b.intelligence_index / b.cost_per_task_usd) - (a.intelligence_index / a.cost_per_task_usd)).slice(0, 3);
+  const top5 = [...frontier].sort((a, b) => (b.intelligence_index / b.cost_per_task_usd) - (a.intelligence_index / a.cost_per_task_usd)).slice(0, 5);
 
   const frontierRows = frontier.map((p, i) => {
     const prev = frontier[i - 1];
@@ -368,7 +368,7 @@ function renderValueTab(d) {
       <span style="color:var(--text-dim)">(${e.dominated_by.cost_per_task_usd < e.cost_per_task_usd ? 'cheaper' : 'same price'}${e.dominated_by.intelligence_index > e.intelligence_index ? ', smarter' : ', same score'})</span>
     </div>`).join('');
 
-  const top3Cards = top3.map((p, i) => `
+  const top5Cards = top5.map((p, i) => `
     <div class="top3-card">
       <span class="top3-rank">${i + 1}</span>
       <p class="top3-model">${p.model}${estChip(p)}</p>
@@ -381,8 +381,8 @@ function renderValueTab(d) {
     </div>`).join('');
 
   return `
-    <p class="section-label" style="margin-top:8px;">Top 3 for everyday tasks</p>
-    <div class="top3-grid" style="margin-bottom:24px;">${top3Cards}</div>
+    <p class="section-label" style="margin-top:8px;">Top 5 for everyday tasks</p>
+    <div class="top3-grid" style="margin-bottom:24px;">${top5Cards}</div>
 
     <p class="section-label">Cost per task vs Intelligence Index</p>
     <div class="value-card">
@@ -592,7 +592,10 @@ function render(d) {
       </div>
       <p class="rationale">${overall.rationale}</p>
       <div class="runners">
-        ${others.slice(0,2).map((m,i) => `<span class="chip">${i===0?'Runner-up':'3rd'}: ${m.name} (${m.composite_overall})</span>`).join('')}
+        ${others.slice(0, 4).map((m, i) => {
+          const ordinals = ['Runner-up', '3rd', '4th', '5th'];
+          return `<span class="chip">${ordinals[i] || (i + 2) + 'th'}: ${m.name} (${m.composite_overall})</span>`;
+        }).join('')}
       </div>
     </div>
 
@@ -679,7 +682,7 @@ function render(d) {
                 </div>
                 <p class="bench-desc">${b.description}${b.as_of ? ` · ${b.scope || 'whole board'} · fetched ${fmt(b.as_of)}` : ''}${b.stale ? ' <span class="calibrating-chip">stale</span>' : ''}</p>
                 <table class="bench-table">
-                  ${b.top3.map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.value}</td></tr>`).join('')}
+                  ${(b.top5 || b.top3 || []).map((row,i) => `<tr><td>${i+1}. ${row.model}</td><td>${row.value}</td></tr>`).join('')}
                 </table>
               </div>
             `).join('')}

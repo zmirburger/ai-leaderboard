@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-12T03:53:31Z",
+  "last_updated": "2026-10-12T03:58:18Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -11,7 +11,7 @@
   "best_overall": {
     "model": "Gemini 3.8 Flash",
     "composite": 80,
-    "rationale": "Computed from benchmarks: accuracy 78, long context 95, agent 73, cost 76 → 80.50. Next: Claude Haiku 5.5 80.25; GPT-6.1 Sol 80.00."
+    "rationale": "Computed from benchmarks: accuracy 78, long context 95, agent 73, cost 76 → 80.50. Next: Claude Haiku 5.5 80.25; GPT-6.1 Sol 80.00; Claude Opus 5.5 78.75; GPT-6 Astra 78.75."
   },
   "best_per_priority": {
     "accuracy": {
@@ -1650,6 +1650,28 @@
         "as_of": "2026-10-11",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "Claude Opus 5.5 (Max, Default Fallback)",
+            "value": "57.6"
+          },
+          {
+            "model": "Claude Sonnet 5.5 (Max, Default Fallback)",
+            "value": "56.0"
+          },
+          {
+            "model": "Claude Fable 5.1 (Max, Default Fallback)",
+            "value": "53.4"
+          },
+          {
+            "model": "GPT-6 Astra (Max)",
+            "value": "52.7"
+          },
+          {
+            "model": "Gemini 4 Argon (High)",
+            "value": "52.6"
+          }
+        ],
         "top3": [
           {
             "model": "Claude Opus 5.5 (Max, Default Fallback)",
@@ -1674,6 +1696,28 @@
         "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "Claude Opus 5.5",
+            "value": "86.4"
+          },
+          {
+            "model": "GPT-6 Astra",
+            "value": "84.9"
+          },
+          {
+            "model": "GPT-6.1 Sol",
+            "value": "84.2"
+          },
+          {
+            "model": "Claude Sonnet 5.5",
+            "value": "83.9"
+          },
+          {
+            "model": "Claude Fable 5.1",
+            "value": "82.1"
+          }
+        ],
         "top3": [
           {
             "model": "Claude Opus 5.5",
@@ -1700,6 +1744,28 @@
         "as_of": "2026-10-11",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "Kimi K3 (Max)",
+            "value": "88.7%"
+          },
+          {
+            "model": "Step 5 Preview",
+            "value": "88.3%"
+          },
+          {
+            "model": "MiMo-V2.6-Pro",
+            "value": "86.3%"
+          },
+          {
+            "model": "Claude Fable 5.1 (Max, Default Fallback)",
+            "value": "85.3%"
+          },
+          {
+            "model": "Claude Opus 5.5 (Max, Default Fallback)",
+            "value": "84.7%"
+          }
+        ],
         "top3": [
           {
             "model": "Kimi K3 (Max)",
@@ -1726,6 +1792,28 @@
         "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "gpt-6-astra",
+            "value": "74.1%"
+          },
+          {
+            "model": "gemini-3-8-flash",
+            "value": "73.8%"
+          },
+          {
+            "model": "claude-opus-5",
+            "value": "73.6%"
+          },
+          {
+            "model": "gpt-5-6-sol",
+            "value": "72.7%"
+          },
+          {
+            "model": "claude-fable-5",
+            "value": "69.9%"
+          }
+        ],
         "top3": [
           {
             "model": "gpt-6-astra",
@@ -1750,6 +1838,28 @@
         "as_of": "2026-10-11",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "Claude Sonnet 5.5 (Max, Default Fallback)",
+            "value": "63.6%"
+          },
+          {
+            "model": "GPT-6 Astra (Xhigh)",
+            "value": "59.6%"
+          },
+          {
+            "model": "Claude Opus 5.5 (Max, Default Fallback)",
+            "value": "59.6%"
+          },
+          {
+            "model": "Gemini 4 Argon (High)",
+            "value": "57.1%"
+          },
+          {
+            "model": "GPT-6.1 Sol (Max)",
+            "value": "56.1%"
+          }
+        ],
         "top3": [
           {
             "model": "Claude Sonnet 5.5 (Max, Default Fallback)",
@@ -1774,6 +1884,28 @@
         "as_of": "2026-10-11",
         "stale": false,
         "scope": "whole board",
+        "top5": [
+          {
+            "model": "Qwen3.8 Max",
+            "value": "51.3%"
+          },
+          {
+            "model": "Grok 4.6 (High)",
+            "value": "50.7%"
+          },
+          {
+            "model": "Muse Spark 1.3 (Max)",
+            "value": "50.5%"
+          },
+          {
+            "model": "GLM-5.3 (Max)",
+            "value": "50.3%"
+          },
+          {
+            "model": "Qwen3.8 2.4T A95B",
+            "value": "49.1%"
+          }
+        ],
         "top3": [
           {
             "model": "Qwen3.8 Max",
@@ -1800,6 +1932,28 @@
         "as_of": "2026-10-12",
         "stale": false,
         "scope": "tracked models",
+        "top5": [
+          {
+            "model": "Gemini 3.1 Pro",
+            "value": "$2.14"
+          },
+          {
+            "model": "Gemini 3.8 Flash",
+            "value": "$2.36"
+          },
+          {
+            "model": "GPT-6 Luna",
+            "value": "$3.03"
+          },
+          {
+            "model": "Grok 4.7",
+            "value": "$3.45"
+          },
+          {
+            "model": "GPT-6 Astra",
+            "value": "$4.43"
+          }
+        ],
         "top3": [
           {
             "model": "Gemini 3.1 Pro",
@@ -1824,6 +1978,28 @@
         "as_of": "2026-10-11",
         "stale": false,
         "scope": "tracked models",
+        "top5": [
+          {
+            "model": "Claude Haiku 5.5",
+            "value": "$0.20/MTok"
+          },
+          {
+            "model": "GPT-6 Luna",
+            "value": "$0.20/MTok"
+          },
+          {
+            "model": "Gemini 3.8 Flash",
+            "value": "$1.50/MTok"
+          },
+          {
+            "model": "Grok 4.7",
+            "value": "$3.00/MTok"
+          },
+          {
+            "model": "Claude Sonnet 5.5",
+            "value": "$4.00/MTok"
+          }
+        ],
         "top3": [
           {
             "model": "Claude Haiku 5.5",

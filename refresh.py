@@ -598,7 +598,7 @@ def compute_scores(data):
                     "score": round(normalize(b, v, best, worst), 1), "board_name": board_name,
                     "inherited": inherited, "as_of": as_of, "stale": stale,
                 })
-            # Details-tab card: top 3 on the board (or among tracked models for cost).
+            # Details-tab card: top 5 on the board (or among tracked models for cost).
             ranked = sorted(((v, n) for v, n in idx.values()), reverse=b["higher_better"])
             if b["reference"] == "tracked":
                 ranked = sorted(((r[0], m["name"]) for m in models if (r := resolved[m["id"]])), reverse=b["higher_better"])
@@ -606,6 +606,7 @@ def compute_scores(data):
                 "id": b["id"], "name": b["name"], "url": b["url"], "description": b["description"],
                 "lower_better": not b["higher_better"], "as_of": as_of, "stale": stale,
                 "scope": "tracked models" if b["reference"] == "tracked" else "whole board",
+                "top5": [{"model": n, "value": fmt_value(b, v)} for v, n in ranked[:5]],
                 "top3": [{"model": n, "value": fmt_value(b, v)} for v, n in ranked[:3]],
             })
 
@@ -689,7 +690,7 @@ def recompute_rankings(data):
         best = ranked[0]
         pp = best["per_priority"]
         dims = ", ".join(f"{labels.get(k, k)} {pp[k]}" for k in included)
-        runners = "; ".join(f"{m['name']} {raw[m['name']]:.2f}" for m in ranked[1:3])
+        runners = "; ".join(f"{m['name']} {raw[m['name']]:.2f}" for m in ranked[1:5])
         prov = [k for k in included if best["score_detail"][k]["status"] == "provisional"]
         cov = best.get("coverage", {})
         note = f" Provisional on {', '.join(labels[k] for k in prov)} ({cov.get('measured', 0)}/{cov.get('total', 0)} benchmarks measured, {cov.get('provisional', 0)} inherited)." if prov else ""

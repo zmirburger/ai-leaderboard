@@ -419,7 +419,6 @@ SOURCES = [
     ("BenchLM", fetch_benchlm),
     ("DeepSWE", fetch_deepswe),
     ("METR time horizons", fetch_metr),
-    ("Vectara HHEM", fetch_vectara),
 ]
 
 # scale: "linear" -> score = value / best x 100.
@@ -440,8 +439,6 @@ BENCHMARKS = [
          url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in banking customer-service flows"),
     dict(id="aa_intelligence_index", priority="accuracy", name="AA Intelligence Index", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
-    dict(id="vectara", priority="accuracy", name="Vectara HHEM", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://github.com/vectara/hallucination-leaderboard", description="Factual consistency when summarizing (100 − hallucination rate)"),
     dict(id="benchlm", priority="accuracy", name="BenchLM", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
     dict(id="aa_lcr", priority="long_context", name="AA Long-Context Reasoning", unit="pct", scale="linear", higher_better=True, reference="board",
@@ -626,8 +623,19 @@ def compute_scores(data):
                     status = "measured"
             measured_ids = {i["bench"] for i in inputs}
             missing = [b["name"] for b in benches if b["id"] not in measured_ids]
+            dim_meas = sum(1 for i in inputs if not i["inherited"])
+            dim_tot = len(inputs)
             m["per_priority"][dim] = score
-            m["score_detail"][dim] = {"status": status, "inputs": inputs, "missing": missing}
+            m["score_detail"][dim] = {
+                "status": status,
+                "inputs": inputs,
+                "missing": missing,
+                "coverage": {
+                    "measured": dim_meas,
+                    "total": dim_tot,
+                    "provisional": dim_tot - dim_meas,
+                },
+            }
             parts = []
             for i in inputs:
                 p = f"{i['name']} {i['display']} → {i['score']:.0f}"
@@ -639,6 +647,16 @@ def compute_scores(data):
             if missing:
                 parts.append("not on " + ", ".join(missing))
             m["score_basis"][dim] = " · ".join(parts) if parts else "No benchmark data yet."
+
+    for m in models:
+        all_inputs = [i for det in m["score_detail"].values() for i in det.get("inputs", [])]
+        tot_meas = sum(1 for i in all_inputs if not i.get("inherited"))
+        tot_all = len(all_inputs)
+        m["coverage"] = {
+            "measured": tot_meas,
+            "total": tot_all,
+            "provisional": tot_all - tot_meas,
+        }
 
 def recompute_rankings(data):
     """Composite = weighted mean over the priorities at least half the models have a
@@ -673,7 +691,8 @@ def recompute_rankings(data):
         dims = ", ".join(f"{labels.get(k, k)} {pp[k]}" for k in included)
         runners = "; ".join(f"{m['name']} {raw[m['name']]:.2f}" for m in ranked[1:3])
         prov = [k for k in included if best["score_detail"][k]["status"] == "provisional"]
-        note = f" Provisional on {', '.join(labels[k] for k in prov)} (inherited benchmark values)." if prov else ""
+        cov = best.get("coverage", {})
+        note = f" Provisional on {', '.join(labels[k] for k in prov)} ({cov.get('measured', 0)}/{cov.get('total', 0)} benchmarks measured, {cov.get('provisional', 0)} inherited)." if prov else ""
         if unranked:
             note += " Not ranked (missing data): " + "; ".join(f"{n} ({', '.join(labels[k] for k in ks)})" for n, ks in unranked.items()) + "."
         if data["composite_basis"]["excluded"]:
@@ -696,7 +715,8 @@ def recompute_rankings(data):
         }
 
 def report_gaps(data):
-    gaps = [f"{m['name']} {dim}: {d['status']}" for m in data["models"]
+    gaps = [f"{m['name']} {dim}: {d['status']} ({d.get('coverage', {}).get('measured', 0)}/{d.get('coverage', {}).get('total', 0)} measured)"
+            for m in data["models"]
             for dim, d in m["score_detail"].items() if d["status"] in ("provisional", "none")]
     if gaps:
         print("\n=== Not fully measured ===")

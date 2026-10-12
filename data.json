@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-11T04:47:00Z",
+  "last_updated": "2026-10-12T03:53:31Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -10,14 +10,14 @@
   },
   "best_overall": {
     "model": "Gemini 3.8 Flash",
-    "composite": 81,
-    "rationale": "Computed from benchmarks: accuracy 81, long context 95, agent 73, cost 76 → 81.25. Next: Claude Haiku 5.5 80.25; GPT-6.1 Sol 80.00. Provisional on accuracy (inherited benchmark values)."
+    "composite": 80,
+    "rationale": "Computed from benchmarks: accuracy 78, long context 95, agent 73, cost 76 → 80.50. Next: Claude Haiku 5.5 80.25; GPT-6.1 Sol 80.00."
   },
   "best_per_priority": {
     "accuracy": {
       "model": "Claude Opus 5.5",
-      "summary": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 86.4 → 100",
-      "supporting": "AA Intelligence Index · Vectara HHEM · BenchLM"
+      "summary": "AA Intelligence Index 57.6 → 100 · BenchLM 86.4 → 100",
+      "supporting": "AA Intelligence Index · BenchLM"
     },
     "long_context": {
       "model": "Claude Fable 5.1",
@@ -54,7 +54,7 @@
       },
       "score_detail": {
         "accuracy": {
-          "status": "partial",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -75,13 +75,16 @@
               "score": 95.0,
               "board_name": "Claude Fable 5.1",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": [
-            "Vectara HHEM"
-          ]
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -98,7 +101,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -111,7 +119,7 @@
               "score": 94.3,
               "board_name": "claude-fable-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -137,7 +145,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 3,
+            "provisional": 1
+          }
         },
         "cost": {
           "status": "provisional",
@@ -150,7 +163,7 @@
               "score": 27.0,
               "board_name": "claude-fable-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -165,16 +178,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 53.4 → 93 · BenchLM 82.1 → 95 · not on Vectara HHEM",
+        "accuracy": "AA Intelligence Index 53.4 → 93 · BenchLM 82.1 → 95",
         "long_context": "AA Long-Context Reasoning 85.3% → 96",
         "agent": "DeepSWE 69.9% → 94 (inherited from claude-fable-5) · Terminal-Bench 4.0 (AA) 55.1% → 86 · τ-Bench Banking (AA) 47.2% → 92",
         "cost": "DeepSWE $/task $13.41 → 27 (inherited from claude-fable-5) · AA blended price $20.00/MTok → 0"
       },
-      "composite_unrounded": 73.75
+      "composite_unrounded": 73.75,
+      "coverage": {
+        "measured": 6,
+        "total": 8,
+        "provisional": 2
+      }
     },
     {
       "id": "claude_opus_4_7",
@@ -185,16 +208,16 @@
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 78,
+      "composite_overall": 79,
       "per_priority": {
-        "accuracy": 97,
+        "accuracy": 100,
         "long_context": 96,
         "agent": 93,
         "cost": 26
       },
       "score_detail": {
         "accuracy": {
-          "status": "provisional",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -208,17 +231,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 88.0,
-              "display": "88.0%",
-              "score": 89.6,
-              "board_name": "anthropic/claude-opus-4-7",
-              "inherited": true,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 86.43,
@@ -226,11 +238,16 @@
               "score": 100.0,
               "board_name": "Claude Opus 5.5",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -247,7 +264,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -260,7 +282,7 @@
               "score": 99.4,
               "board_name": "claude-opus-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -286,7 +308,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
         },
         "cost": {
           "status": "provisional",
@@ -299,7 +326,7 @@
               "score": 31.9,
               "board_name": "claude-opus-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -314,16 +341,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 57.6 → 100 · Vectara HHEM 88.0% → 90 (inherited from anthropic/claude-opus-4-7) · BenchLM 86.4 → 100",
+        "accuracy": "AA Intelligence Index 57.6 → 100 · BenchLM 86.4 → 100",
         "long_context": "AA Long-Context Reasoning 84.7% → 96",
         "agent": "DeepSWE 73.6% → 99 (inherited from claude-opus-5) · Terminal-Bench 4.0 (AA) 59.6% → 94 · τ-Bench Banking (AA) 44.7% → 87 (inherited from Claude Opus 5 (High))",
         "cost": "DeepSWE $/task $11.84 → 32 (inherited from claude-opus-5) · AA blended price $8.00/MTok → 20"
       },
-      "composite_unrounded": 78.0
+      "composite_unrounded": 78.75,
+      "coverage": {
+        "measured": 5,
+        "total": 8,
+        "provisional": 3
+      }
     },
     {
       "id": "claude_sonnet_4_6",
@@ -336,14 +373,14 @@
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "composite_overall": 72,
       "per_priority": {
-        "accuracy": 95,
+        "accuracy": 97,
         "long_context": 93,
         "agent": 82,
         "cost": 17
       },
       "score_detail": {
         "accuracy": {
-          "status": "provisional",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -357,17 +394,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 89.4,
-              "display": "89.4%",
-              "score": 91.0,
-              "board_name": "anthropic/claude-sonnet-4-6",
-              "inherited": true,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 83.92,
@@ -375,11 +401,16 @@
               "score": 97.1,
               "board_name": "Claude Sonnet 5.5",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -396,7 +427,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -409,7 +445,7 @@
               "score": 72.7,
               "board_name": "claude-sonnet-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -435,7 +471,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
         },
         "cost": {
           "status": "provisional",
@@ -448,7 +489,7 @@
               "score": 0.0,
               "board_name": "claude-sonnet-5",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -463,16 +504,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 56.0 → 97 · Vectara HHEM 89.4% → 91 (inherited from anthropic/claude-sonnet-4-6) · BenchLM 83.9 → 97",
+        "accuracy": "AA Intelligence Index 56.0 → 97 · BenchLM 83.9 → 97",
         "long_context": "AA Long-Context Reasoning 82.7% → 93",
         "agent": "DeepSWE 53.8% → 73 (inherited from claude-sonnet-5) · Terminal-Bench 4.0 (AA) 63.6% → 100 · τ-Bench Banking (AA) 37.3% → 73 (inherited from Claude Sonnet 5 (Max))",
         "cost": "DeepSWE $/task $26.40 → 0 (inherited from claude-sonnet-5) · AA blended price $4.00/MTok → 35"
       },
-      "composite_unrounded": 71.75
+      "composite_unrounded": 72.25,
+      "coverage": {
+        "measured": 5,
+        "total": 8,
+        "provisional": 3
+      }
     },
     {
       "id": "claude_haiku_4_5",
@@ -492,7 +543,7 @@
       },
       "score_detail": {
         "accuracy": {
-          "status": "partial",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -513,13 +564,16 @@
               "score": 77.3,
               "board_name": "Claude Haiku 5.5",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": [
-            "Vectara HHEM"
-          ]
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -536,7 +590,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "partial",
@@ -556,7 +615,12 @@
           "missing": [
             "DeepSWE",
             "τ-Bench Banking (AA)"
-          ]
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "cost": {
           "status": "partial",
@@ -575,16 +639,26 @@
           ],
           "missing": [
             "DeepSWE $/task"
-          ]
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 43.4 → 75 · BenchLM 66.8 → 77 · not on Vectara HHEM",
+        "accuracy": "AA Intelligence Index 43.4 → 75 · BenchLM 66.8 → 77",
         "long_context": "AA Long-Context Reasoning 82.7% → 93",
         "agent": "Terminal-Bench 4.0 (AA) 32.8% → 52 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price $0.20/MTok → 100 · not on DeepSWE $/task"
       },
-      "composite_unrounded": 80.25
+      "composite_unrounded": 80.25,
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      }
     },
     {
       "id": "gpt_astra",
@@ -596,7 +670,7 @@
       "changelog": "GPT-6 Astra: #1 on BenchLM (88.7), AA Intelligence Index 53, Terminal-bench 4.0 60%, top of DeepSWE. Hallucination 4.2%. 1.05M context. $10/$50 per MTok (2x above 272K input).",
       "release_notes_url": "https://openai.com/index/gpt-6-astra/",
       "per_priority": {
-        "accuracy": 94,
+        "accuracy": 95,
         "long_context": 91,
         "agent": 93,
         "cost": 36
@@ -617,17 +691,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 91.3,
-              "display": "91.3%",
-              "score": 93.0,
-              "board_name": "openai/gpt-6-astra",
-              "inherited": false,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 84.88,
@@ -635,11 +698,16 @@
               "score": 98.2,
               "board_name": "GPT-6 Astra",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -656,7 +724,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "measured",
@@ -669,7 +742,7 @@
               "score": 100.0,
               "board_name": "gpt-6-astra",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -695,7 +768,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 3,
+            "total": 3,
+            "provisional": 0
+          }
         },
         "cost": {
           "status": "measured",
@@ -708,7 +786,7 @@
               "score": 71.1,
               "board_name": "gpt-6-astra",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -723,17 +801,27 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 52.7 → 92 · Vectara HHEM 91.3% → 93 · BenchLM 84.9 → 98",
+        "accuracy": "AA Intelligence Index 52.7 → 92 · BenchLM 84.9 → 98",
         "long_context": "AA Long-Context Reasoning 80.7% → 91",
         "agent": "DeepSWE 74.1% → 100 · Terminal-Bench 4.0 (AA) 59.6% → 94 · τ-Bench Banking (AA) 43.1% → 84",
         "cost": "DeepSWE $/task $4.43 → 71 · AA blended price $20.00/MTok → 0"
       },
-      "composite_unrounded": 78.5,
-      "composite_overall": 78
+      "composite_unrounded": 78.75,
+      "composite_overall": 79,
+      "coverage": {
+        "measured": 8,
+        "total": 8,
+        "provisional": 0
+      }
     },
     {
       "id": "gpt_sol",
@@ -752,7 +840,7 @@
       },
       "score_detail": {
         "accuracy": {
-          "status": "provisional",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -766,17 +854,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 93.5,
-              "display": "93.5%",
-              "score": 95.2,
-              "board_name": "openai/gpt-6-sol",
-              "inherited": true,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 84.18,
@@ -784,11 +861,16 @@
               "score": 97.4,
               "board_name": "GPT-6.1 Sol",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -805,7 +887,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -818,7 +905,7 @@
               "score": 98.0,
               "board_name": "gpt-5-6-sol",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -844,7 +931,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
         },
         "cost": {
           "status": "provisional",
@@ -857,7 +949,7 @@
               "score": 45.7,
               "board_name": "gpt-5-6-sol",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -872,17 +964,27 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 51.8 → 90 · Vectara HHEM 93.5% → 95 (inherited from openai/gpt-6-sol) · BenchLM 84.2 → 97",
+        "accuracy": "AA Intelligence Index 51.8 → 90 · BenchLM 84.2 → 97",
         "long_context": "AA Long-Context Reasoning 84.0% → 95",
         "agent": "DeepSWE 72.7% → 98 (inherited from gpt-5-6-sol) · Terminal-Bench 4.0 (AA) 56.1% → 88 · τ-Bench Banking (AA) 44.3% → 86 (inherited from GPT-5.6 Sol (Max))",
         "cost": "DeepSWE $/task $8.39 → 46 (inherited from gpt-5-6-sol) · AA blended price $4.00/MTok → 35"
       },
       "composite_unrounded": 80.0,
-      "composite_overall": 80
+      "composite_overall": 80,
+      "coverage": {
+        "measured": 5,
+        "total": 8,
+        "provisional": 3
+      }
     },
     {
       "id": "gpt_luna",
@@ -901,7 +1003,7 @@
       },
       "score_detail": {
         "accuracy": {
-          "status": "partial",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -922,13 +1024,16 @@
               "score": 75.9,
               "board_name": "GPT-6 Luna",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": [
-            "Vectara HHEM"
-          ]
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -945,7 +1050,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -958,7 +1068,7 @@
               "score": 90.7,
               "board_name": "gpt-5-6-luna",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -984,7 +1094,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
         },
         "cost": {
           "status": "provisional",
@@ -997,7 +1112,7 @@
               "score": 86.2,
               "board_name": "gpt-5-6-luna",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1012,17 +1127,27 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 38.1 → 66 · BenchLM 65.6 → 76 · not on Vectara HHEM",
+        "accuracy": "AA Intelligence Index 38.1 → 66 · BenchLM 65.6 → 76",
         "long_context": "AA Long-Context Reasoning 83.3% → 94",
         "agent": "DeepSWE 67.2% → 91 (inherited from gpt-5-6-luna) · Terminal-Bench 4.0 (AA) 12.6% → 20 · τ-Bench Banking (AA) 31.1% → 61 (inherited from GPT-5.6 Luna (Max))",
         "cost": "DeepSWE $/task $3.03 → 86 (inherited from gpt-5-6-luna) · AA blended price $0.20/MTok → 100"
       },
       "composite_unrounded": 78.75,
-      "composite_overall": 79
+      "composite_overall": 79,
+      "coverage": {
+        "measured": 5,
+        "total": 8,
+        "provisional": 3
+      }
     },
     {
       "id": "gemini_3_1_pro",
@@ -1033,9 +1158,9 @@
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 63,
+      "composite_overall": 61,
       "per_priority": {
-        "accuracy": 73,
+        "accuracy": 64,
         "long_context": 92,
         "agent": 21,
         "cost": 66
@@ -1056,17 +1181,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 89.6,
-              "display": "89.6%",
-              "score": 91.2,
-              "board_name": "google/gemini-3.1-pro-preview",
-              "inherited": false,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 65.17,
@@ -1074,11 +1188,16 @@
               "score": 75.4,
               "board_name": "Gemini 3.1 Pro",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -1095,7 +1214,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "measured",
@@ -1108,7 +1232,7 @@
               "score": 15.8,
               "board_name": "gemini-3-1-pro-preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1134,7 +1258,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 3,
+            "total": 3,
+            "provisional": 0
+          }
         },
         "cost": {
           "status": "measured",
@@ -1147,7 +1276,7 @@
               "score": 100.0,
               "board_name": "gemini-3-1-pro-preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1162,16 +1291,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 29.7 → 52 · Vectara HHEM 89.6% → 91 · BenchLM 65.2 → 75",
+        "accuracy": "AA Intelligence Index 29.7 → 52 · BenchLM 65.2 → 75",
         "long_context": "AA Long-Context Reasoning 82.0% → 92",
         "agent": "DeepSWE 11.7% → 16 · Terminal-Bench 4.0 (AA) 4.0% → 6 · τ-Bench Banking (AA) 21.4% → 42",
         "cost": "DeepSWE $/task $2.14 → 100 · AA blended price $4.50/MTok → 32"
       },
-      "composite_unrounded": 63.0
+      "composite_unrounded": 60.75,
+      "coverage": {
+        "measured": 8,
+        "total": 8,
+        "provisional": 0
+      }
     },
     {
       "id": "gemini_3_1_flash",
@@ -1182,16 +1321,16 @@
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 81,
+      "composite_overall": 80,
       "per_priority": {
-        "accuracy": 81,
+        "accuracy": 78,
         "long_context": 95,
         "agent": 73,
         "cost": 76
       },
       "score_detail": {
         "accuracy": {
-          "status": "provisional",
+          "status": "measured",
           "inputs": [
             {
               "bench": "aa_intelligence_index",
@@ -1205,17 +1344,6 @@
               "stale": false
             },
             {
-              "bench": "vectara",
-              "name": "Vectara HHEM",
-              "value": 86.5,
-              "display": "86.5%",
-              "score": 88.1,
-              "board_name": "google/gemini-3-flash-preview",
-              "inherited": true,
-              "as_of": "2026-10-11",
-              "stale": false
-            },
-            {
               "bench": "benchlm",
               "name": "BenchLM",
               "value": 73.17,
@@ -1223,11 +1351,16 @@
               "score": 84.7,
               "board_name": "Gemini 3.8 Flash",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         },
         "long_context": {
           "status": "measured",
@@ -1244,7 +1377,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "measured",
@@ -1257,7 +1395,7 @@
               "score": 99.6,
               "board_name": "gemini-3-8-flash",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1283,7 +1421,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 3,
+            "total": 3,
+            "provisional": 0
+          }
         },
         "cost": {
           "status": "measured",
@@ -1296,7 +1439,7 @@
               "score": 96.1,
               "board_name": "gemini-3-8-flash",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1311,16 +1454,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 40.9 → 71 · Vectara HHEM 86.5% → 88 (inherited from google/gemini-3-flash-preview) · BenchLM 73.2 → 85",
+        "accuracy": "AA Intelligence Index 40.9 → 71 · BenchLM 73.2 → 85",
         "long_context": "AA Long-Context Reasoning 84.0% → 95",
         "agent": "DeepSWE 73.8% → 100 · Terminal-Bench 4.0 (AA) 19.7% → 31 · τ-Bench Banking (AA) 45.8% → 89",
         "cost": "DeepSWE $/task $2.36 → 96 · AA blended price $1.50/MTok → 56"
       },
-      "composite_unrounded": 81.25
+      "composite_unrounded": 80.5,
+      "coverage": {
+        "measured": 8,
+        "total": 8,
+        "provisional": 0
+      }
     },
     {
       "id": "grok_4_5",
@@ -1361,13 +1514,16 @@
               "score": 78.6,
               "board_name": "Grok 4.6",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
-          "missing": [
-            "Vectara HHEM"
-          ]
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         },
         "long_context": {
           "status": "measured",
@@ -1384,7 +1540,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
         },
         "agent": {
           "status": "provisional",
@@ -1397,7 +1558,7 @@
               "score": 91.0,
               "board_name": "grok-4-6",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1423,7 +1584,12 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
         },
         "cost": {
           "status": "provisional",
@@ -1436,7 +1602,7 @@
               "score": 81.1,
               "board_name": "grok-4-6",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1451,16 +1617,26 @@
               "stale": false
             }
           ],
-          "missing": []
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index 46.4 → 81 · BenchLM 67.9 → 79 (inherited from Grok 4.6) · not on Vectara HHEM",
+        "accuracy": "AA Intelligence Index 46.4 → 81 · BenchLM 67.9 → 79 (inherited from Grok 4.6)",
         "long_context": "AA Long-Context Reasoning 80.0% → 90",
         "agent": "DeepSWE 67.5% → 91 (inherited from grok-4-6) · Terminal-Bench 4.0 (AA) 25.8% → 40 · τ-Bench Banking (AA) 50.7% → 99 (inherited from Grok 4.6 (High))",
         "cost": "DeepSWE $/task $3.45 → 81 (inherited from grok-4-6) · AA blended price $3.00/MTok → 41"
       },
-      "composite_unrounded": 77.0
+      "composite_unrounded": 77.0,
+      "coverage": {
+        "measured": 4,
+        "total": 8,
+        "provisional": 4
+      }
     }
   ],
   "benchmarks": {
@@ -1490,36 +1666,12 @@
         ]
       },
       {
-        "id": "vectara",
-        "name": "Vectara HHEM",
-        "url": "https://github.com/vectara/hallucination-leaderboard",
-        "description": "Factual consistency when summarizing (100 − hallucination rate)",
-        "lower_better": false,
-        "as_of": "2026-10-11",
-        "stale": false,
-        "scope": "whole board",
-        "top3": [
-          {
-            "model": "antgroup/finix_s1_32b",
-            "value": "98.2%"
-          },
-          {
-            "model": "openai/gpt-5.4-nano-2026-03-17",
-            "value": "96.9%"
-          },
-          {
-            "model": "google/gemini-2.5-flash-lite",
-            "value": "96.7%"
-          }
-        ]
-      },
-      {
         "id": "benchlm",
         "name": "BenchLM",
         "url": "https://benchlm.ai/compare",
         "description": "Composite across verified benchmarks",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1571,7 +1723,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Long-horizon real-world SWE tasks (pass@1, best effort)",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top3": [
@@ -1645,7 +1797,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Cost per task on the model's best DeepSWE run",
         "lower_better": true,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "tracked models",
         "top3": [
@@ -1843,7 +1995,7 @@
   },
   "raw_benchmarks": {
     "benchlm": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Opus 5.5": 86.43,
         "GPT-6 Astra": 84.88,
@@ -1898,7 +2050,7 @@
       }
     },
     "deepswe": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "gpt-6-astra": 74.115,
         "gemini-3-8-flash": 73.8255,
@@ -1931,7 +2083,7 @@
       }
     },
     "deepswe_cost": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "gpt-6-astra": 4.4291,
         "gemini-3-8-flash": 2.3623,
@@ -1964,7 +2116,7 @@
       }
     },
     "metr": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "GPT-4 0314": 0.1224,
         "GPT-4 1106 (Inspect)": 0.1253,

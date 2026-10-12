@@ -5,3 +5,8 @@ venv/
 .DS_Store
 Thumbs.db
 .env
+.autopilot
+.drift/
+AGENT.md*
+AGENTS.md
+integrations/

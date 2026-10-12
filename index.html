@@ -84,6 +84,7 @@
   @media (max-width: 520px) { .priority-grid { grid-template-columns: 1fr; } }
   .calibrating-chip { background: rgba(234, 179, 8, 0.15); color: #ca8a04; font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
   @media (prefers-color-scheme: dark) { .calibrating-chip { background: rgba(234, 179, 8, 0.2); color: #facc15; } }
+  .cov-chip { background: var(--surface-2); color: var(--text-dim); font-size: 10.5px; padding: 1px 7px; border-radius: var(--radius-sm); font-weight: 500; }
   .pri-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
   .pri-tag { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px; }
   .pri-name { font-size: 16px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.005em; }
@@ -421,6 +422,11 @@ const STATUS_TEXT = {
 };
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const isProvisional = (m) => Object.values(m.score_detail || {}).some(x => x.status === 'provisional');
+const getCoverage = (m) => m.coverage || {
+  measured: Object.values(m.score_detail || {}).reduce((sum, det) => sum + (det.inputs || []).filter(i => !i.inherited).length, 0),
+  total: Object.values(m.score_detail || {}).reduce((sum, det) => sum + (det.inputs || []).length, 0),
+  provisional: Object.values(m.score_detail || {}).reduce((sum, det) => sum + (det.inputs || []).filter(i => i.inherited).length, 0),
+};
 
 function renderDebugTab(d) {
   const w = d.weights;
@@ -435,11 +441,18 @@ function renderDebugTab(d) {
 
   const cards = rows.map((m, idx) => {
     const pp = m.per_priority;
+    const cov = getCoverage(m);
     const lines = dims.map(k => {
       const v = pp[k];
       const inComp = cb.included.includes(k);
       const eff = inComp && incW ? w[k] / incW : 0;
       const det = (m.score_detail || {})[k] || { status: 'none', inputs: [], missing: [] };
+      const detCov = det.coverage || {
+        measured: (det.inputs || []).filter(i => !i.inherited).length,
+        total: (det.inputs || []).length,
+        provisional: (det.inputs || []).filter(i => i.inherited).length,
+      };
+      const covSuffix = det.inputs.length > 0 ? ` (${detCov.measured}/${detCov.total})` : '';
       const inputs = det.inputs.map(i => {
         const flags = [i.inherited ? `inherited from ${esc(i.board_name)}` : '', i.stale ? `as of ${i.as_of}` : ''].filter(Boolean).join(', ');
         return `${esc(i.name)}: ${esc(i.display)} → <b>${Math.round(i.score)}</b>${flags ? ` <span class="dbg-flag">(${flags})</span>` : ''}`;
@@ -448,7 +461,7 @@ function renderDebugTab(d) {
       if (det.missing.length) inputs.push(`not listed on ${esc(det.missing.join(', '))}`);
       if (!inComp) inputs.push('not in composite: most models have no data for this priority');
       return `<tr class="dbg-main">
-        <td>${DIM_LABELS[k] || k} <span class="dbg-status dbg-${det.status}">${STATUS_TEXT[det.status]}</span></td>
+        <td>${DIM_LABELS[k] || k} <span class="dbg-status dbg-${det.status}">${STATUS_TEXT[det.status]}${covSuffix}</span></td>
         <td>${v ?? '—'}</td>
         <td>${v != null ? '#' + rankIn(m, k) : '—'}</td>
         <td>${inComp ? '× ' + eff.toFixed(2) : '—'}</td>
@@ -458,7 +471,7 @@ function renderDebugTab(d) {
     const formula = cb.included.map(k => `${pp[k]}×${(w[k] / incW).toFixed(2)}`).join(' + ') + ` = ${m.composite_unrounded ?? '—'} → ${m.composite_overall ?? '—'}`;
     return `<div class="dbg-card">
       <div class="dbg-head">
-        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${isProvisional(m) ? '<span class="calibrating-chip">Provisional</span>' : ''}</div>
+        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${isProvisional(m) ? `<span class="calibrating-chip" title="${cov.measured}/${cov.total} benchmarks measured">Provisional (${cov.measured}/${cov.total})</span>` : `<span class="new-chip">${cov.measured}/${cov.total} measured</span>`}</div>
         <span class="dbg-total">Composite <b>${m.composite_overall ?? '—'}</b></span>
       </div>
       <table class="dbg-table">
@@ -487,7 +500,7 @@ function renderDebugTab(d) {
 
     <p class="section-label">Per model: every input behind every score</p>
     ${cards}
-    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional</b> until the board lists it. A board that hasn't tested any model released in the last 90 days is dropped rather than left to feed old results. Cost is scaled across the tracked models on a log scale: the cheapest scores 100, the priciest 0. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
+    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional (X/Y)</b> showing the ratio of directly measured to total benchmarks until the board lists it. A board that hasn't tested any model released in the last 90 days is dropped rather than left to feed old results. Cost is scaled across the tracked models on a log scale: the cheapest scores 100, the priciest 0. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
   `;
 }
 
@@ -593,7 +606,18 @@ function render(d) {
           cost: 'Cost efficiency (cost / task)'
         };
         if (!d.models.some(m => m.per_priority[k] != null)) return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><p class="pri-summary">No benchmark data yet, so this priority is left out of the composite.</p></div>`;
-        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => { const score = m.per_priority[k]; const st = ((m.score_detail || {})[k] || {}).status; return `<tr><td>${i+1}. ${m.name}${st === 'provisional' ? '<span class="est-chip" title="Uses an older version&#39;s benchmark results">prov.</span>' : ''}</td><td>${score != null ? score : '—'}</td></tr>`; }).join('')}</table></div>`;
+        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => {
+          const score = m.per_priority[k];
+          const det = (m.score_detail || {})[k] || {};
+          const st = det.status;
+          const dCov = det.coverage || {
+            measured: (det.inputs || []).filter(x => !x.inherited).length,
+            total: (det.inputs || []).length,
+            provisional: (det.inputs || []).filter(x => x.inherited).length,
+          };
+          const provBadge = st === 'provisional' ? `<span class="est-chip" title="${dCov.measured} of ${dCov.total} benchmarks measured (${dCov.provisional} prov.)">prov. (${dCov.measured}/${dCov.total})</span>` : '';
+          return `<tr><td>${i+1}. ${m.name}${provBadge}</td><td>${score != null ? score : '—'}</td></tr>`;
+        }).join('')}</table></div>`;
       }).join('')}
     </div>
 
@@ -612,14 +636,18 @@ function render(d) {
         return `
           <p class="section-label" style="margin-top:16px;">${vendor}</p>
           <div class="model-grid" style="margin-bottom:8px;">
-            ${tiers.map(m => `
+            ${tiers.map(m => {
+              const cov = getCoverage(m);
+              return `
               <div class="model-card" data-toggle>
                 <div class="model-head">
                   <div>
                     <div class="model-name-row">
                       <p class="model-name">${m.name}</p>
                       ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
-                      ${isProvisional(m) ? `<span class="calibrating-chip" title="Some scores use an older version's benchmark results until boards list this model">Provisional</span>` : ''}
+                      ${isProvisional(m)
+                        ? `<span class="calibrating-chip" title="${cov.measured} of ${cov.total} benchmarks directly measured, ${cov.provisional} inherited from older versions">Provisional (${cov.measured}/${cov.total})</span>`
+                        : `<span class="cov-chip" title="All ${cov.total} benchmarks directly measured">${cov.measured}/${cov.total} measured</span>`}
                       ${!isNaN(daysSince(m.released)) && daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
                     </div>
                     <p class="model-vendor">${fmt(m.released)}</p>
@@ -631,7 +659,7 @@ function render(d) {
                   <a href="${m.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
                 </div>
               </div>
-            `).join('')}
+            `;}).join('')}
           </div>
         `;
       }).join('')}

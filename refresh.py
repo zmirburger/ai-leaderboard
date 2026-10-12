@@ -262,31 +262,33 @@ def update_releases(data):
             print(f"  skipped (no parse)")
             continue
         name, date, changelog, url = result
-        existing = next(
-            (m for m in data["models"] if m["vendor"] == vendor and m.get("tier") == tier),
-            None,
-        )
-        if not existing:
+        matching = [m for m in data["models"] if m["vendor"] == vendor and m.get("tier") == tier]
+        if not matching:
             print(f"  no entry for {vendor}/{tier} in data.json")
             continue
-        if existing["name"] != name:
-            old = existing["name"]
-            if _parse_version(name) <= _parse_version(old):
-                print(f"  detected {name} but keeping {old} (not a newer version)")
-                continue
-            existing["previous"] = old
-            existing["name"] = name
-            if date:
-                existing["released"] = date
+        for existing in matching:
+            has_effort_suffix = " (high)" in existing["name"].lower() or " (medium)" in existing["name"].lower()
+            target_name = f"{name} ({existing['target_effort'].capitalize()})" if has_effort_suffix else name
+            if existing["name"] != target_name:
+                old = existing["name"]
+                if _parse_version(name) <= _parse_version(old):
+                    print(f"  detected {name} but keeping {old} (not a newer version)")
+                    continue
+                existing["previous"] = old
+                existing["name"] = target_name
+                if "base_name" in existing:
+                    existing["base_name"] = name
+                if date:
+                    existing["released"] = date
+                else:
+                    print(f"  WARNING: {vendor}/{tier} renamed to {target_name} but no release date parsed - "
+                          f"'released' left at stale value {existing['released']}, check {url} manually")
+                existing["changelog"] = changelog
+                existing["release_notes_url"] = url
+                changes.append(f"{vendor}/{tier}: {old} -> {target_name}")
+                print(f"  NEW RELEASE: {old} -> {target_name} (scores inherit from older versions until benchmarked)")
             else:
-                print(f"  WARNING: {vendor}/{tier} renamed to {name} but no release date parsed - "
-                      f"'released' left at stale value {existing['released']}, check {url} manually")
-            existing["changelog"] = changelog
-            existing["release_notes_url"] = url
-            changes.append(f"{vendor}/{tier}: {old} -> {name}")
-            print(f"  NEW RELEASE: {old} -> {name} (scores inherit from older versions until benchmarked)")
-        else:
-            print(f"  no change ({name})")
+                print(f"  no change ({existing['name']})")
     return changes
 
 # ---------- benchmark sources ----------
@@ -482,23 +484,18 @@ TARGET_EFFORT_MAP = {
     "gemini": "high",
 }
 
-# Models configured for dual high-med effort evaluation
-DUAL_EFFORT_MODELS = {"claude opus 5.5", "gemini 3.8 flash", "grok 4.7"}
-
-def get_target_efforts(model):
+def get_target_effort(model):
+    if "target_effort" in model and model["target_effort"]:
+        return model["target_effort"].lower()
     name = model.get("name", "").lower()
     tier = model.get("tier", "").lower()
-    for dem in DUAL_EFFORT_MODELS:
-        if dem in name:
-            return ["high", "medium"]
     for kw, eff in TARGET_EFFORT_MAP.items():
         if kw in name or kw in tier:
-            return [eff]
-    return ["medium"]
+            return eff
+    return "medium"
 
-def get_target_effort(model):
-    effs = get_target_efforts(model)
-    return "high-med" if len(effs) > 1 else effs[0]
+def get_target_efforts(model):
+    return [get_target_effort(model)]
 
 def extract_effort(name):
     s = str(name).lower()

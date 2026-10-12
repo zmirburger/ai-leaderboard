@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-12T04:03:12Z",
+  "last_updated": "2026-10-12T05:02:34Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -64,7 +64,7 @@
               "score": 84.9,
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -97,7 +97,7 @@
               "score": 95.5,
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -130,7 +130,7 @@
               "score": 70.6,
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -141,7 +141,7 @@
               "score": 79.9,
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -174,7 +174,7 @@
               "score": 0.0,
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -228,7 +228,7 @@
               "score": 88.9,
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -261,7 +261,7 @@
               "score": 95.1,
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -294,7 +294,7 @@
               "score": 82.5,
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -305,7 +305,7 @@
               "score": 75.1,
               "board_name": "Claude Opus 5 (Medium)",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -338,7 +338,7 @@
               "score": 19.9,
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -392,7 +392,7 @@
               "score": 81.2,
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -425,7 +425,7 @@
               "score": 88.0,
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -458,7 +458,7 @@
               "score": 69.0,
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -469,7 +469,7 @@
               "score": 30.5,
               "board_name": "Claude Sonnet 5 (Non-reasoning, High)",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -502,7 +502,7 @@
               "score": 34.9,
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -556,7 +556,7 @@
               "score": 65.6,
               "board_name": "Claude Haiku 5.5 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -589,7 +589,7 @@
               "score": 87.2,
               "board_name": "Claude Haiku 5.5 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -611,7 +611,7 @@
               "score": 34.1,
               "board_name": "Claude Haiku 5.5 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -636,7 +636,7 @@
               "score": 100.0,
               "board_name": "Claude Haiku 5.5 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -691,7 +691,7 @@
               "score": 86.1,
               "board_name": "GPT-6 Astra (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -724,7 +724,7 @@
               "score": 89.8,
               "board_name": "GPT-6 Astra (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -757,7 +757,7 @@
               "score": 77.8,
               "board_name": "GPT-6 Astra (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -768,7 +768,7 @@
               "score": 69.1,
               "board_name": "GPT-6 Astra (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -801,7 +801,7 @@
               "score": 0.0,
               "board_name": "GPT-6 Astra (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -855,7 +855,7 @@
               "score": 83.0,
               "board_name": "GPT-6.1 Sol (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -888,7 +888,7 @@
               "score": 94.0,
               "board_name": "GPT-6.1 Sol (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -921,7 +921,7 @@
               "score": 75.4,
               "board_name": "GPT-6.1 Sol (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -932,7 +932,7 @@
               "score": 71.1,
               "board_name": "GPT-5.6 Sol (Medium)",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -965,7 +965,7 @@
               "score": 34.9,
               "board_name": "GPT-6.1 Sol (Medium)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1019,7 +1019,7 @@
               "score": 57.1,
               "board_name": "GPT-6 Luna (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1052,7 +1052,7 @@
               "score": 89.5,
               "board_name": "GPT-6 Luna (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1085,7 +1085,7 @@
               "score": 7.1,
               "board_name": "GPT-6 Luna (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1096,7 +1096,7 @@
               "score": 49.0,
               "board_name": "GPT-5.6 Luna (High)",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1129,7 +1129,7 @@
               "score": 100.0,
               "board_name": "GPT-6 Luna (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1184,7 +1184,7 @@
               "score": 51.6,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1217,7 +1217,7 @@
               "score": 92.5,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1250,7 +1250,7 @@
               "score": 6.3,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1261,7 +1261,7 @@
               "score": 41.8,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1294,7 +1294,7 @@
               "score": 32.4,
               "board_name": "Gemini 3.1 Pro Preview",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1348,7 +1348,7 @@
               "score": 71.0,
               "board_name": "Gemini 3.8 Flash (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1381,7 +1381,7 @@
               "score": 91.7,
               "board_name": "Gemini 3.8 Flash (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1414,7 +1414,7 @@
               "score": 31.0,
               "board_name": "Gemini 3.8 Flash (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1425,7 +1425,7 @@
               "score": 87.6,
               "board_name": "Gemini 3.8 Flash (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1458,7 +1458,7 @@
               "score": 56.2,
               "board_name": "Gemini 3.8 Flash (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1512,7 +1512,7 @@
               "score": 80.4,
               "board_name": "Grok 4.7 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1545,7 +1545,7 @@
               "score": 90.2,
               "board_name": "Grok 4.7 (Low)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1578,7 +1578,7 @@
               "score": 38.9,
               "board_name": "Grok 4.7 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             },
             {
@@ -1589,7 +1589,7 @@
               "score": 86.3,
               "board_name": "Grok 4.6 (Medium)",
               "inherited": true,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1622,7 +1622,7 @@
               "score": 41.2,
               "board_name": "Grok 4.7 (High)",
               "inherited": false,
-              "as_of": "2026-10-11",
+              "as_of": "2026-10-12",
               "stale": false
             }
           ],
@@ -1657,7 +1657,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
         "description": "Composite of 10 hard evals",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -1751,7 +1751,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning",
         "description": "Reasoning over ~100k-token document sets",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -1845,7 +1845,7 @@
         "url": "https://artificialanalysis.ai/evaluations/terminalbench",
         "description": "Agentic terminal tasks",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -1891,7 +1891,7 @@
         "url": "https://artificialanalysis.ai/evaluations/tau2-bench",
         "description": "Tool use in banking customer-service flows",
         "lower_better": false,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -1985,7 +1985,7 @@
         "url": "https://artificialanalysis.ai/models",
         "description": "$/1M tokens, 3:1 input:output blend",
         "lower_better": true,
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "stale": false,
         "scope": "tracked models",
         "top5": [
@@ -2526,7 +2526,7 @@
       }
     },
     "aa_intelligence_index": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 57.6,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 56.0,
@@ -3218,7 +3218,7 @@
       }
     },
     "aa_lcr": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 84.6667,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 82.6667,
@@ -3793,7 +3793,7 @@
       }
     },
     "aa_price": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 8.0,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 4.0,
@@ -4243,7 +4243,7 @@
       }
     },
     "aa_terminalbench_v4": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 59.596,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 63.6364,
@@ -4464,7 +4464,7 @@
       }
     },
     "aa_tau_banking": {
-      "fetched_at": "2026-10-11",
+      "fetched_at": "2026-10-12",
       "values": {
         "Claude Fable 5.1 (Max, Default Fallback)": 47.2165,
         "Claude Fable 5.1 (Xhigh, Default Fallback)": 45.7732,

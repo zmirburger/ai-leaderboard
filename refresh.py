@@ -482,15 +482,23 @@ TARGET_EFFORT_MAP = {
     "gemini": "high",
 }
 
-def get_target_effort(model):
-    if "target_effort" in model:
-        return model["target_effort"].lower()
+# Models configured for dual high-med effort evaluation
+DUAL_EFFORT_MODELS = {"claude opus 5.5", "gemini 3.8 flash", "grok 4.7"}
+
+def get_target_efforts(model):
     name = model.get("name", "").lower()
     tier = model.get("tier", "").lower()
+    for dem in DUAL_EFFORT_MODELS:
+        if dem in name:
+            return ["high", "medium"]
     for kw, eff in TARGET_EFFORT_MAP.items():
         if kw in name or kw in tier:
-            return eff
-    return "medium"
+            return [eff]
+    return ["medium"]
+
+def get_target_effort(model):
+    effs = get_target_efforts(model)
+    return "high-med" if len(effs) > 1 else effs[0]
 
 def extract_effort(name):
     s = str(name).lower()
@@ -501,20 +509,48 @@ def extract_effort(name):
 
 EFFORT_RANKS = {"low": 1, "medium": 2, "high": 3, "xhigh": 4, "max": 5}
 
-def pick_variant(variants, target_effort, higher_better):
-    """Picks the variant matching target reasoning effort; falls back to closest effort or best available."""
+def pick_variants(variants, targets, higher_better):
+    """Picks variants matching target reasoning efforts (supports dual high-med).
+    Falls back to closest effort or best available when exact targets are absent."""
     if not variants:
-        return None
-    if not target_effort:
-        return max(variants, key=lambda x: x[0] if higher_better else -x[0])
-    exact = [v for v in variants if v[2] == target_effort]
-    if exact:
-        return max(exact, key=lambda x: x[0] if higher_better else -x[0])
-    t_rank = EFFORT_RANKS.get(target_effort, 3)
+        return []
+    if len(targets) == 1:
+        t = targets[0]
+        exact = [v for v in variants if v[2] == t]
+        if exact:
+            return [max(exact, key=lambda x: x[0] if higher_better else -x[0])]
+        t_rank = EFFORT_RANKS.get(t, 3)
+        with_effort = [v for v in variants if v[2] in EFFORT_RANKS]
+        if with_effort:
+            return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))]
+        return [max(variants, key=lambda x: x[0] if higher_better else -x[0])]
+
+    exact_runs = []
+    seen = set()
+    for t in targets:
+        exact = [v for v in variants if v[2] == t]
+        if exact:
+            best = max(exact, key=lambda x: x[0] if higher_better else -x[0])
+            if best[1] not in seen:
+                seen.add(best[1])
+                exact_runs.append(best)
+    if exact_runs:
+        return exact_runs
+
+    no_effort = [v for v in variants if v[2] is None]
+    if no_effort:
+        return [max(no_effort, key=lambda x: x[0] if higher_better else -x[0])]
+
+    t_rank = EFFORT_RANKS.get(targets[0], 3)
     with_effort = [v for v in variants if v[2] in EFFORT_RANKS]
     if with_effort:
-        return min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))
-    return max(variants, key=lambda x: x[0] if higher_better else -x[0])
+        return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))]
+    return [max(variants, key=lambda x: x[0] if higher_better else -x[0])]
+
+def pick_variant(variants, target_effort, higher_better):
+    targets = [target_effort] if isinstance(target_effort, str) else target_effort
+    runs = pick_variants(variants, targets, higher_better)
+    return runs[0] if runs else None
 
 _NOISE_WORDS = {"low", "medium", "high", "xhigh", "max", "minimal", "none", "thinking", "reasoning",
                 "non", "adaptive", "preview", "latest", "exp", "experimental", "instruct", "inspect"}
@@ -547,15 +583,16 @@ def build_index(bench, values):
 
 def resolve(model, idx, bench):
     """Target-effort match on name/aliases -> measured. Otherwise the newest OLDER version of the
-    same family on this board at target effort -> inherited (provisional). None if neither exists."""
-    target = get_target_effort(model)
+    same family on this board at target effort -> inherited (provisional). Empty list if neither exists.
+    Returns list of (value, board_name, inherited) tuples to support dual reasoning effort."""
+    targets = get_target_efforts(model)
     hb = bench["higher_better"]
     keys = [norm_name(model["name"])] + [norm_name(a) for a in model.get("aliases", [])]
     for k in keys:
         if k in idx:
-            chosen = pick_variant(idx[k], target, hb)
+            chosen = pick_variants(idx[k], targets, hb)
             if chosen:
-                return chosen[0], chosen[1], False
+                return [(v[0], v[1], False) for v in chosen]
     mine = _parse_version(model["name"])
     fams = {_family(k) for k in keys}
     # Only inherit across a gap of less than one major version (Opus 4.7 -> 5.5 yes,
@@ -563,12 +600,12 @@ def resolve(model, idx, bench):
     older = [(k, _parse_version(k)) for k in idx
              if _family(k) in fams and 0 < _parse_version(k) < mine and mine - _parse_version(k) < 1.0]
     if not older:
-        return None
+        return []
     k = max(older, key=lambda kv: kv[1])[0]
-    chosen = pick_variant(idx[k], target, hb)
+    chosen = pick_variants(idx[k], targets, hb)
     if not chosen:
-        return None
-    return chosen[0], chosen[1], True
+        return []
+    return [(v[0], v[1], True) for v in chosen]
 
 def normalize(bench, v, best, worst):
     if bench["scale"] == "log" and bench["reference"] == "tracked":
@@ -632,12 +669,12 @@ def compute_scores(data):
             entry = cache[b["id"]]
             idx = build_index(b, entry["values"])
             resolved = {m["id"]: resolve(m, idx, b) for m in models}
-            if recent and not any(resolved[m["id"]] and not resolved[m["id"]][2] for m in recent):
+            if recent and not any(any(not r[2] for r in resolved[m["id"]]) for m in recent if resolved[m["id"]]):
                 data["dropped_benchmarks"][b["name"]] = f"hasn't tested any tracked model released in the last {LIVE_BOARD_DAYS} days"
                 continue
             benches.append(b)
             if b["reference"] == "tracked":
-                pool = [r[0] for r in resolved.values() if r]
+                pool = [r[0] for runs in resolved.values() for r in runs]
             else:
                 pool = [max(v[0] for v in vars) if b["higher_better"] else min(v[0] for v in vars) for vars in idx.values() if vars]
             if not pool:
@@ -647,18 +684,25 @@ def compute_scores(data):
             as_of = entry["fetched_at"]
             stale = (today - datetime.fromisoformat(as_of).date()).days > STALE_DAYS
             for m in models:
-                r = resolved[m["id"]]
-                if not r:
+                runs = resolved[m["id"]]
+                if not runs:
                     continue
-                v, board_name, inherited = r
-                per_model[m["id"]].append({
-                    "bench": b["id"], "name": b["name"], "value": v, "display": fmt_value(b, v),
-                    "score": round(normalize(b, v, best, worst), 1), "board_name": board_name,
-                    "inherited": inherited, "as_of": as_of, "stale": stale,
-                })
+                for v, board_name, inherited in runs:
+                    eff = extract_effort(board_name)
+                    per_model[m["id"]].append({
+                        "bench": b["id"], "name": b["name"], "value": v, "display": fmt_value(b, v),
+                        "score": round(normalize(b, v, best, worst), 1), "board_name": board_name,
+                        "effort": eff, "inherited": inherited, "as_of": as_of, "stale": stale,
+                    })
             # Details-tab card: top 5 on the board (or among tracked models for cost).
             if b["reference"] == "tracked":
-                ranked = sorted(((r[0], m["name"]) for m in models if (r := resolved[m["id"]])), reverse=b["higher_better"])
+                ranked = []
+                for m in models:
+                    runs = resolved[m["id"]]
+                    if runs:
+                        best_run = max(runs, key=lambda r: r[0] if b["higher_better"] else -r[0])
+                        ranked.append((best_run[0], m["name"]))
+                ranked.sort(reverse=b["higher_better"])
             else:
                 best_per_model = [max(vars, key=lambda x: x[0] if b["higher_better"] else -x[0]) for vars in idx.values() if vars]
                 ranked = sorted(((v, n) for v, n, _ in best_per_model), reverse=b["higher_better"])
@@ -678,7 +722,7 @@ def compute_scores(data):
                 score = round(sum(i["score"] for i in inputs) / len(inputs))
                 if any(i["inherited"] for i in inputs):
                     status = "provisional"
-                elif len(inputs) < len(benches):
+                elif len({i["bench"] for i in inputs}) < len(benches):
                     status = "partial"
                 else:
                     status = "measured"
@@ -699,7 +743,8 @@ def compute_scores(data):
             }
             parts = []
             for i in inputs:
-                p = f"{i['name']} {i['display']} → {i['score']:.0f}"
+                eff_tag = f" ({i['effort']})" if i.get("effort") else ""
+                p = f"{i['name']}{eff_tag} {i['display']} → {i['score']:.0f}"
                 if i["inherited"]:
                     p += f" (inherited from {i['board_name']})"
                 if i["stale"]:

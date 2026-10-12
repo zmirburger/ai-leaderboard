@@ -455,7 +455,8 @@ function renderDebugTab(d) {
       const covSuffix = det.inputs.length > 0 ? ` (${detCov.measured}/${detCov.total})` : '';
       const inputs = det.inputs.map(i => {
         const flags = [i.inherited ? `inherited from ${esc(i.board_name)}` : '', i.stale ? `as of ${i.as_of}` : ''].filter(Boolean).join(', ');
-        return `${esc(i.name)}: ${esc(i.display)} → <b>${Math.round(i.score)}</b>${flags ? ` <span class="dbg-flag">(${flags})</span>` : ''}`;
+        const runName = i.effort ? `${esc(i.name)} (${esc(i.effort)})` : esc(i.name);
+        return `${runName}: ${esc(i.display)} → <b>${Math.round(i.score)}</b>${flags ? ` <span class="dbg-flag">(${flags})</span>` : ''}`;
       });
       if (det.inputs.length > 1) inputs.push(`mean of ${det.inputs.length} = ${v}`);
       if (det.missing.length) inputs.push(`not listed on ${esc(det.missing.join(', '))}`);

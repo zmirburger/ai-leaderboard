@@ -471,7 +471,7 @@ function renderDebugTab(d) {
     const formula = cb.included.map(k => `${pp[k]}×${(w[k] / incW).toFixed(2)}`).join(' + ') + ` = ${m.composite_unrounded ?? '—'} → ${m.composite_overall ?? '—'}`;
     return `<div class="dbg-card">
       <div class="dbg-head">
-        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${isProvisional(m) ? `<span class="calibrating-chip" title="${cov.measured}/${cov.total} benchmarks measured">Provisional (${cov.measured}/${cov.total})</span>` : `<span class="new-chip">${cov.measured}/${cov.total} measured</span>`}</div>
+        <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${m.target_effort ? `<span class="tier-chip">${esc(m.target_effort)} effort</span>` : ''}${isProvisional(m) ? `<span class="calibrating-chip" title="${cov.measured}/${cov.total} benchmarks measured">Provisional (${cov.measured}/${cov.total})</span>` : `<span class="new-chip">${cov.measured}/${cov.total} measured</span>`}</div>
         <span class="dbg-total">Composite <b>${m.composite_overall ?? '—'}</b></span>
       </div>
       <table class="dbg-table">
@@ -572,7 +572,7 @@ function render(d) {
         <div>
           <span class="badge">Recommended</span>
           <p class="winner-name">${overall.model}</p>
-          <p class="winner-vendor">${overallModel.vendor}${isNaN(daysSince(overallModel.released)) ? '' : ` · released ${daysSince(overallModel.released)}d ago`}</p>
+          <p class="winner-vendor">${overallModel.vendor} · ${overallModel.target_effort ? `${overallModel.target_effort} effort · ` : ''}${isNaN(daysSince(overallModel.released)) ? '' : `released ${daysSince(overallModel.released)}d ago`}</p>
         </div>
         <div class="composite">
           <p class="composite-label">Composite</p>
@@ -648,6 +648,7 @@ function render(d) {
                     <div class="model-name-row">
                       <p class="model-name">${m.name}</p>
                       ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
+                      ${m.target_effort ? `<span class="tier-chip" title="Target reasoning effort: ${m.target_effort}">${m.target_effort} effort</span>` : ''}
                       ${isProvisional(m)
                         ? `<span class="calibrating-chip" title="${cov.measured} of ${cov.total} benchmarks directly measured, ${cov.provisional} inherited from older versions">Provisional (${cov.measured}/${cov.total})</span>`
                         : `<span class="cov-chip" title="All ${cov.total} benchmarks directly measured">${cov.measured}/${cov.total} measured</span>`}

@@ -351,7 +351,7 @@ def fetch_benchlm():
     return {"benchlm": vals}
 
 def fetch_deepswe():
-    """pass@1 per model (best reasoning effort) and, when published, the $/task of that same run."""
+    """pass@1 and $/task per model x reasoning effort."""
     raw = fetch("https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json")
     if not raw:
         return None
@@ -359,21 +359,22 @@ def fetch_deepswe():
         rows = json.loads(raw).get("rows") or []
     except (json.JSONDecodeError, AttributeError):
         return None
-    if rows:
-        print(f"  row fields: {sorted(rows[0].keys())}")
-    best = {}
+    runs = {}
     for r in rows:
         name, p1 = r.get("model"), r.get("pass_at_1")
         if not name or not isinstance(p1, (int, float)):
             continue
-        if name not in best or p1 > best[name].get("pass_at_1", -1):
-            best[name] = r
+        effort = (r.get("reasoning_effort") or "").strip().lower()
+        key = f"{name} ({effort})" if effort and effort != "none" else name
+        if key not in runs or p1 > runs[key].get("pass_at_1", -1):
+            runs[key] = r
     pass1, cost = {}, {}
-    for name, r in best.items():
-        pass1[name] = r["pass_at_1"] * 100 if r["pass_at_1"] <= 1 else float(r["pass_at_1"])
+    for key, r in runs.items():
+        p1 = r["pass_at_1"]
+        pass1[key] = p1 * 100 if p1 <= 1 else float(p1)
         c = r.get("mean_cost_usd")
         if isinstance(c, (int, float)) and c > 0:
-            cost[name] = float(c)
+            cost[key] = float(c)
     return {"deepswe": pass1, "deepswe_cost": cost}
 
 def fetch_metr():
@@ -467,7 +468,53 @@ def fmt_value(bench, v):
         return f"${v:.2f}/MTok"
     return f"{v:.1f}"
 
-# ---------- model-name matching ----------
+# ---------- model-name matching & reasoning effort ----------
+
+TARGET_EFFORT_MAP = {
+    "opus": "medium",
+    "fable": "medium",
+    "grok": "medium",
+    "sol": "medium",
+    "astra": "medium",
+    "sonnet": "high",
+    "haiku": "high",
+    "luna": "high",
+    "gemini": "high",
+}
+
+def get_target_effort(model):
+    if "target_effort" in model:
+        return model["target_effort"].lower()
+    name = model.get("name", "").lower()
+    tier = model.get("tier", "").lower()
+    for kw, eff in TARGET_EFFORT_MAP.items():
+        if kw in name or kw in tier:
+            return eff
+    return "medium"
+
+def extract_effort(name):
+    s = str(name).lower()
+    for eff in ["xhigh", "medium", "high", "max", "low", "minimal"]:
+        if re.search(r'\b' + eff + r'\b', s):
+            return "high" if eff == "minimal" else eff
+    return None
+
+EFFORT_RANKS = {"low": 1, "medium": 2, "high": 3, "xhigh": 4, "max": 5}
+
+def pick_variant(variants, target_effort, higher_better):
+    """Picks the variant matching target reasoning effort; falls back to closest effort or best available."""
+    if not variants:
+        return None
+    if not target_effort:
+        return max(variants, key=lambda x: x[0] if higher_better else -x[0])
+    exact = [v for v in variants if v[2] == target_effort]
+    if exact:
+        return max(exact, key=lambda x: x[0] if higher_better else -x[0])
+    t_rank = EFFORT_RANKS.get(target_effort, 3)
+    with_effort = [v for v in variants if v[2] in EFFORT_RANKS]
+    if with_effort:
+        return min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))
+    return max(variants, key=lambda x: x[0] if higher_better else -x[0])
 
 _NOISE_WORDS = {"low", "medium", "high", "xhigh", "max", "minimal", "none", "thinking", "reasoning",
                 "non", "adaptive", "preview", "latest", "exp", "experimental", "instruct", "inspect"}
@@ -475,7 +522,7 @@ _NOISE_WORDS = {"low", "medium", "high", "xhigh", "max", "minimal", "none", "thi
 def norm_name(s):
     """Canonical form shared by every board: 'anthropic/claude-opus-4-7-20260101 (max)' and
     'Claude 4.7 Opus' both become 'claude opus 4.7'. Effort/preview/date suffixes are dropped,
-    so a board's variants of one model collapse together (best value kept)."""
+    so variants of one model collapse to the same canonical key for indexing."""
     s = _UNICODE_HYPHENS.sub("-", str(s)).lower().split("/")[-1]
     s = re.sub(r"\(.*?\)", " ", s)
     s = re.sub(r"\b20\d\d-?\d\d-?\d\d\b", " ", s)
@@ -488,23 +535,27 @@ def _family(n):
     return " ".join(re.sub(r"\b\d+(?:\.\d+)?\b", " ", n).split())
 
 def build_index(bench, values):
-    """{norm_name: (value, board_name)}, keeping each model's best variant."""
+    """{norm_name: list of (value, board_name, effort)}"""
     idx = {}
     for name, v in values.items():
         k = norm_name(name)
         if not k:
             continue
-        if k not in idx or ((v > idx[k][0]) if bench["higher_better"] else (v < idx[k][0])):
-            idx[k] = (v, name)
+        eff = extract_effort(name)
+        idx.setdefault(k, []).append((v, name, eff))
     return idx
 
-def resolve(model, idx):
-    """Exact match on name/aliases -> measured. Otherwise the newest OLDER version of the
-    same family on this board -> inherited (provisional). None if neither exists."""
+def resolve(model, idx, bench):
+    """Target-effort match on name/aliases -> measured. Otherwise the newest OLDER version of the
+    same family on this board at target effort -> inherited (provisional). None if neither exists."""
+    target = get_target_effort(model)
+    hb = bench["higher_better"]
     keys = [norm_name(model["name"])] + [norm_name(a) for a in model.get("aliases", [])]
     for k in keys:
         if k in idx:
-            return idx[k][0], idx[k][1], False
+            chosen = pick_variant(idx[k], target, hb)
+            if chosen:
+                return chosen[0], chosen[1], False
     mine = _parse_version(model["name"])
     fams = {_family(k) for k in keys}
     # Only inherit across a gap of less than one major version (Opus 4.7 -> 5.5 yes,
@@ -514,7 +565,10 @@ def resolve(model, idx):
     if not older:
         return None
     k = max(older, key=lambda kv: kv[1])[0]
-    return idx[k][0], idx[k][1], True
+    chosen = pick_variant(idx[k], target, hb)
+    if not chosen:
+        return None
+    return chosen[0], chosen[1], True
 
 def normalize(bench, v, best, worst):
     if bench["scale"] == "log" and bench["reference"] == "tracked":
@@ -562,6 +616,7 @@ def compute_scores(data):
     for m in models:
         m.pop("needs_calibration", None)
         m.pop("previous_scores", None)
+        m["target_effort"] = get_target_effort(m)
         m["per_priority"], m["score_detail"], m["score_basis"] = {}, {}, {}
 
     recent = [m for m in models if m.get("released")
@@ -576,12 +631,15 @@ def compute_scores(data):
                 continue
             entry = cache[b["id"]]
             idx = build_index(b, entry["values"])
-            resolved = {m["id"]: resolve(m, idx) for m in models}
+            resolved = {m["id"]: resolve(m, idx, b) for m in models}
             if recent and not any(resolved[m["id"]] and not resolved[m["id"]][2] for m in recent):
                 data["dropped_benchmarks"][b["name"]] = f"hasn't tested any tracked model released in the last {LIVE_BOARD_DAYS} days"
                 continue
             benches.append(b)
-            pool = [r[0] for r in resolved.values() if r] if b["reference"] == "tracked" else [v for v, _ in idx.values()]
+            if b["reference"] == "tracked":
+                pool = [r[0] for r in resolved.values() if r]
+            else:
+                pool = [max(v[0] for v in vars) if b["higher_better"] else min(v[0] for v in vars) for vars in idx.values() if vars]
             if not pool:
                 continue
             best = max(pool) if b["higher_better"] else min(pool)
@@ -599,9 +657,11 @@ def compute_scores(data):
                     "inherited": inherited, "as_of": as_of, "stale": stale,
                 })
             # Details-tab card: top 5 on the board (or among tracked models for cost).
-            ranked = sorted(((v, n) for v, n in idx.values()), reverse=b["higher_better"])
             if b["reference"] == "tracked":
                 ranked = sorted(((r[0], m["name"]) for m in models if (r := resolved[m["id"]])), reverse=b["higher_better"])
+            else:
+                best_per_model = [max(vars, key=lambda x: x[0] if b["higher_better"] else -x[0]) for vars in idx.values() if vars]
+                ranked = sorted(((v, n) for v, n, _ in best_per_model), reverse=b["higher_better"])
             data["benchmarks"].setdefault(dim, []).append({
                 "id": b["id"], "name": b["name"], "url": b["url"], "description": b["description"],
                 "lower_better": not b["higher_better"], "as_of": as_of, "stale": stale,

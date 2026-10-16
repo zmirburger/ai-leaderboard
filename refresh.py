@@ -55,7 +55,7 @@ def save_data(data):
     DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 def _extract_iso_date(text):
-    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:2000])
+    date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:5000])
     if not date_match:
         return ""
     try:
@@ -212,6 +212,20 @@ def detect_gemini_flash():
     version = best if isinstance(best, str) else best[0]
     return _result(f"Gemini {version} Flash", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
+def detect_gemini_argon():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Argon\b", include_body=True)
+    if not best:
+        best = _find_best_match(soup, r"Argon (\d+(?:\.\d+)?)", include_body=True)
+        if best:
+            version = best if isinstance(best, str) else best[0]
+            return _result(f"Gemini {version} Argon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Argon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
 # ---------- xAI ----------
 
 _XAI_URL = "https://docs.x.ai/developers/release-notes"
@@ -244,6 +258,7 @@ TIER_DETECTORS = {
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
     ("Google",    "Pro"):     detect_gemini_pro,
+    ("Google",    "Argon"):   detect_gemini_argon,
     ("Google",    "Flash"):   detect_gemini_flash,
     ("OpenAI",    "Astra"):   detect_openai_astra,
     ("OpenAI",    "Sol"):     detect_openai_sol,
@@ -482,6 +497,7 @@ TARGET_EFFORT_MAP = {
     "haiku": "high",
     "luna": "high",
     "gemini": "high",
+    "argon": "medium",
 }
 
 def get_target_effort(model):

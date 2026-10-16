@@ -212,6 +212,193 @@
     .model-grid { grid-template-columns: 1fr; }
     .bench-grid { grid-template-columns: 1fr; }
     .winner-grid .label { font-size: 10px; }
+    .filter-section { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .model-checklist-grid { grid-template-columns: 1fr; }
+  }
+  .filter-bar {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+  .filter-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .filter-head .title {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .filter-reset-link {
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    font-size: 11.5px;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .filter-reset-link:hover { text-decoration: underline; }
+  .filter-section {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .filter-section:last-child { margin-bottom: 0; }
+  .filter-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 60px;
+    font-weight: 500;
+  }
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .filter-chip {
+    background: var(--surface-2);
+    border: 0.5px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    padding: 4px 11px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+    transition: all 0.12s ease;
+  }
+  .filter-chip:hover { border-color: var(--border-strong); }
+  .filter-chip.active {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .filter-chip.inactive {
+    opacity: 0.45;
+    background: transparent;
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+  .filter-model-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px solid var(--border);
+    font-size: 12px;
+  }
+  .filter-model-summary {
+    cursor: pointer;
+    color: var(--text-muted);
+    user-select: none;
+    font-size: 11.5px;
+  }
+  .filter-model-summary:hover { color: var(--text); }
+  .model-checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 6px 12px;
+    margin-top: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .model-checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+  }
+  .model-checklist-item input {
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+  .model-checklist-item.excluded span {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+  .active-exclusions-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px dashed var(--border);
+  }
+  .active-exclusion-chip {
+    background: rgba(220, 38, 38, 0.08);
+    border: 0.5px solid rgba(220, 38, 38, 0.3);
+    color: #dc2626;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: filter 0.1s;
+  }
+  @media (prefers-color-scheme: dark) {
+    .active-exclusion-chip {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+  }
+  .active-exclusion-chip:hover {
+    filter: brightness(1.2);
+  }
+  .hide-btn {
+    background: transparent;
+    border: 0;
+    color: var(--text-dim);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: inherit;
+    transition: color 0.12s;
+  }
+  .hide-btn:hover {
+    color: #dc2626;
+  }
+  .runner-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface-2);
+    padding: 7px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    border: 0.5px solid transparent;
+    transition: border-color 0.12s;
+  }
+  .runner-item:hover {
+    border-color: var(--border);
+  }
+  .model-card.is-filtered-out {
+    opacity: 0.5;
+    border-style: dashed;
   }
 </style>
 </head>
@@ -505,10 +692,180 @@ function renderDebugTab(d) {
   `;
 }
 
+let currentData = null;
+let activeTab = 'models';
+let modelDetailsOpen = false;
+
+const filterState = {
+  vendors: new Set(),
+  efforts: new Set(['high', 'medium']),
+  excludedModels: new Set(),
+};
+
+function initFilters(data) {
+  const allVendors = [...new Set(data.models.map(m => m.vendor))];
+  const allEfforts = ['high', 'medium'];
+
+  try {
+    const saved = localStorage.getItem('airank_filters_v1');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed.vendors)) {
+        filterState.vendors = new Set(parsed.vendors.filter(v => allVendors.includes(v)));
+      } else {
+        filterState.vendors = new Set(allVendors);
+      }
+      if (Array.isArray(parsed.efforts)) {
+        filterState.efforts = new Set(parsed.efforts.filter(e => allEfforts.includes(e)));
+      } else {
+        filterState.efforts = new Set(allEfforts);
+      }
+      if (Array.isArray(parsed.excluded)) {
+        filterState.excludedModels = new Set(parsed.excluded);
+      } else {
+        filterState.excludedModels = new Set();
+      }
+      return;
+    }
+  } catch (e) {}
+
+  filterState.vendors = new Set(allVendors);
+  filterState.efforts = new Set(allEfforts);
+  filterState.excludedModels = new Set();
+}
+
+function saveFilters() {
+  try {
+    localStorage.setItem('airank_filters_v1', JSON.stringify({
+      vendors: Array.from(filterState.vendors),
+      efforts: Array.from(filterState.efforts),
+      excluded: Array.from(filterState.excludedModels),
+    }));
+  } catch (e) {}
+}
+
+function isModelActive(m) {
+  if (!filterState.vendors.has(m.vendor)) return false;
+  const eff = (m.target_effort || 'medium').toLowerCase();
+  if (!filterState.efforts.has(eff)) return false;
+  if (filterState.excludedModels.has(m.id) || filterState.excludedModels.has(m.name)) return false;
+  return true;
+}
+
+function toggleVendor(vendor) {
+  if (filterState.vendors.has(vendor)) {
+    filterState.vendors.delete(vendor);
+  } else {
+    filterState.vendors.add(vendor);
+  }
+  saveFilters();
+  if (currentData) render(currentData);
+}
+
+function toggleEffort(effort) {
+  const eff = effort.toLowerCase();
+  if (filterState.efforts.has(eff)) {
+    filterState.efforts.delete(eff);
+  } else {
+    filterState.efforts.add(eff);
+  }
+  saveFilters();
+  if (currentData) render(currentData);
+}
+
+function toggleModelExclude(id, e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  if (filterState.excludedModels.has(id)) {
+    filterState.excludedModels.delete(id);
+  } else {
+    filterState.excludedModels.add(id);
+  }
+  saveFilters();
+  if (currentData) render(currentData);
+}
+
+function resetAllFilters() {
+  if (!currentData) return;
+  filterState.vendors = new Set(currentData.models.map(m => m.vendor));
+  filterState.efforts = new Set(['high', 'medium']);
+  filterState.excludedModels = new Set();
+  saveFilters();
+  render(currentData);
+}
+
+function renderFilterBar(d, activeModels) {
+  const allVendors = [...new Set(d.models.map(m => m.vendor))];
+  const allEfforts = ['high', 'medium'];
+  const hasAnyFilter = filterState.vendors.size < allVendors.length
+    || filterState.efforts.size < allEfforts.length
+    || filterState.excludedModels.size > 0;
+
+  const vendorChips = allVendors.map(v => {
+    const active = filterState.vendors.has(v);
+    return `<button class="filter-chip ${active ? 'active' : 'inactive'}" onclick="toggleVendor('${esc(v)}')">${esc(v)} ${active ? '✓' : ''}</button>`;
+  }).join('');
+
+  const effortChips = allEfforts.map(e => {
+    const active = filterState.efforts.has(e);
+    const label = (e === 'high' ? 'High' : 'Medium') + ' effort';
+    return `<button class="filter-chip ${active ? 'active' : 'inactive'}" onclick="toggleEffort('${e}')">${label} ${active ? '✓' : ''}</button>`;
+  }).join('');
+
+  const excludedChips = [...filterState.excludedModels].map(id => {
+    const m = d.models.find(x => x.id === id || x.name === id);
+    const label = m ? m.name : id;
+    return `<span class="active-exclusion-chip" onclick="toggleModelExclude('${esc(id)}')" title="Click to unhide">${esc(label)} ✕</span>`;
+  }).join('');
+
+  const modelChecklist = d.models.map(m => {
+    const active = isModelActive(m);
+    return `
+      <label class="model-checklist-item ${active ? '' : 'excluded'}">
+        <input type="checkbox" ${active ? 'checked' : ''} onchange="toggleModelExclude('${esc(m.id)}')">
+        <span>${esc(m.name)}</span>
+      </label>
+    `;
+  }).join('');
+
+  return `
+    <div class="filter-bar">
+      <div class="filter-head">
+        <span class="title">Filter Top 5 & Rankings</span>
+        ${hasAnyFilter ? `<button class="filter-reset-link" onclick="resetAllFilters()">Reset filters</button>` : ''}
+      </div>
+      <div class="filter-section">
+        <span class="filter-label">Company:</span>
+        <div class="filter-chips">${vendorChips}</div>
+      </div>
+      <div class="filter-section">
+        <span class="filter-label">Effort:</span>
+        <div class="filter-chips">${effortChips}</div>
+      </div>
+      ${excludedChips ? `
+        <div class="active-exclusions-bar">
+          <span class="filter-label" style="min-width:auto;">Excluded:</span>
+          ${excludedChips}
+        </div>
+      ` : ''}
+      <details class="filter-model-details" ${modelDetailsOpen ? 'open' : ''} ontoggle="modelDetailsOpen = this.open">
+        <summary class="filter-summary">Filter specific models (${activeModels.length}/${d.models.length} active)</summary>
+        <div class="model-checklist-grid">
+          ${modelChecklist}
+        </div>
+      </details>
+    </div>
+  `;
+}
+
 async function load() {
   try {
     const res = await fetch('data.json?_=' + Date.now());
     const data = await res.json();
+    currentData = data;
+    initFilters(data);
     document.getElementById('last-updated').textContent = 'Updated ' + fmt(data.last_updated);
     if (data.weights) {
       const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
@@ -526,11 +883,15 @@ function render(d) {
   const w = d.weights;
   const wPct = (k) => Math.round(w[k] * 100);
   const overall = d.best_overall;
-  // Fall back to the top composite model if best_overall.model doesn't match
-  // any entry (e.g. a rename landed in models[] but not in best_overall yet).
-  const overallModel = d.models.find(m => m.name === overall.model)
-    || [...d.models].sort((a,b) => (b.composite_overall ?? -1) - (a.composite_overall ?? -1))[0];
-  const ranked = (priority) => [...d.models].sort((a,b) => {
+
+  const activeModels = d.models.filter(isModelActive)
+    .sort((a,b) => (b.composite_unrounded ?? (b.composite_overall ?? -1)) - (a.composite_unrounded ?? (a.composite_overall ?? -1)));
+
+  const isFiltered = activeModels.length < d.models.length;
+  const overallModel = activeModels.length > 0 ? activeModels[0] : null;
+  const others = activeModels.length > 1 ? activeModels.slice(1) : [];
+
+  const ranked = (priority) => [...activeModels].sort((a,b) => {
     const sa = a.per_priority[priority];
     const sb = b.per_priority[priority];
     if (sa == null && sb == null) return 0;
@@ -538,9 +899,7 @@ function render(d) {
     if (sb == null) return -1;
     return sb - sa;
   });
-  const rank = (model, priority) => ranked(priority).findIndex(m => m.name === model.name) + 1;
-
-  const others = d.models.filter(m => m.name !== overallModel.name).sort((a,b) => (b.composite_overall ?? -1) - (a.composite_overall ?? -1));
+  const rank = (model, priority) => ranked(priority).findIndex(m => m.id === model.id) + 1;
 
   // Claude lens: expand each tier × effort into a combo. Model name + capability
   // base are resolved live from d.models so a version bump flows through here;
@@ -566,41 +925,85 @@ function render(d) {
   const clRow = (c, i, val) => `<tr><td><span class="cl-rank">${i+1}.</span>${c.name}<span class="effort-chip">${c.effort}</span></td><td>${val}</td></tr>`;
 
   const wSummary = Object.keys(w).map(k => `${wPct(k)} ${k === 'long_context' ? 'ctx' : k}`).join('/');
-  const html = `
-    <p class="section-label">Best overall · ${wSummary}</p>
-    <div class="winner-card">
-      <div class="winner-head">
-        <div>
-          <span class="badge">Recommended</span>
-          <p class="winner-name">${overall.model}</p>
-          <p class="winner-vendor">${overallModel.vendor} · ${overallModel.target_effort ? `${overallModel.target_effort} effort · ` : ''}${isNaN(daysSince(overallModel.released)) ? '' : `released ${daysSince(overallModel.released)}d ago`}</p>
-        </div>
-        <div class="composite">
-          <p class="composite-label">Composite</p>
-          <p class="composite-value">${overall.composite}<span class="denom">/100</span></p>
-        </div>
-      </div>
-      <div class="winner-grid">
-        ${Object.keys(w).map(k => {
-          const dimLabels = { accuracy: 'Accuracy', long_context: 'Long context', agent: 'Agent', cost: 'Cost' };
-          return `
-            <div>
-              <p class="label">${dimLabels[k] || k} · ${wPct(k)}%</p>
-              <p class="val">${overallModel.per_priority[k] ?? '—'} <span class="rank">${overallModel.per_priority[k] != null ? `· #${rank(overallModel, k)}` : ''}</span></p>
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <p class="rationale">${overall.rationale}</p>
-      <div class="runners">
-        ${others.slice(0, 4).map((m, i) => {
-          const ordinals = ['Runner-up', '3rd', '4th', '5th'];
-          return `<span class="chip">${ordinals[i] || (i + 2) + 'th'}: ${m.name} (${m.composite_overall})</span>`;
-        }).join('')}
-      </div>
-    </div>
 
-    <p class="section-label">Best per priority</p>
+  let winnerHtml = '';
+  if (!overallModel) {
+    winnerHtml = `
+      <p class="section-label">Best overall · ${wSummary}</p>
+      <div class="winner-card" style="text-align:center;padding:36px 16px;">
+        <p style="font-size:16px;font-weight:600;margin:0 0 6px;">No models match selected filters</p>
+        <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 16px;">Select at least one company or effort above, or reset filters.</p>
+        <button class="refresh-btn" onclick="resetAllFilters()" style="padding:6px 14px;font-size:12.5px;">Reset all filters</button>
+      </div>
+    `;
+  } else {
+    let rationale = overall.rationale;
+    if (isFiltered) {
+      const pp = overallModel.per_priority;
+      const dims = Object.keys(w).map(k => `${k === 'long_context' ? 'long context' : k} ${pp[k] ?? '—'}`).join(', ');
+      const runnerStr = others.slice(0, 4).map(m => `${m.name} ${m.composite_overall}`).join('; ');
+      rationale = `Filtered view (${activeModels.length} of ${d.models.length} models active). Scores: ${dims} → ${overallModel.composite_unrounded ?? overallModel.composite_overall}. Next: ${runnerStr || 'none'}.`;
+    }
+
+    winnerHtml = `
+      <p class="section-label">Best overall · ${wSummary}${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>
+      <div class="winner-card">
+        <div class="winner-head">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span class="badge">${isFiltered ? 'Filtered #1' : 'Recommended'}</span>
+              <button class="hide-btn" style="font-size:11px;border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:2px 7px;" title="Exclude ${esc(overallModel.name)}" onclick="toggleModelExclude('${esc(overallModel.id)}')">✕ Exclude</button>
+            </div>
+            <p class="winner-name">${esc(overallModel.name)}</p>
+            <p class="winner-vendor">${esc(overallModel.vendor)} · ${overallModel.target_effort ? `${esc(overallModel.target_effort)} effort · ` : ''}${isNaN(daysSince(overallModel.released)) ? '' : `released ${daysSince(overallModel.released)}d ago`}</p>
+          </div>
+          <div class="composite">
+            <p class="composite-label">Composite</p>
+            <p class="composite-value">${overallModel.composite_overall ?? '—'}<span class="denom">/100</span></p>
+          </div>
+        </div>
+        <div class="winner-grid">
+          ${Object.keys(w).map(k => {
+            const dimLabels = { accuracy: 'Accuracy', long_context: 'Long context', agent: 'Agent', cost: 'Cost' };
+            return `
+              <div>
+                <p class="label">${dimLabels[k] || k} · ${wPct(k)}%</p>
+                <p class="val">${overallModel.per_priority[k] ?? '—'} <span class="rank">${overallModel.per_priority[k] != null ? `· #${rank(overallModel, k)}` : ''}</span></p>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <p class="rationale">${rationale}</p>
+        ${others.length > 0 ? `
+          <div class="runners" style="display:flex;flex-direction:column;gap:6px;margin-top:16px;padding-top:14px;border-top:0.5px solid var(--border);">
+            <div style="font-size:10.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:2px;">Top 5 Leaders (Click ✕ to exclude):</div>
+            ${others.slice(0, 4).map((m, i) => {
+              const ordinals = ['2nd', '3rd', '4th', '5th'];
+              return `
+                <div class="runner-item">
+                  <div style="display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden;">
+                    <span style="font-weight:600;color:var(--text-muted);font-size:11.5px;min-width:24px;">${ordinals[i] || (i + 2) + 'th'}</span>
+                    <span style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(m.name)}</span>
+                    <span class="tier-chip" style="font-size:10px;padding:1px 5px;">${esc(m.target_effort || 'medium')}</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                    <span style="font-weight:600;font-variant-numeric:tabular-nums;">${m.composite_overall ?? '—'}</span>
+                    <button class="hide-btn" title="Exclude ${esc(m.name)}" onclick="toggleModelExclude('${esc(m.id)}')">✕</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  const html = `
+    ${renderFilterBar(d, activeModels)}
+    ${winnerHtml}
+
+    <p class="section-label">Best per priority${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>
     <div class="priority-grid">
       ${Object.keys(w).map(k => {
         const labels = {
@@ -609,8 +1012,11 @@ function render(d) {
           long_context: 'Long instructions & context',
           cost: 'Cost efficiency (cost / task)'
         };
-        if (!d.models.some(m => m.per_priority[k] != null)) return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><p class="pri-summary">No benchmark data yet, so this priority is left out of the composite.</p></div>`;
-        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${ranked(k).map((m, i) => {
+        const rankedList = ranked(k);
+        if (!rankedList.length || !rankedList.some(m => m.per_priority[k] != null)) {
+          return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><p class="pri-summary">No active models for this priority with current filters.</p></div>`;
+        }
+        return `<div class="pri-card"><p class="pri-tag">${labels[k] || k}</p><table class="pri-rank">${rankedList.map((m, i) => {
           const score = m.per_priority[k];
           const det = (m.score_detail || {})[k] || {};
           const st = det.status;
@@ -627,14 +1033,14 @@ function render(d) {
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="models">Latest releases</button>
-      <button class="tab-btn" data-tab="details">Benchmark details</button>
-      ${d.cost_efficiency ? '<button class="tab-btn" data-tab="value">Cost vs intelligence</button>' : ''}
-      ${cl ? '<button class="tab-btn" data-tab="claude">Claude</button>' : ''}
-      <button class="tab-btn" data-tab="debug">Score breakdown</button>
+      <button class="tab-btn ${activeTab === 'models' ? 'active' : ''}" data-tab="models">Latest releases</button>
+      <button class="tab-btn ${activeTab === 'details' ? 'active' : ''}" data-tab="details">Benchmark details</button>
+      ${d.cost_efficiency ? `<button class="tab-btn ${activeTab === 'value' ? 'active' : ''}" data-tab="value">Cost vs intelligence</button>` : ''}
+      ${cl ? `<button class="tab-btn ${activeTab === 'claude' ? 'active' : ''}" data-tab="claude">Claude</button>` : ''}
+      <button class="tab-btn ${activeTab === 'debug' ? 'active' : ''}" data-tab="debug">Score breakdown</button>
     </div>
 
-    <div id="pane-models" class="tab-pane active">
+    <div id="pane-models" class="tab-pane ${activeTab === 'models' ? 'active' : ''}">
       ${[...new Set(d.models.map(m => m.vendor))].map(vendor => {
         const tiers = d.models.filter(m => m.vendor === vendor);
         if (!tiers.length) return '';
@@ -643,14 +1049,15 @@ function render(d) {
           <div class="model-grid" style="margin-bottom:8px;">
             ${tiers.map(m => {
               const cov = getCoverage(m);
+              const active = isModelActive(m);
               return `
-              <div class="model-card" data-toggle>
+              <div class="model-card ${active ? '' : 'is-filtered-out'}" data-toggle>
                 <div class="model-head">
                   <div>
                     <div class="model-name-row">
-                      <p class="model-name">${m.name}</p>
-                      ${m.tier ? `<span class="tier-chip">${m.tier}</span>` : ''}
-                      ${m.target_effort ? `<span class="tier-chip" title="Target reasoning effort: ${m.target_effort}">${m.target_effort} effort</span>` : ''}
+                      <p class="model-name">${esc(m.name)}</p>
+                      ${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}
+                      ${m.target_effort ? `<span class="tier-chip" title="Target reasoning effort: ${esc(m.target_effort)}">${esc(m.target_effort)} effort</span>` : ''}
                       ${isProvisional(m)
                         ? `<span class="calibrating-chip" title="${cov.measured} of ${cov.total} benchmarks directly measured, ${cov.provisional} inherited from older versions">Provisional (${cov.measured}/${cov.total})</span>`
                         : `<span class="cov-chip" title="All ${cov.total} benchmarks directly measured">${cov.measured}/${cov.total} measured</span>`}
@@ -658,7 +1065,10 @@ function render(d) {
                     </div>
                     <p class="model-vendor">${fmt(m.released)}</p>
                   </div>
-                  <span class="chev">▼</span>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <button class="hide-btn" style="border:0.5px solid var(--border);border-radius:4px;padding:2px 7px;" title="${active ? 'Exclude from rankings' : 'Include in rankings'}" onclick="toggleModelExclude('${esc(m.id)}', event)">${active ? '✕ Hide' : '+ Include'}</button>
+                    <span class="chev">▼</span>
+                  </div>
                 </div>
                 <div class="model-changelog">
                   <p><span class="changelog-head">vs ${esc(m.previous)}:</span> ${esc(m.changelog)}</p>
@@ -676,7 +1086,7 @@ function render(d) {
       }).join('')}
     </div>
 
-    <div id="pane-details" class="tab-pane">
+    <div id="pane-details" class="tab-pane ${activeTab === 'details' ? 'active' : ''}">
       ${['agent','accuracy','long_context','cost'].filter(cat => (d.benchmarks[cat] || []).length).map(cat => {
         const labels = {agent:'Autonomous agents', accuracy:'Accuracy & low hallucination', long_context:'Long instructions & context', cost:'Cost'};
         return `
@@ -700,12 +1110,12 @@ function render(d) {
     </div>
 
     ${d.cost_efficiency ? `
-    <div id="pane-value" class="tab-pane">
+    <div id="pane-value" class="tab-pane ${activeTab === 'value' ? 'active' : ''}">
       ${renderValueTab(d)}
     </div>` : ''}
 
     ${cl ? `
-    <div id="pane-claude" class="tab-pane">
+    <div id="pane-claude" class="tab-pane ${activeTab === 'claude' ? 'active' : ''}">
       <div class="subtabs">
         <button class="subtab-btn active" data-sub="cap">Capability</button>
         <button class="subtab-btn" data-sub="cost">Max plan cost</button>
@@ -734,7 +1144,7 @@ function render(d) {
       <p class="cl-note" style="margin-top:14px;">${cl.note}</p>
     </div>` : ''}
 
-    <div id="pane-debug" class="tab-pane">
+    <div id="pane-debug" class="tab-pane ${activeTab === 'debug' ? 'active' : ''}">
       ${renderDebugTab(d)}
     </div>
 
@@ -748,7 +1158,8 @@ function render(d) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+      activeTab = btn.dataset.tab;
+      document.getElementById('pane-' + activeTab).classList.add('active');
     });
   });
   document.querySelectorAll('[data-toggle]').forEach(card => {

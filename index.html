@@ -215,6 +215,123 @@
     .filter-section { flex-direction: column; align-items: flex-start; gap: 6px; }
     .model-checklist-grid { grid-template-columns: 1fr; }
   }
+  .weight-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .weight-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .weight-title {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+  .weight-total-badge {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-size: 10.5px;
+    padding: 1px 7px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+  .weight-presets {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .weight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 18px;
+  }
+  @media (max-width: 580px) {
+    .weight-grid { grid-template-columns: 1fr; }
+  }
+  .weight-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .weight-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .weight-name {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .weight-pct {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .weight-lock-btn {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 1px 3px;
+    line-height: 1;
+    opacity: 0.45;
+    transition: opacity 0.12s, transform 0.12s;
+  }
+  .weight-lock-btn:hover {
+    opacity: 0.9;
+  }
+  .weight-lock-btn.locked {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  .weight-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    accent-color: var(--accent);
+    cursor: pointer;
+    margin: 4px 0 0;
+  }
+  .weight-slider:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .weight-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  .weight-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
   .filter-bar {
     background: var(--surface);
     border: 0.5px solid var(--border);
@@ -410,8 +527,12 @@
   <div class="meta">
     <span id="last-updated">Loading…</span>
     <span style="color: var(--text-dim);">·</span>
-    <span id="weights-meta">Weights: 35 acc · 25 ctx · 25 agent · 15 cost</span>
+    <span id="weights-meta">Weights: 25 acc · 25 ctx · 25 agent · 25 cost</span>
     <button class="refresh-btn" onclick="location.reload()">Reload</button>
+  </div>
+  <div id="controls-section">
+    <div id="weight-panel-container"></div>
+    <div id="filter-bar-container"></div>
   </div>
   <div id="content" class="loading">Loading dashboard data…</div>
 </div>
@@ -696,6 +817,288 @@ let currentData = null;
 let activeTab = 'models';
 let modelDetailsOpen = false;
 
+const WEIGHT_STORAGE_KEY = 'airank_custom_weights_v1';
+const weightKeys = ['accuracy', 'long_context', 'agent', 'cost'];
+const DIM_TITLES = {
+  accuracy: 'Accuracy & low hallucination',
+  long_context: 'Long instructions & context',
+  agent: 'Autonomous agent',
+  cost: 'Cost efficiency'
+};
+
+let weightState = {
+  accuracy: 25,
+  long_context: 25,
+  agent: 25,
+  cost: 25
+};
+
+let lockedWeights = {
+  accuracy: false,
+  long_context: false,
+  agent: false,
+  cost: false
+};
+
+const PRESETS = {
+  equal: { label: 'Equal (25%)', weights: { accuracy: 25, long_context: 25, agent: 25, cost: 25 } },
+  agent: { label: 'Agent Heavy (50%)', weights: { accuracy: 20, long_context: 20, agent: 50, cost: 10 } },
+  accuracy: { label: 'Accuracy Heavy (50%)', weights: { accuracy: 50, long_context: 20, agent: 20, cost: 10 } },
+  cost: { label: 'Budget / Cost (40%)', weights: { accuracy: 20, long_context: 20, agent: 20, cost: 40 } },
+  context: { label: 'Context Heavy (50%)', weights: { accuracy: 25, long_context: 50, agent: 15, cost: 10 } },
+};
+
+function initWeights(data) {
+  try {
+    const saved = localStorage.getItem(WEIGHT_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (
+        typeof parsed.accuracy === 'number' &&
+        typeof parsed.long_context === 'number' &&
+        typeof parsed.agent === 'number' &&
+        typeof parsed.cost === 'number'
+      ) {
+        const sum = parsed.accuracy + parsed.long_context + parsed.agent + parsed.cost;
+        if (sum === 100) {
+          weightState = { ...parsed };
+          return;
+        }
+      }
+    }
+  } catch (e) {}
+
+  if (data && data.weights) {
+    const rawSum = Object.values(data.weights).reduce((s, v) => s + v, 0);
+    if (rawSum > 0) {
+      weightState = {
+        accuracy: Math.round(data.weights.accuracy / rawSum * 100),
+        long_context: Math.round(data.weights.long_context / rawSum * 100),
+        agent: Math.round(data.weights.agent / rawSum * 100),
+        cost: Math.round(data.weights.cost / rawSum * 100),
+      };
+      const total = weightState.accuracy + weightState.long_context + weightState.agent + weightState.cost;
+      if (total !== 100) {
+        weightState.accuracy += (100 - total);
+      }
+      return;
+    }
+  }
+
+  weightState = { accuracy: 25, long_context: 25, agent: 25, cost: 25 };
+}
+
+function saveWeights() {
+  try {
+    localStorage.setItem(WEIGHT_STORAGE_KEY, JSON.stringify(weightState));
+  } catch (e) {}
+}
+
+function updateHeaderWeightsMeta() {
+  const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
+  const wStr = Object.entries(weightState).map(([k, v]) => `${v} ${wMap[k] || k}`).join(' · ');
+  const wEl = document.getElementById('weights-meta');
+  if (wEl) wEl.textContent = 'Weights: ' + wStr;
+}
+
+function recomputeWithWeights(d, w) {
+  const totalW = w.accuracy + w.long_context + w.agent + w.cost;
+  const decW = {
+    accuracy: totalW ? w.accuracy / totalW : 0.25,
+    long_context: totalW ? w.long_context / totalW : 0.25,
+    agent: totalW ? w.agent / totalW : 0.25,
+    cost: totalW ? w.cost / totalW : 0.25,
+  };
+  d.weights = decW;
+
+  for (const m of d.models) {
+    const pp = m.per_priority;
+    const raw = (pp.accuracy ?? 0) * decW.accuracy +
+                (pp.long_context ?? 0) * decW.long_context +
+                (pp.agent ?? 0) * decW.agent +
+                (pp.cost ?? 0) * decW.cost;
+    m.composite_unrounded = Math.round(raw * 100) / 100;
+    m.composite_overall = Math.round(raw);
+  }
+}
+
+function renderWeightPanel() {
+  const container = document.getElementById('weight-panel-container');
+  if (!container) return;
+
+  if (!document.getElementById('weight-card')) {
+    const presetButtons = Object.entries(PRESETS).map(([key, p]) => {
+      return `<button class="filter-chip preset-chip" id="preset-btn-${key}" onclick="applyPreset('${key}')">${esc(p.label)}</button>`;
+    }).join('');
+
+    const sliderItems = weightKeys.map(k => {
+      return `
+        <div class="weight-item" id="weight-item-${k}">
+          <div class="weight-item-head">
+            <span class="weight-name" title="${esc(DIM_TITLES[k] || k)}">${esc(DIM_LABELS[k] || k)}</span>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="weight-pct" id="weight-val-${k}">${weightState[k]}%</span>
+              <button class="weight-lock-btn ${lockedWeights[k] ? 'locked' : ''}" id="lock-btn-${k}" onclick="toggleWeightLock('${k}')" title="Lock weight while adjusting others">${lockedWeights[k] ? '🔒' : '🔓'}</button>
+            </div>
+          </div>
+          <input type="range" min="0" max="100" step="1" value="${weightState[k]}" id="slider-${k}" class="weight-slider" oninput="handleSliderChange('${k}', +this.value)" ${lockedWeights[k] ? 'disabled' : ''}>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="weight-card" id="weight-card">
+        <div class="weight-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="weight-title">Custom Weightings</span>
+            <span id="weight-total-badge" class="weight-total-badge">100% total</span>
+          </div>
+          <button class="filter-reset-link" onclick="resetWeights()">Reset to 25% each</button>
+        </div>
+        <div class="weight-presets">
+          <span class="filter-label" style="min-width:auto;">Presets:</span>
+          <div class="filter-chips">${presetButtons}</div>
+        </div>
+        <div class="weight-grid">
+          ${sliderItems}
+        </div>
+      </div>
+    `;
+  }
+
+  updateSliderUI();
+}
+
+function updateSliderUI() {
+  const total = weightKeys.reduce((s, k) => s + weightState[k], 0);
+  const totalBadge = document.getElementById('weight-total-badge');
+  if (totalBadge) totalBadge.textContent = total + '% total';
+
+  for (const k of weightKeys) {
+    const slider = document.getElementById('slider-' + k);
+    const valText = document.getElementById('weight-val-' + k);
+    const lockBtn = document.getElementById('lock-btn-' + k);
+    if (slider) {
+      if (document.activeElement !== slider) {
+        slider.value = weightState[k];
+      }
+      slider.disabled = !!lockedWeights[k];
+    }
+    if (valText) valText.textContent = weightState[k] + '%';
+    if (lockBtn) {
+      lockBtn.textContent = lockedWeights[k] ? '🔒' : '🔓';
+      lockBtn.classList.toggle('locked', !!lockedWeights[k]);
+    }
+  }
+
+  for (const [key, p] of Object.entries(PRESETS)) {
+    const btn = document.getElementById('preset-btn-' + key);
+    if (btn) {
+      const match = weightKeys.every(k => weightState[k] === p.weights[k]);
+      btn.classList.toggle('active', match);
+    }
+  }
+}
+
+function toggleWeightLock(k) {
+  lockedWeights[k] = !lockedWeights[k];
+  const lockedCount = weightKeys.filter(key => lockedWeights[key]).length;
+  if (lockedCount >= weightKeys.length) {
+    lockedWeights[k] = false;
+  }
+  updateSliderUI();
+}
+
+function applyPreset(name) {
+  const p = PRESETS[name];
+  if (!p) return;
+  weightState = { ...p.weights };
+  lockedWeights = { accuracy: false, long_context: false, agent: false, cost: false };
+  for (const k of weightKeys) {
+    const slider = document.getElementById('slider-' + k);
+    if (slider) slider.value = weightState[k];
+  }
+  updateSliderUI();
+  saveWeights();
+  applyWeightsAndRender();
+}
+
+function resetWeights() {
+  applyPreset('equal');
+}
+
+function handleSliderChange(changedKey, targetVal) {
+  targetVal = Math.max(0, Math.min(100, Math.round(targetVal)));
+  if (lockedWeights[changedKey]) return;
+
+  const currentVal = weightState[changedKey];
+  const delta = targetVal - currentVal;
+  if (delta === 0) return;
+
+  const otherKeys = weightKeys.filter(k => k !== changedKey && !lockedWeights[k]);
+  if (otherKeys.length === 0) {
+    const slider = document.getElementById('slider-' + changedKey);
+    if (slider) slider.value = currentVal;
+    return;
+  }
+
+  const otherSum = otherKeys.reduce((sum, k) => sum + weightState[k], 0);
+
+  let actualDelta = delta;
+  if (actualDelta > otherSum) {
+    actualDelta = otherSum;
+    targetVal = currentVal + actualDelta;
+  }
+
+  weightState[changedKey] = targetVal;
+
+  if (otherSum > 0) {
+    let distributed = 0;
+    const newOtherVals = {};
+    for (let i = 0; i < otherKeys.length; i++) {
+      const k = otherKeys[i];
+      if (i === otherKeys.length - 1) {
+        newOtherVals[k] = Math.max(0, otherSum - actualDelta - distributed);
+      } else {
+        const share = Math.round(weightState[k] - actualDelta * (weightState[k] / otherSum));
+        const clamped = Math.max(0, share);
+        newOtherVals[k] = clamped;
+        distributed += clamped;
+      }
+    }
+    for (const k of otherKeys) {
+      weightState[k] = newOtherVals[k];
+    }
+  } else {
+    const toDistribute = -actualDelta;
+    const base = Math.floor(toDistribute / otherKeys.length);
+    let rem = toDistribute % otherKeys.length;
+    for (const k of otherKeys) {
+      weightState[k] = base + (rem > 0 ? 1 : 0);
+      if (rem > 0) rem--;
+    }
+  }
+
+  let total = weightKeys.reduce((s, k) => s + weightState[k], 0);
+  if (total !== 100) {
+    const diff = 100 - total;
+    const candidates = otherKeys.length > 0 ? otherKeys : [changedKey];
+    candidates.sort((a, b) => weightState[b] - weightState[a]);
+    weightState[candidates[0]] = Math.max(0, weightState[candidates[0]] + diff);
+  }
+
+  updateSliderUI();
+  saveWeights();
+  applyWeightsAndRender();
+}
+
+function applyWeightsAndRender() {
+  if (!currentData) return;
+  recomputeWithWeights(currentData, weightState);
+  updateHeaderWeightsMeta();
+  render(currentData);
+}
+
 const filterState = {
   vendors: new Set(),
   efforts: new Set(['high', 'medium']),
@@ -866,13 +1269,10 @@ async function load() {
     const data = await res.json();
     currentData = data;
     initFilters(data);
+    initWeights(data);
+    recomputeWithWeights(data, weightState);
     document.getElementById('last-updated').textContent = 'Updated ' + fmt(data.last_updated);
-    if (data.weights) {
-      const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
-      const wStr = Object.entries(data.weights).map(([k, v]) => `${Math.round(v * 100)} ${wMap[k] || k}`).join(' · ');
-      const wEl = document.getElementById('weights-meta');
-      if (wEl) wEl.textContent = 'Weights: ' + wStr;
-    }
+    updateHeaderWeightsMeta();
     render(data);
   } catch (e) {
     document.getElementById('content').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0;">Could not load data.json — has the scraper run yet?</p>';
@@ -880,12 +1280,19 @@ async function load() {
 }
 
 function render(d) {
-  const w = d.weights;
-  const wPct = (k) => Math.round(w[k] * 100);
-  const overall = d.best_overall;
+  renderWeightPanel();
 
   const activeModels = d.models.filter(isModelActive)
     .sort((a,b) => (b.composite_unrounded ?? (b.composite_overall ?? -1)) - (a.composite_unrounded ?? (a.composite_overall ?? -1)));
+
+  const filterContainer = document.getElementById('filter-bar-container');
+  if (filterContainer) {
+    filterContainer.innerHTML = renderFilterBar(d, activeModels);
+  }
+
+  const w = d.weights;
+  const wPct = (k) => Math.round(w[k] * 100);
+  const overall = d.best_overall;
 
   const isFiltered = activeModels.length < d.models.length;
   const overallModel = activeModels.length > 0 ? activeModels[0] : null;
@@ -924,7 +1331,8 @@ function render(d) {
   const byCost = [...claudeCombos].sort((a,b) => a.cost - b.cost);
   const clRow = (c, i, val) => `<tr><td><span class="cl-rank">${i+1}.</span>${c.name}<span class="effort-chip">${c.effort}</span></td><td>${val}</td></tr>`;
 
-  const wSummary = Object.keys(w).map(k => `${wPct(k)} ${k === 'long_context' ? 'ctx' : k}`).join('/');
+  const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
+  const wSummary = Object.keys(w).map(k => `${wPct(k)} ${wMap[k] || k}`).join(' · ');
 
   let winnerHtml = '';
   if (!overallModel) {
@@ -937,13 +1345,11 @@ function render(d) {
       </div>
     `;
   } else {
-    let rationale = overall.rationale;
-    if (isFiltered) {
-      const pp = overallModel.per_priority;
-      const dims = Object.keys(w).map(k => `${k === 'long_context' ? 'long context' : k} ${pp[k] ?? '—'}`).join(', ');
-      const runnerStr = others.slice(0, 4).map(m => `${m.name} ${m.composite_overall}`).join('; ');
-      rationale = `Filtered view (${activeModels.length} of ${d.models.length} models active). Scores: ${dims} → ${overallModel.composite_unrounded ?? overallModel.composite_overall}. Next: ${runnerStr || 'none'}.`;
-    }
+    const pp = overallModel.per_priority;
+    const dims = Object.keys(w).map(k => `${k === 'long_context' ? 'long context' : k} ${pp[k] ?? '—'}`).join(', ');
+    const runnerStr = others.slice(0, 4).map(m => `${m.name} ${m.composite_unrounded != null ? m.composite_unrounded.toFixed(2) : (m.composite_overall ?? '—')}`).join('; ');
+    const filterNote = isFiltered ? `Filtered view (${activeModels.length} of ${d.models.length} models active). ` : '';
+    const rationale = `${filterNote}Scores: ${dims} → ${overallModel.composite_unrounded != null ? overallModel.composite_unrounded.toFixed(2) : overallModel.composite_overall}. Next: ${runnerStr || 'none'}.`;
 
     winnerHtml = `
       <p class="section-label">Best overall · ${wSummary}${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>
@@ -1000,7 +1406,6 @@ function render(d) {
   }
 
   const html = `
-    ${renderFilterBar(d, activeModels)}
     ${winnerHtml}
 
     <p class="section-label">Best per priority${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>

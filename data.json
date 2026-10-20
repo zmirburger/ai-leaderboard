@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-19T03:50:16Z",
+  "last_updated": "2026-10-20T04:01:30Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -11,12 +11,12 @@
   "best_overall": {
     "model": "GPT-6.1 Sol",
     "composite": 78,
-    "rationale": "Computed from benchmarks: accuracy 90, long context 94, agent 76, cost 50 → 77.50. Next: Claude Opus 5.5 (Medium) 76.00; Gemini 3.8 Flash (Medium) 75.25; Claude Opus 5.5 (High) 74.75; Gemini 3.8 Flash (High) 74.25. Provisional on agent, cost (5/8 benchmarks measured, 3 inherited)."
+    "rationale": "Computed from benchmarks: accuracy 90, long context 94, agent 76, cost 50 → 77.50. Next: Claude Opus 5.5 (Medium) 76.00; Gemini 3.8 Flash (Medium) 75.00; Claude Opus 5.5 (High) 74.75; GPT-6 Luna 74.00. Provisional on agent, cost (5/8 benchmarks measured, 3 inherited)."
   },
   "best_per_priority": {
     "accuracy": {
       "model": "Claude Opus 5.5 (High)",
-      "summary": "AA Intelligence Index (high) 53.6 → 93 · BenchLM 86.6 → 100",
+      "summary": "AA Intelligence Index (high) 53.6 → 93 · BenchLM 86.7 → 100",
       "supporting": "AA Intelligence Index · BenchLM"
     },
     "long_context": {
@@ -66,19 +66,19 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 83.18,
+              "value": 83.24,
               "display": "83.2",
               "score": 96.1,
               "board_name": "Claude Fable 5.1",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -101,7 +101,7 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -124,7 +124,7 @@
               "board_name": "claude-fable-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -136,7 +136,7 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -148,7 +148,7 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -171,7 +171,7 @@
               "board_name": "claude-fable-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -183,7 +183,7 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -239,19 +239,19 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 83.18,
+              "value": 83.24,
               "display": "83.2",
               "score": 96.1,
               "board_name": "Claude Fable 5.1",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -274,7 +274,7 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -297,7 +297,7 @@
               "board_name": "claude-fable-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -309,7 +309,7 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -321,7 +321,7 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -344,7 +344,7 @@
               "board_name": "claude-fable-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -356,7 +356,7 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -411,19 +411,19 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 86.56,
-              "display": "86.6",
+              "value": 86.66,
+              "display": "86.7",
               "score": 100.0,
               "board_name": "Claude Opus 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -446,7 +446,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -469,7 +469,7 @@
               "board_name": "claude-opus-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -481,7 +481,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -493,7 +493,7 @@
               "board_name": "Claude Opus 5 (Medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -516,7 +516,7 @@
               "board_name": "claude-opus-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -528,7 +528,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -541,7 +541,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (medium) 51.2 → 89 · BenchLM 86.6 → 100",
+        "accuracy": "AA Intelligence Index (medium) 51.2 → 89 · BenchLM 86.7 → 100",
         "long_context": "AA Long-Context Reasoning (medium) 84.3% → 95",
         "agent": "DeepSWE (medium) 68.9% → 93 (inherited from claude-opus-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 52.5% → 82 · τ-Bench Banking (AA) (medium) 38.6% → 75 (inherited from Claude Opus 5 (Medium))",
         "cost": "DeepSWE $/task (medium) $3.29 → 42 (inherited from claude-opus-5 (medium)) · AA blended price (medium) $8.00/MTok → 20"
@@ -584,19 +584,19 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 86.56,
-              "display": "86.6",
+              "value": 86.66,
+              "display": "86.7",
               "score": 100.0,
               "board_name": "Claude Opus 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -619,7 +619,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -642,7 +642,7 @@
               "board_name": "claude-opus-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -654,7 +654,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -666,7 +666,7 @@
               "board_name": "Claude Opus 5 (High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -689,7 +689,7 @@
               "board_name": "claude-opus-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -701,7 +701,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -714,7 +714,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 53.6 → 93 · BenchLM 86.6 → 100",
+        "accuracy": "AA Intelligence Index (high) 53.6 → 93 · BenchLM 86.7 → 100",
         "long_context": "AA Long-Context Reasoning (high) 82.7% → 93",
         "agent": "DeepSWE (high) 72.8% → 98 (inherited from claude-opus-5 (high)) · Terminal-Bench 4.0 (AA) (high) 56.6% → 89 · τ-Bench Banking (AA) (high) 44.7% → 87 (inherited from Claude Opus 5 (High))",
         "cost": "DeepSWE $/task (high) $6.08 → 17 (inherited from claude-opus-5 (high)) · AA blended price (high) $8.00/MTok → 20"
@@ -758,19 +758,19 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 82.18,
+              "value": 82.22,
               "display": "82.2",
               "score": 94.9,
               "board_name": "Claude Sonnet 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -793,7 +793,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -816,7 +816,7 @@
               "board_name": "claude-sonnet-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -828,7 +828,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -840,7 +840,7 @@
               "board_name": "Claude Sonnet 5 (Non-reasoning, High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -863,7 +863,7 @@
               "board_name": "claude-sonnet-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -875,7 +875,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -931,19 +931,19 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 82.18,
+              "value": 82.22,
               "display": "82.2",
               "score": 94.9,
               "board_name": "Claude Sonnet 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -966,7 +966,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -989,7 +989,7 @@
               "board_name": "claude-sonnet-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1001,7 +1001,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1013,7 +1013,7 @@
               "board_name": "Claude Sonnet 5 (Non-reasoning, High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1036,7 +1036,7 @@
               "board_name": "claude-sonnet-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1048,7 +1048,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1083,9 +1083,9 @@
       "previous": "Claude Haiku 4.5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 74,
+      "composite_overall": 73,
       "per_priority": {
-        "accuracy": 73,
+        "accuracy": 72,
         "long_context": 87,
         "agent": 34,
         "cost": 100
@@ -1103,19 +1103,19 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 70.04,
-              "display": "70.0",
-              "score": 80.9,
+              "value": 67.23,
+              "display": "67.2",
+              "score": 77.6,
               "board_name": "Claude Haiku 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1138,7 +1138,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1161,7 +1161,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1187,7 +1187,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1202,12 +1202,12 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 37.8 → 66 · BenchLM 70.0 → 81",
+        "accuracy": "AA Intelligence Index (high) 37.8 → 66 · BenchLM 67.2 → 78",
         "long_context": "AA Long-Context Reasoning (high) 77.3% → 87",
         "agent": "Terminal-Bench 4.0 (AA) (high) 21.7% → 34 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $0.20/MTok → 100 · not on DeepSWE $/task"
       },
-      "composite_unrounded": 73.5,
+      "composite_unrounded": 73.25,
       "coverage": {
         "measured": 5,
         "total": 5,
@@ -1243,19 +1243,19 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 83.88,
-              "display": "83.9",
-              "score": 96.9,
+              "value": 84.05,
+              "display": "84.0",
+              "score": 97.0,
               "board_name": "GPT-6 Astra",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1278,7 +1278,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1301,7 +1301,7 @@
               "board_name": "gpt-6-astra (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1313,7 +1313,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1325,7 +1325,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1348,7 +1348,7 @@
               "board_name": "gpt-6-astra (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1360,7 +1360,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1373,7 +1373,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (medium) 49.6 → 86 · BenchLM 83.9 → 97",
+        "accuracy": "AA Intelligence Index (medium) 49.6 → 86 · BenchLM 84.0 → 97",
         "long_context": "AA Long-Context Reasoning (medium) 79.7% → 90",
         "agent": "DeepSWE (medium) 72.8% → 98 · Terminal-Bench 4.0 (AA) (medium) 49.5% → 78 · τ-Bench Banking (AA) (medium) 35.5% → 69",
         "cost": "DeepSWE $/task (medium) $3.08 → 44 · AA blended price (medium) $20.00/MTok → 0"
@@ -1415,19 +1415,19 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 84.07,
-              "display": "84.1",
-              "score": 97.1,
+              "value": 84.21,
+              "display": "84.2",
+              "score": 97.2,
               "board_name": "GPT-6.1 Sol",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1450,7 +1450,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1473,7 +1473,7 @@
               "board_name": "gpt-5-6-sol (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1485,7 +1485,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1497,7 +1497,7 @@
               "board_name": "GPT-5.6 Sol (Medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1520,7 +1520,7 @@
               "board_name": "gpt-5-6-sol (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1532,7 +1532,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1545,7 +1545,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (medium) 47.8 → 83 · BenchLM 84.1 → 97",
+        "accuracy": "AA Intelligence Index (medium) 47.8 → 83 · BenchLM 84.2 → 97",
         "long_context": "AA Long-Context Reasoning (medium) 83.3% → 94",
         "agent": "DeepSWE (medium) 61.1% → 82 (inherited from gpt-5-6-sol (medium)) · Terminal-Bench 4.0 (AA) (medium) 48.0% → 75 · τ-Bench Banking (AA) (medium) 36.5% → 71 (inherited from GPT-5.6 Sol (Medium))",
         "cost": "DeepSWE $/task (medium) $1.86 → 65 (inherited from gpt-5-6-sol (medium)) · AA blended price (medium) $4.00/MTok → 35"
@@ -1587,19 +1587,19 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 66.66,
-              "display": "66.7",
-              "score": 77.0,
+              "value": 66.56,
+              "display": "66.6",
+              "score": 76.8,
               "board_name": "GPT-6 Luna",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1622,7 +1622,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1645,7 +1645,7 @@
               "board_name": "gpt-5-6-luna (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1657,7 +1657,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1669,7 +1669,7 @@
               "board_name": "GPT-5.6 Luna (High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1692,7 +1692,7 @@
               "board_name": "gpt-5-6-luna (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1704,7 +1704,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1717,7 +1717,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 32.9 → 57 · BenchLM 66.7 → 77",
+        "accuracy": "AA Intelligence Index (high) 32.9 → 57 · BenchLM 66.6 → 77",
         "long_context": "AA Long-Context Reasoning (high) 79.3% → 90",
         "agent": "DeepSWE (high) 44.2% → 60 (inherited from gpt-5-6-luna (high)) · Terminal-Bench 4.0 (AA) (high) 4.5% → 7 · τ-Bench Banking (AA) (high) 25.2% → 49 (inherited from GPT-5.6 Luna (High))",
         "cost": "DeepSWE $/task (high) $0.78 → 100 (inherited from gpt-5-6-luna (high)) · AA blended price (high) $0.20/MTok → 100"
@@ -1760,19 +1760,19 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 64.7,
+              "value": 64.74,
               "display": "64.7",
               "score": 74.7,
               "board_name": "Gemini 3.1 Pro",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1795,7 +1795,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1818,7 +1818,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1830,7 +1830,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1842,7 +1842,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1865,7 +1865,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -1877,7 +1877,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1922,7 +1922,7 @@
         "Gemini 4 Pro"
       ],
       "per_priority": {
-        "accuracy": 92,
+        "accuracy": 94,
         "long_context": 90,
         "agent": 49,
         "cost": 47
@@ -1940,19 +1940,19 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 80.97,
-              "display": "81.0",
-              "score": 93.5,
+              "value": 82.93,
+              "display": "82.9",
+              "score": 95.7,
               "board_name": "Gemini 4 Argon",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1975,7 +1975,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -1998,7 +1998,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2010,7 +2010,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2022,7 +2022,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2045,7 +2045,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2057,7 +2057,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2070,7 +2070,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 52.6 → 91 · BenchLM 81.0 → 94",
+        "accuracy": "AA Intelligence Index (high) 52.6 → 91 · BenchLM 82.9 → 96",
         "long_context": "AA Long-Context Reasoning (high) 79.7% → 90",
         "agent": "DeepSWE (high) 11.7% → 16 (inherited from gemini-3-1-pro-preview (high)) · Terminal-Bench 4.0 (AA) (high) 57.1% → 90 · τ-Bench Banking (AA) 21.4% → 42 (inherited from Gemini 3.1 Pro Preview)",
         "cost": "DeepSWE $/task (high) $2.14 → 59 (inherited from gemini-3-1-pro-preview (high)) · AA blended price (high) $4.00/MTok → 35"
@@ -2080,7 +2080,7 @@
         "total": 8,
         "provisional": 3
       },
-      "composite_unrounded": 69.5,
+      "composite_unrounded": 70.0,
       "composite_overall": 70
     },
     {
@@ -2102,7 +2102,7 @@
         "Gemini 4 Pro"
       ],
       "per_priority": {
-        "accuracy": 92,
+        "accuracy": 94,
         "long_context": 90,
         "agent": 49,
         "cost": 47
@@ -2120,19 +2120,19 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 80.97,
-              "display": "81.0",
-              "score": 93.5,
+              "value": 82.93,
+              "display": "82.9",
+              "score": 95.7,
               "board_name": "Gemini 4 Argon",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2155,7 +2155,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2178,7 +2178,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2190,7 +2190,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2202,7 +2202,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2225,7 +2225,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2237,7 +2237,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2250,7 +2250,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 52.6 → 91 · BenchLM 81.0 → 94",
+        "accuracy": "AA Intelligence Index (high) 52.6 → 91 · BenchLM 82.9 → 96",
         "long_context": "AA Long-Context Reasoning (high) 79.7% → 90",
         "agent": "DeepSWE (high) 11.7% → 16 (inherited from gemini-3-1-pro-preview (high)) · Terminal-Bench 4.0 (AA) (high) 57.1% → 90 · τ-Bench Banking (AA) 21.4% → 42 (inherited from Gemini 3.1 Pro Preview)",
         "cost": "DeepSWE $/task (high) $2.14 → 59 (inherited from gemini-3-1-pro-preview (high)) · AA blended price (high) $4.00/MTok → 35"
@@ -2260,7 +2260,7 @@
         "total": 8,
         "provisional": 3
       },
-      "composite_unrounded": 69.5,
+      "composite_unrounded": 70.0,
       "composite_overall": 70
     },
     {
@@ -2274,7 +2274,7 @@
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
       "composite_overall": 75,
       "per_priority": {
-        "accuracy": 75,
+        "accuracy": 74,
         "long_context": 95,
         "agent": 72,
         "cost": 59
@@ -2292,19 +2292,19 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 69.25,
+              "value": 69.19,
               "display": "69.2",
-              "score": 80.0,
+              "score": 79.8,
               "board_name": "Gemini 3.8 Flash",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2327,7 +2327,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2350,7 +2350,7 @@
               "board_name": "gemini-3-8-flash (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2362,7 +2362,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2374,7 +2374,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2397,7 +2397,7 @@
               "board_name": "gemini-3-8-flash (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2409,7 +2409,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2427,7 +2427,7 @@
         "agent": "DeepSWE (medium) 71.0% → 96 · Terminal-Bench 4.0 (AA) (medium) 19.7% → 31 · τ-Bench Banking (AA) (medium) 45.8% → 89",
         "cost": "DeepSWE $/task (medium) $1.97 → 62 · AA blended price (medium) $1.50/MTok → 56"
       },
-      "composite_unrounded": 75.25,
+      "composite_unrounded": 75.0,
       "coverage": {
         "measured": 8,
         "total": 8,
@@ -2447,7 +2447,7 @@
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
       "composite_overall": 74,
       "per_priority": {
-        "accuracy": 76,
+        "accuracy": 75,
         "long_context": 92,
         "agent": 73,
         "cost": 56
@@ -2465,19 +2465,19 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 69.25,
+              "value": 69.19,
               "display": "69.2",
-              "score": 80.0,
+              "score": 79.8,
               "board_name": "Gemini 3.8 Flash",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2500,7 +2500,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2523,7 +2523,7 @@
               "board_name": "gemini-3-8-flash (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2535,7 +2535,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2547,7 +2547,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2570,7 +2570,7 @@
               "board_name": "gemini-3-8-flash (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2582,7 +2582,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2600,7 +2600,7 @@
         "agent": "DeepSWE (high) 73.8% → 100 · Terminal-Bench 4.0 (AA) (high) 19.7% → 31 · τ-Bench Banking (AA) (high) 44.9% → 88",
         "cost": "DeepSWE $/task (high) $2.36 → 55 · AA blended price (high) $1.50/MTok → 56"
       },
-      "composite_unrounded": 74.25,
+      "composite_unrounded": 74.0,
       "coverage": {
         "measured": 8,
         "total": 8,
@@ -2638,19 +2638,19 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 67.02,
-              "display": "67.0",
+              "value": 67.09,
+              "display": "67.1",
               "score": 77.4,
               "board_name": "Grok 4.6",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2673,7 +2673,7 @@
               "board_name": "Grok 4.7 (Low)",
               "effort": "low",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2696,7 +2696,7 @@
               "board_name": "grok-4-6 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2708,7 +2708,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2720,7 +2720,7 @@
               "board_name": "Grok 4.6 (Medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2743,7 +2743,7 @@
               "board_name": "grok-4-6 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2755,7 +2755,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2768,7 +2768,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 46.3 → 80 · BenchLM 67.0 → 77 (inherited from Grok 4.6)",
+        "accuracy": "AA Intelligence Index (high) 46.3 → 80 · BenchLM 67.1 → 77 (inherited from Grok 4.6)",
         "long_context": "AA Long-Context Reasoning (low) 80.0% → 90",
         "agent": "DeepSWE (medium) 67.5% → 91 (inherited from grok-4-6 (medium)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 39 · τ-Bench Banking (AA) (medium) 44.3% → 86 (inherited from Grok 4.6 (Medium))",
         "cost": "DeepSWE $/task (medium) $3.45 → 40 (inherited from grok-4-6 (medium)) · AA blended price (high) $3.00/MTok → 41"
@@ -2811,19 +2811,19 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
               "bench": "benchlm",
               "name": "BenchLM",
-              "value": 67.02,
-              "display": "67.0",
+              "value": 67.09,
+              "display": "67.1",
               "score": 77.4,
               "board_name": "Grok 4.6",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2846,7 +2846,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2869,7 +2869,7 @@
               "board_name": "grok-4-6 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2881,7 +2881,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2893,7 +2893,7 @@
               "board_name": "Grok 4.6 (High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2916,7 +2916,7 @@
               "board_name": "grok-4-6 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             },
             {
@@ -2928,7 +2928,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-10-19",
+              "as_of": "2026-10-20",
               "stale": false
             }
           ],
@@ -2941,7 +2941,7 @@
         }
       },
       "score_basis": {
-        "accuracy": "AA Intelligence Index (high) 46.3 → 80 · BenchLM 67.0 → 77 (inherited from Grok 4.6)",
+        "accuracy": "AA Intelligence Index (high) 46.3 → 80 · BenchLM 67.1 → 77 (inherited from Grok 4.6)",
         "long_context": "AA Long-Context Reasoning (high) 77.0% → 87",
         "agent": "DeepSWE (high) 65.2% → 88 (inherited from grok-4-6 (high)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 39 · τ-Bench Banking (AA) (high) 50.7% → 99 (inherited from Grok 4.6 (High))",
         "cost": "DeepSWE $/task (high) $4.38 → 30 (inherited from grok-4-6 (high)) · AA blended price (high) $3.00/MTok → 41"
@@ -2964,7 +2964,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
         "description": "Composite of 10 hard evals",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3010,43 +3010,43 @@
         "url": "https://benchlm.ai/compare",
         "description": "Composite across verified benchmarks",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
           {
             "model": "Claude Opus 5.5",
-            "value": "86.6"
+            "value": "86.7"
           },
           {
             "model": "GPT-6.1 Sol",
-            "value": "84.1"
+            "value": "84.2"
           },
           {
             "model": "GPT-6 Astra",
-            "value": "83.9"
+            "value": "84.0"
           },
           {
             "model": "Claude Fable 5.1",
             "value": "83.2"
           },
           {
-            "model": "Claude Sonnet 5.5",
-            "value": "82.2"
+            "model": "Gemini 4 Argon",
+            "value": "82.9"
           }
         ],
         "top3": [
           {
             "model": "Claude Opus 5.5",
-            "value": "86.6"
+            "value": "86.7"
           },
           {
             "model": "GPT-6.1 Sol",
-            "value": "84.1"
+            "value": "84.2"
           },
           {
             "model": "GPT-6 Astra",
-            "value": "83.9"
+            "value": "84.0"
           }
         ]
       }
@@ -3058,7 +3058,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning",
         "description": "Reasoning over ~100k-token document sets",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3106,7 +3106,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Long-horizon real-world SWE tasks (pass@1, best effort)",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3152,7 +3152,7 @@
         "url": "https://artificialanalysis.ai/evaluations/terminalbench",
         "description": "Agentic terminal tasks",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3198,7 +3198,7 @@
         "url": "https://artificialanalysis.ai/evaluations/tau2-bench",
         "description": "Tool use in banking customer-service flows",
         "lower_better": false,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3246,7 +3246,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Cost per task on the model's best DeepSWE run",
         "lower_better": true,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "tracked models",
         "top5": [
@@ -3292,7 +3292,7 @@
         "url": "https://artificialanalysis.ai/models",
         "description": "$/1M tokens, 3:1 input:output blend",
         "lower_better": true,
-        "as_of": "2026-10-19",
+        "as_of": "2026-10-20",
         "stale": false,
         "scope": "tracked models",
         "top5": [
@@ -3488,62 +3488,62 @@
   },
   "raw_benchmarks": {
     "benchlm": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
-        "Claude Opus 5.5": 86.56,
-        "GPT-6.1 Sol": 84.07,
-        "GPT-6 Astra": 83.88,
-        "Claude Fable 5.1": 83.18,
-        "Claude Sonnet 5.5": 82.18,
-        "Claude Fable 5": 81.27,
-        "Gemini 4 Argon": 80.97,
-        "Claude Opus 5": 79.63,
-        "GPT-6 Sol": 78.48,
-        "GPT-5.6 Sol": 75.32,
-        "Muse Wonder Full": 74.27,
-        "MiMo-V2.6-Pro": 73.57,
-        "GPT-5.5 Pro": 73.37,
-        "Muse Wonder": 71.16,
-        "GPT-5.6 Terra": 70.21,
-        "Claude Haiku 5.5": 70.04,
-        "Claude Opus 4.8": 70.01,
-        "Kimi K3": 69.87,
-        "Qwen3.8 Max": 69.66,
-        "Step 5 Preview": 69.44,
-        "GPT-5.5": 69.29,
-        "Gemini 3.8 Flash": 69.25,
-        "Claude Opus 4.7 (Adaptive)": 68.96,
-        "GPT-5.4 Pro": 68.6,
-        "Ling 3.1 Flash": 68.03,
-        "GLM-5.3": 67.88,
-        "Grok 4.6": 67.02,
-        "Gemini 3.7 Flash": 66.84,
-        "Claude Opus 4.7": 66.74,
-        "GPT-5.4": 66.7,
-        "GPT-6 Luna": 66.66,
-        "GPT-5.2 Pro": 66.65,
-        "Muse Spark 1.1": 66.02,
-        "Muse Spark 1.2": 65.84,
-        "DeepSeek V4.1 Flash 1017": 65.61,
-        "Claude Sonnet 5": 64.84,
-        "Gemini 3.1 Pro": 64.7,
-        "MiMo-V2.6-Flash": 64.51,
-        "GPT-5.6 Luna": 64.35,
-        "dots3-note Preview": 63.78,
-        "Grok 4.5": 63.28,
-        "DeepSeek V4 Pro 0813": 63.19,
-        "Qwen3.8-Flash-Next": 62.8,
-        "Gemini 3.6 Flash": 62.78,
-        "Muse Spark Open": 62.66,
-        "Qwen3.7 Max": 62.58,
-        "Claude Opus 4.6": 62.39,
-        "Ornith-1.5-397B": 62.33,
-        "Gemini 3.5 Flash": 61.88,
-        "Mistral Large 4": 61.51
+        "Claude Opus 5.5": 86.66,
+        "GPT-6.1 Sol": 84.21,
+        "GPT-6 Astra": 84.05,
+        "Claude Fable 5.1": 83.24,
+        "Gemini 4 Argon": 82.93,
+        "Claude Sonnet 5.5": 82.22,
+        "Claude Fable 5": 81.35,
+        "Claude Opus 5": 80.09,
+        "GPT-6 Sol": 78.6,
+        "GPT-5.6 Sol": 75.31,
+        "Muse Wonder Full": 74.76,
+        "MiMo-V2.6-Pro": 73.67,
+        "GPT-5.5 Pro": 73.48,
+        "Muse Wonder": 71.5,
+        "GPT-5.6 Terra": 70.19,
+        "Claude Opus 4.8": 69.97,
+        "Kimi K3": 69.95,
+        "Qwen3.8 Max": 69.73,
+        "Step 5 Preview": 69.57,
+        "GPT-5.5": 69.21,
+        "Gemini 3.8 Flash": 69.19,
+        "GPT-5.4 Pro": 68.7,
+        "Claude Opus 4.7 (Adaptive)": 68.69,
+        "Ling 3.1 Flash": 68.08,
+        "GLM-5.3": 67.96,
+        "Claude Haiku 5.5": 67.23,
+        "MiniMax M3.1 Flash": 67.1,
+        "Grok 4.6": 67.09,
+        "Gemini 3.7 Flash": 66.94,
+        "GPT-5.4": 66.72,
+        "GPT-5.2 Pro": 66.68,
+        "GPT-6 Luna": 66.56,
+        "Muse Spark 1.1": 66.08,
+        "Muse Spark 1.2": 65.9,
+        "DeepSeek V4.1 Flash 1017": 65.67,
+        "Claude Opus 4.7": 65.48,
+        "Claude Sonnet 5": 64.88,
+        "Gemini 3.1 Pro": 64.74,
+        "MiMo-V2.6-Flash": 64.59,
+        "GPT-5.6 Luna": 64.4,
+        "dots3-note Preview": 64.06,
+        "Grok 4.5": 63.31,
+        "DeepSeek V4 Pro 0813": 63.2,
+        "Qwen3.8-Flash-Next": 62.86,
+        "Gemini 3.6 Flash": 62.8,
+        "Muse Spark Open": 62.77,
+        "Qwen3.7 Max": 62.59,
+        "Claude Opus 4.6": 62.32,
+        "Ornith-1.5-397B": 62.28,
+        "Gemini 3.5 Flash": 61.91
       }
     },
     "deepswe": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "gpt-6-astra (xhigh)": 74.115,
         "gemini-3-8-flash (high)": 73.8255,
@@ -3618,7 +3618,7 @@
       }
     },
     "deepswe_cost": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "gpt-6-astra (xhigh)": 4.4291,
         "gemini-3-8-flash (high)": 2.3623,
@@ -3693,7 +3693,7 @@
       }
     },
     "metr": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "GPT-4 0314": 0.1224,
         "GPT-4 1106 (Inspect)": 0.1253,
@@ -3833,7 +3833,7 @@
       }
     },
     "aa_intelligence_index": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 57.6,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 56.0,
@@ -3870,6 +3870,7 @@
         "MiMo-V2.6-Pro": 46.3,
         "GPT-6 Astra (Low)": 45.8,
         "Qwen3.8 Max (0902)": 45.4,
+        "DeepSeek V4.1 Flash 1017 (Max)": 45.1,
         "Muse Spark 1.3 (Xhigh)": 45.1,
         "Claude Opus 5 (Medium)": 44.8,
         "GLM-5.3 (Max)": 44.8,
@@ -3881,6 +3882,7 @@
         "Kimi K3 (Max)": 43.6,
         "Claude Haiku 5.5 (Max)": 43.4,
         "Grok 4.6 (Medium)": 42.8,
+        "MiniMax-M3.1-Flash": 42.7,
         "GPT-6 Sol (High)": 42.4,
         "GPT-5.6 Sol (High)": 42.3,
         "Claude Opus 5.5 (Low, Default Fallback)": 42.3,
@@ -4532,7 +4534,7 @@
       }
     },
     "aa_lcr": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 84.6667,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 82.6667,
@@ -4569,6 +4571,7 @@
         "MiMo-V2.6-Pro": 86.3333,
         "GPT-6 Astra (Low)": 80.0,
         "Qwen3.8 Max (0902)": 80.3333,
+        "DeepSeek V4.1 Flash 1017 (Max)": 82.6667,
         "Muse Spark 1.3 (Xhigh)": 83.0,
         "Claude Opus 5 (Medium)": 82.0,
         "GLM-5.3 (Max)": 79.6667,
@@ -4580,6 +4583,7 @@
         "Kimi K3 (Max)": 88.6667,
         "Claude Haiku 5.5 (Max)": 82.6667,
         "Grok 4.6 (Medium)": 81.0,
+        "MiniMax-M3.1-Flash": 79.6667,
         "GPT-6 Sol (High)": 83.6667,
         "GPT-5.6 Sol (High)": 81.6667,
         "Claude Opus 5.5 (Low, Default Fallback)": 80.6667,
@@ -5114,7 +5118,7 @@
       }
     },
     "aa_price": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 8.0,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 4.0,
@@ -5150,6 +5154,7 @@
         "MiMo-V2.6-Pro": 0.544,
         "GPT-6 Astra (Low)": 20.0,
         "Qwen3.8 Max (0902)": 3.0,
+        "DeepSeek V4.1 Flash 1017 (Max)": 0.525,
         "Muse Spark 1.3 (Xhigh)": 2.0,
         "Claude Opus 5 (Medium)": 10.0,
         "GLM-5.3 (Max)": 2.15,
@@ -5161,6 +5166,7 @@
         "Kimi K3 (Max)": 6.0,
         "Claude Haiku 5.5 (Max)": 0.2,
         "Grok 4.6 (Medium)": 3.0,
+        "MiniMax-M3.1-Flash": 0.262,
         "GPT-6 Sol (High)": 4.0,
         "GPT-5.6 Sol (High)": 8.0,
         "Claude Opus 5.5 (Low, Default Fallback)": 8.0,
@@ -5547,7 +5553,7 @@
       }
     },
     "aa_terminalbench_v4": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "Claude Opus 5.5 (Max, Default Fallback)": 59.596,
         "Claude Sonnet 5.5 (Max, Default Fallback)": 63.6364,
@@ -5584,6 +5590,7 @@
         "MiMo-V2.6-Pro": 34.8485,
         "GPT-6 Astra (Low)": 41.9192,
         "Qwen3.8 Max (0902)": 38.8889,
+        "DeepSeek V4.1 Flash 1017 (Max)": 33.8384,
         "Muse Spark 1.3 (Xhigh)": 16.6667,
         "Claude Opus 5 (Medium)": 34.3434,
         "GLM-5.3 (Max)": 41.9192,
@@ -5595,6 +5602,7 @@
         "Kimi K3 (Max)": 12.6263,
         "Claude Haiku 5.5 (Max)": 32.8283,
         "Grok 4.6 (Medium)": 13.1313,
+        "MiniMax-M3.1-Flash": 25.7576,
         "GPT-6 Sol (High)": 26.2626,
         "GPT-5.6 Sol (High)": 20.7071,
         "Claude Opus 5.5 (Low, Default Fallback)": 31.3131,
@@ -5774,7 +5782,7 @@
       }
     },
     "aa_tau_banking": {
-      "fetched_at": "2026-10-19",
+      "fetched_at": "2026-10-20",
       "values": {
         "Claude Fable 5.1 (Max, Default Fallback)": 47.2165,
         "Claude Fable 5.1 (Xhigh, Default Fallback)": 45.7732,

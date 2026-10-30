@@ -327,11 +327,11 @@ def fetch_aa():
         return None
     raw = fetch(AA_URL, extra_headers={"x-api-key": key})
     if not raw:
-        return None
+        return {}
     try:
         items = json.loads(raw).get("data") or []
     except (json.JSONDecodeError, AttributeError):
-        return None
+        return {}
     out = {b: {} for b in list(AA_EVAL_KEYS) + ["aa_price"]}
     seen_keys = set()
     for it in items:
@@ -353,6 +353,8 @@ def fetch_aa():
         vals = out[bench]
         if vals and max(vals.values()) <= 1.0:
             out[bench] = {k: v * 100 for k, v in vals.items()}
+    if not any(bool(v) for v in out.values()):
+        return {}
     return out
 
 def fetch_benchlm():
@@ -417,20 +419,7 @@ def fetch_metr():
             continue
     return {"metr": out}
 
-def fetch_vectara():
-    """Factual consistency rate (100 - hallucination rate) from the HHEM README table."""
-    text = fetch("https://raw.githubusercontent.com/vectara/hallucination-leaderboard/main/README.md")
-    if not text:
-        return None
-    out = {}
-    for line in text.splitlines():
-        cols = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cols) < 3 or "/" not in cols[0]:
-            continue
-        m = re.match(r"([\d.]+)\s*%", cols[2])
-        if m:
-            out[cols[0]] = float(m.group(1))
-    return {"vectara": out}
+fetch_artificial_analysis = fetch_aa
 
 SOURCES = [
     ("Artificial Analysis API", fetch_aa),
@@ -638,12 +627,18 @@ def update_benchmarks(data):
     cache = data.setdefault("raw_benchmarks", {})
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     changes = []
+    sources_succeeded = 0
     for label, fn in SOURCES:
         print(f"Fetching {label}...")
         result = fn()
-        if not result:
+        if fn in (fetch_aa, fetch_artificial_analysis) and os.environ.get("AA_API_KEY"):
+            if not result or result == {} or not any(bool(v) for v in result.values()):
+                print(f"ERROR: AA_API_KEY is set in env, but {label} returned no data ({result})", file=sys.stderr)
+                sys.exit(1)
+        if not result or not any(bool(v) for v in result.values()):
             print("  kept cached values (no data)")
             continue
+        sources_succeeded += 1
         for bench_id, values in result.items():
             old = cache.get(bench_id, {}).get("values", {})
             if not values:
@@ -657,6 +652,9 @@ def update_benchmarks(data):
                 changes.append(f"{bench_id}: {len(values)} rows")
             cache[bench_id] = {"fetched_at": now, "values": values}
             print(f"  {bench_id}: {len(values)} rows")
+    if sources_succeeded == 0:
+        print("ERROR: 0 benchmark sources succeeded.", file=sys.stderr)
+        sys.exit(1)
     return changes
 
 def compute_scores(data):

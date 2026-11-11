@@ -1,6 +1,6 @@
 # AI Leader Dashboard
 
-Daily-refreshed view of the leading AI model across three priorities.
+Daily-refreshed view of the leading AI model across four priorities.
 
 **Live URL:** https://airank.zmirburger.com/ — bookmark on phone home screen for one-tap access.
 
@@ -13,12 +13,12 @@ Daily-refreshed view of the leading AI model across three priorities.
 | Autonomous agent | 25% |
 | Cost efficiency (cost / task) | 25% |
 
-To change weights, edit `data.json` and re-run `refresh.py`.
+To change weights, edit `data.json` and re-run `refresh.py` (or adjust custom weight sliders in the dashboard UI).
 
 ## Refresh
 
 - **Automatic:** daily at 8am MYT (00:00 UTC) via GitHub Actions
-- **Manual:** ask Claude to "refresh my AI dashboard" — runs locally and pushes
+- **Manual:** ask Claude / Antigravity to "refresh my AI dashboard" — runs locally and pushes
 
 ## Files
 
@@ -28,20 +28,8 @@ To change weights, edit `data.json` and re-run `refresh.py`.
 | `data.json` | Current scores + model info |
 | `refresh.py` | Scraper that updates data.json |
 | `sources.md` | All source URLs being scraped |
-| `backup.md` | Backup instructions |
-| `CLAUDE.md` | Project context for Claude |
+| `CLAUDE.md` | Project context |
 | `.github/workflows/daily-refresh.yml` | Cron config |
-
-## Claude tab (Archived / Hidden)
-
-Archived in `data.json` under `_archived_claude_lens`. To restore, rename back to `claude_lens`.
-
-- **Capability** — every Claude tier (Fable/Opus/Sonnet) × reasoning-effort level (low → max), ranked by estimated capability.
-- **Max plan cost** — relative Claude Max quota burn (× lightest combo).
-
-## Cost vs intelligence tab (Archived / Hidden)
-
-Archived in `data.json` under `_archived_cost_efficiency`. To restore, rename back to `cost_efficiency`.
 
 ## Tracked benchmarks
 
@@ -52,7 +40,7 @@ Archived in `data.json` under `_archived_cost_efficiency`. To restore, rename ba
 
 ## Tracked vendors
 
-Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT Astra/Sol/Luna), Google (Gemini), xAI (Grok)
+Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT Astra/Sol/Luna), Google (Gemini Carbon/Argon/Pro/Flash), xAI (Grok)
 
 ## Hosting
 

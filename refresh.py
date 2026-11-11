@@ -52,7 +52,7 @@ def load_data():
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
 
 def save_data(data):
-    DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    DATA_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
 
 def _extract_iso_date(text):
     date_match = re.search(r"(\w+ \d{1,2}, \d{4})", text[:5000])
@@ -99,6 +99,69 @@ def _find_best_match(soup, pattern, include_body=False):
 
 def _result(name, soup_text, url):
     return (name, _extract_iso_date(soup_text), "(Auto-detected from release notes - full changelog at link)", url)
+
+_AA_LEADERBOARD_URL = "https://artificialanalysis.ai/leaderboards/models"
+_AA_FREE_API_URL = "https://artificialanalysis.ai/api/v2/language/models/free"
+_AA_RSC_SCORES = {
+    "aa_lcr": "artificial-analysis-long-context-reasoning",
+    "aa_terminalbench_v4": "terminalbench-4-0",
+    "aa_tau_banking": "tau3-banking",
+}
+_AA_MERGE_BENCHES = {"aa_lcr", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
+_aa_rsc_cache = None
+
+def _get_aa_rsc():
+    """Fetch and decode Artificial Analysis Next.js RSC stream once per run.
+    Returns (models_list, releases_list)."""
+    global _aa_rsc_cache
+    if _aa_rsc_cache is not None:
+        return _aa_rsc_cache
+    html = fetch(_AA_LEADERBOARD_URL)
+    if not html:
+        _aa_rsc_cache = ([], [])
+        return _aa_rsc_cache
+    chunks = []
+    for m in re.finditer(r'self\.__next_f\.push\(\[1,\s*("(?:\\.|[^"\\])*")\]\)', html):
+        try:
+            chunks.append(json.loads(m.group(1)))
+        except json.JSONDecodeError:
+            continue
+    stream = "".join(chunks)
+    decoder = json.JSONDecoder()
+    models_arr, releases_arr = [], []
+    i = 0
+    while (idx := stream.find("[{", i)) != -1:
+        try:
+            arr, end = decoder.raw_decode(stream, idx)
+            if isinstance(arr, list) and arr and isinstance(arr[0], dict):
+                keys = arr[0].keys()
+                if "scores" in keys and "name" in keys and len(arr) > len(models_arr):
+                    models_arr = arr
+                elif "releaseDate" in keys and "creator" in keys and len(arr) > len(releases_arr):
+                    releases_arr = arr
+            i = end
+        except json.JSONDecodeError:
+            i = idx + 2
+    _aa_rsc_cache = (models_arr, releases_arr)
+    return _aa_rsc_cache
+
+def _find_aa_release(creator_names, pattern):
+    """Find highest-version release matching pattern in AA's releases feed."""
+    _, releases_arr = _get_aa_rsc()
+    candidates = []
+    for rel in releases_arr:
+        cname = ((rel.get("creator") or {}).get("name") or "").strip()
+        if cname not in creator_names:
+            continue
+        rname = _UNICODE_HYPHENS.sub("-", str(rel.get("name") or ""))
+        m = re.search(pattern, rname)
+        if m:
+            ver_str = m.group(1)
+            candidates.append((_parse_version(ver_str), ver_str, str(rel.get("releaseDate") or "")))
+    if not candidates:
+        return None
+    _, ver_str, rdate = max(candidates, key=lambda x: (x[0], x[2]))
+    return ver_str, rdate
 
 # ---------- Anthropic ----------
 
@@ -150,26 +213,14 @@ def detect_anthropic_haiku():
 
 # ---------- OpenAI ----------
 
-_OPENAI_URL = "https://help.openai.com/en/articles/9624314-model-release-notes"
-_openai_soup = None
-
-def _get_openai_soup():
-    global _openai_soup
-    if _openai_soup is None:
-        html = fetch(_OPENAI_URL)
-        _openai_soup = BeautifulSoup(html, "html.parser") if html else None
-    return _openai_soup
-
 def _detect_openai_tier(tier):
     """GPT-6 ships as three tiers (Astra > Sol > Luna), versioned independently
-    (e.g. GPT-6.1 Sol next to GPT-6 Astra)."""
-    soup = _get_openai_soup()
-    if not soup:
+    (e.g. GPT-6.1 Sol next to GPT-6 Astra). Uses AA releases feed since help.openai.com returns 403."""
+    hit = _find_aa_release(("OpenAI",), rf"\bGPT-(\d+(?:\.\d+)?)[ -]{tier}\b")
+    if not hit:
         return None
-    version = _find_best_match(soup, rf"GPT-(\d+(?:\.\d+)?)[ -]{tier}\b", include_body=True)
-    if not version:
-        return None
-    return _result(f"GPT-{version} {tier}", soup.get_text(" ", strip=True), _OPENAI_URL)
+    version, rdate = hit
+    return (f"GPT-{version} {tier}", rdate, "(Auto-detected from Artificial Analysis releases)", _AA_LEADERBOARD_URL)
 
 def detect_openai_astra():
     return _detect_openai_tier("Astra")
@@ -255,14 +306,20 @@ def _get_xai_soup():
 def detect_grok():
     # xAI dropped the Expert/Fast split with Grok 4.5 — one unified model line.
     # Suffixed legacy names ("Grok 4.1 Fast") are excluded so they can't win.
+    aa_hit = _find_aa_release(("SpaceXAI", "xAI"), r"\bGrok[ -]?(\d+(?:\.\d+)?)(?!\.?\d)(?!\s+(?:Expert|Fast|Build)\b)")
     soup = _get_xai_soup()
-    if not soup:
-        return None
-    best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)(?!\.?\d)(?!\s+(?:Expert|Fast)\b)")
-    if not best:
-        return None
-    version = best if isinstance(best, str) else best[0]
-    return _result(f"Grok {version}", soup.get_text(" ", strip=True), _XAI_URL)
+    soup_ver, soup_date = None, ""
+    if soup:
+        best = _find_best_match(soup, r"Grok[ -]?(\d+(?:\.\d+)?)(?!\.?\d)(?!\s+(?:Expert|Fast)\b)")
+        if best:
+            soup_ver = best if isinstance(best, str) else best[0]
+            soup_date = _extract_iso_date(soup.get_text(" ", strip=True))
+    if aa_hit and (not soup_ver or _parse_version(aa_hit[0]) > _parse_version(soup_ver)):
+        return (f"Grok {aa_hit[0]}", aa_hit[1], "(Auto-detected from Artificial Analysis releases)", _XAI_URL)
+    if soup_ver:
+        rdate = soup_date or (aa_hit[1] if aa_hit and _parse_version(aa_hit[0]) == _parse_version(soup_ver) else "")
+        return (f"Grok {soup_ver}", rdate, "(Auto-detected from release notes - full changelog at link)", _XAI_URL)
+    return None
 
 # ---------- tier detector registry ----------
 
@@ -326,48 +383,61 @@ def update_releases(data):
 # the board (not just a top 3), or None when the fetch/parse fails. Values are in
 # natural units: percentages 0-100, hours, USD.
 
-AA_URL = "https://artificialanalysis.ai/api/v2/data/llms/models"
-AA_EVAL_KEYS = {
-    "aa_intelligence_index": ["artificial_analysis_intelligence_index"],
-    "aa_lcr": ["lcr", "aa_lcr"],
-    "aa_terminalbench_v4": ["terminalbench_v4_0"],
-    "aa_tau_banking": ["tau_banking"],
-}
+def _supplement_aa_free_api(out, key):
+    """Optionally backfill historical Intelligence Index v5.0 & blended price via AA Free V2 API."""
+    for page in range(1, 10):
+        raw = fetch(f"{_AA_FREE_API_URL}?page={page}", retries=1, extra_headers={"x-api-key": key})
+        if not raw:
+            break
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            break
+        for it in payload.get("data") or []:
+            name = it.get("name")
+            if not name:
+                continue
+            ii = (it.get("evaluations") or {}).get("artificial_analysis_intelligence_index")
+            if isinstance(ii, (int, float)):
+                out["aa_intelligence_index"].setdefault(name, float(ii))
+            pricing = it.get("pricing") or {}
+            inp, outp = pricing.get("price_1m_input_tokens"), pricing.get("price_1m_output_tokens")
+            if isinstance(inp, (int, float)) and isinstance(outp, (int, float)):
+                blended = (3.0 * float(inp) + float(outp)) / 4.0
+                if blended > 0:
+                    out["aa_price"].setdefault(name, blended)
+        if not (payload.get("pagination") or {}).get("has_more"):
+            break
 
 def fetch_aa():
-    """Artificial Analysis free data API. Needs AA_API_KEY (repo secret)."""
-    key = os.environ.get("AA_API_KEY")
-    if not key:
-        print("  skipped (AA_API_KEY not set)")
-        return None
-    raw = fetch(AA_URL, extra_headers={"x-api-key": key})
-    if not raw:
-        return {}
-    try:
-        items = json.loads(raw).get("data") or []
-    except (json.JSONDecodeError, AttributeError):
-        return {}
-    out = {b: {} for b in list(AA_EVAL_KEYS) + ["aa_price"]}
-    seen_keys = set()
-    for it in items:
+    """Artificial Analysis leaderboard RSC stream (+ optional Free V2 API supplement)."""
+    models_arr, _ = _get_aa_rsc()
+    out = {b: {} for b in ("aa_intelligence_index", "aa_lcr", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
+    for it in models_arr:
         name = it.get("name")
         if not name:
             continue
-        evals = it.get("evaluations") or {}
-        seen_keys.update(evals.keys())
-        for bench, candidates in AA_EVAL_KEYS.items():
-            v = next((evals[k] for k in candidates if isinstance(evals.get(k), (int, float))), None)
-            if v is not None:
+        ii = it.get("intelligenceIndex")
+        if isinstance(ii, (int, float)):
+            out["aa_intelligence_index"][name] = float(ii)
+        scores = it.get("scores") or {}
+        for bench, score_key in _AA_RSC_SCORES.items():
+            v = scores.get(score_key)
+            if isinstance(v, (int, float)):
                 out[bench][name] = float(v)
-        price = (it.get("pricing") or {}).get("price_1m_blended_3_to_1")
-        if isinstance(price, (int, float)) and price > 0:
-            out["aa_price"][name] = float(price)
-    print(f"  {len(items)} models; evaluation fields: {sorted(seen_keys)}")
-    # AA reports most evals as 0-1 fractions; store as percentages.
-    for bench in ("aa_lcr", "aa_terminalbench_v4", "aa_tau_banking"):
+        inp, outp = it.get("price1mInputTokens"), it.get("price1mOutputTokens")
+        if isinstance(inp, (int, float)) and isinstance(outp, (int, float)):
+            blended = (3.0 * float(inp) + float(outp)) / 4.0
+            if blended > 0:
+                out["aa_price"][name] = blended
+    for bench in _AA_RSC_SCORES:
         vals = out[bench]
         if vals and max(vals.values()) <= 1.0:
-            out[bench] = {k: v * 100 for k, v in vals.items()}
+            out[bench] = {k: v * 100.0 for k, v in vals.items()}
+    key = os.environ.get("AA_API_KEY")
+    if key:
+        _supplement_aa_free_api(out, key)
+    print(f"  {len(models_arr)} RSC models; counts: " + ", ".join(f"{k}={len(v)}" for k, v in out.items()))
     if not any(bool(v) for v in out.values()):
         return {}
     return out
@@ -411,33 +481,79 @@ def fetch_deepswe():
             cost[key] = float(c)
     return {"deepswe": pass1, "deepswe_cost": cost}
 
+def _format_metr_key(raw_key):
+    """Convert METR v1.1 snake_case model key (e.g. claude_opus_4_6_inspect) to display name."""
+    k = re.sub(r"_inspect$", "", raw_key.strip())
+    date_tag = ""
+    dm = re.search(r"_(20\d\d)[_]?(\d\d)[_]?(\d\d)$", k)
+    if dm:
+        date_tag = f" ({dm.group(1)}-{dm.group(2)}-{dm.group(3)})"
+        k = k[:dm.start()]
+    k = re.sub(r"(?<=\d)_(?=\d)", ".", k)
+    if k.startswith("claude_"):
+        rest = " ".join(w.capitalize() for w in k[len("claude_"):].split("_"))
+        return f"Claude {rest}{date_tag}"
+    if k.startswith("gpt_"):
+        parts = k[len("gpt_"):].split("_")
+        ver = parts[0]
+        tail = " " + " ".join("4o" if w == "4o" else w.capitalize() for w in parts[1:]) if len(parts) > 1 else ""
+        return f"GPT-{ver}{tail}{date_tag}"
+    if k == "gpt2":
+        return "GPT-2"
+    if k.startswith("gemini_"):
+        rest = " ".join(w.capitalize() for w in k[len("gemini_"):].split("_"))
+        return f"Gemini {rest}{date_tag}"
+    if k.startswith("davinci_"):
+        return k.replace("_", "-") + date_tag
+    if k in ("o1", "o3", "o1_preview"):
+        return k.replace("_", "-") + date_tag
+    return k.replace("_", " ") + date_tag
+
 def fetch_metr():
-    """50%-reliability time horizon in hours. Pre-release '(early)' entries are skipped."""
-    html = fetch("https://metr.org/time-horizons/")
-    if not html:
-        return None
-    m = re.search(r'var\s+thData\s*=\s*(\{.*?\})\s*;', html, re.DOTALL)
-    if not m:
-        return None
-    try:
-        agents = json.loads(m.group(1)).get("agents", {})
-    except json.JSONDecodeError:
-        return None
+    """50%-reliability time horizon in hours (METR-Horizon-v1.1). Pre-release 'early' entries are skipped."""
     out = {}
-    for name, info in agents.items():
-        coef, intercept = info.get("coefficient"), info.get("intercept")
-        if "(early)" in name.lower() or not coef or intercept is None:
-            continue
-        try:
-            out[name] = math.exp(-intercept / coef) / 60
-        except (OverflowError, ValueError):
-            continue
-    return {"metr": out}
+    html = fetch("https://metr.org/time-horizons/")
+    if html:
+        pos = html.find("benchmarkDataV1_1")
+        if pos != -1:
+            brace = html.find("{", pos)
+            if brace != -1:
+                try:
+                    obj, _ = json.JSONDecoder().raw_decode(html, brace)
+                    for raw_key, info in (obj.get("results") or {}).items():
+                        if raw_key in ("all_time_stitched", "from_2023_on") or "early" in raw_key.lower():
+                            continue
+                        p50 = ((info.get("metrics") or {}).get("p50_horizon_length") or {}).get("estimate")
+                        if isinstance(p50, (int, float)) and p50 > 0:
+                            out[_format_metr_key(raw_key)] = float(p50) / 60.0
+                except json.JSONDecodeError:
+                    pass
+    if not out:
+        yaml_raw = fetch("https://metr.org/assets/benchmark_results_1_1.yaml")
+        if yaml_raw:
+            cur = None
+            in_p50 = False
+            for line in yaml_raw.splitlines():
+                km = re.match(r"^  ([a-z0-9_]+):\s*$", line)
+                if km:
+                    cur = km.group(1)
+                    in_p50 = False
+                elif re.match(r"^\s+p50_horizon_length:\s*$", line):
+                    in_p50 = True
+                elif in_p50 and cur:
+                    em = re.match(r"^\s+estimate:\s*([0-9.]+)\s*$", line)
+                    if em:
+                        if cur not in ("all_time_stitched", "from_2023_on") and "early" not in cur.lower():
+                            val = float(em.group(1))
+                            if val > 0:
+                                out[_format_metr_key(cur)] = val / 60.0
+                        in_p50 = False
+    return {"metr": out} if out else None
 
 fetch_artificial_analysis = fetch_aa
 
 SOURCES = [
-    ("Artificial Analysis API", fetch_aa),
+    ("Artificial Analysis", fetch_aa),
     ("BenchLM", fetch_benchlm),
     ("DeepSWE", fetch_deepswe),
     ("METR time horizons", fetch_metr),
@@ -456,9 +572,9 @@ BENCHMARKS = [
     dict(id="metr", priority="agent", name="METR Time Horizon", unit="hours", scale="log", higher_better=True, reference="board",
          url="https://metr.org/time-horizons/", description="Task length completed at 50% reliability"),
     dict(id="aa_terminalbench_v4", priority="agent", name="Terminal-Bench 4.0 (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/terminalbench", description="Agentic terminal tasks"),
+         url="https://artificialanalysis.ai/evaluations/terminalbench-4-0", description="Agentic terminal tasks"),
     dict(id="aa_tau_banking", priority="agent", name="τ-Bench Banking (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/tau2-bench", description="Tool use in banking customer-service flows"),
+         url="https://artificialanalysis.ai/evaluations/tau3-banking", description="Tool use in banking customer-service flows"),
     dict(id="aa_intelligence_index", priority="accuracy", name="AA Intelligence Index", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
     dict(id="benchlm", priority="accuracy", name="BenchLM", unit="score", scale="linear", higher_better=True, reference="board",
@@ -502,7 +618,7 @@ TARGET_EFFORT_MAP = {
     "luna": "high",
     "gemini": "high",
     "carbon": "medium",
-    "argon": "medium",
+    "argon": "high",
 }
 
 def get_target_effort(model):
@@ -613,10 +729,10 @@ def resolve(model, idx, bench):
                 return [(v[0], v[1], False) for v in chosen]
     mine = _parse_version(model["name"])
     fams = {_family(k) for k in keys}
-    # Only inherit across a gap of less than one major version (Opus 4.7 -> 5.5 yes,
-    # Grok 3 -> 4.7 no): an older-generation model says little about a new one.
+    # Only inherit within the same major version (Opus 5 -> 5.5 yes, Gemini 3.1 -> 4.0 no):
+    # an older major generation says little about a new architecture.
     older = [(k, _parse_version(k)) for k in idx
-             if _family(k) in fams and 0 < _parse_version(k) < mine and mine - _parse_version(k) < 1.0]
+             if _family(k) in fams and 0 < _parse_version(k) < mine and int(_parse_version(k)) == int(mine)]
     if not older:
         return []
     k = max(older, key=lambda kv: kv[1])[0]
@@ -660,7 +776,18 @@ def update_benchmarks(data):
             if not values:
                 print(f"  {bench_id}: empty, kept cache ({len(old)} rows)")
                 continue
-            if old and len(values) < len(old) / 2:
+            if bench_id == "aa_intelligence_index":
+                if len(values) < 50:
+                    print(f"  {bench_id}: only {len(values)} rows, looks like a broken parse; kept cache")
+                    continue
+                if old and max(old.values(), default=0) >= 58.0:
+                    values = {**old, **values}
+            elif bench_id in _AA_MERGE_BENCHES:
+                if len(values) < 25:
+                    print(f"  {bench_id}: only {len(values)} rows, looks like a broken parse; kept cache")
+                    continue
+                values = {**old, **values}
+            elif old and len(values) < len(old) / 2:
                 print(f"  {bench_id}: only {len(values)} rows vs {len(old)} cached, looks like a broken parse; kept cache")
                 continue
             values = {k: round(v, 4) for k, v in values.items()}

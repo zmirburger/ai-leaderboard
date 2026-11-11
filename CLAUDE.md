@@ -25,28 +25,21 @@ Personal dashboard tracking the current leading AI model across Zmir's four prio
 | "Drop benchmark Z" | Remove its `BENCHMARKS` entry (and fetcher if unused) in refresh.py; its `raw_benchmarks` cache entry is then ignored |
 | "A score looks wrong" | Open the dashboard's Score breakdown tab: it lists every raw input. Fix the source or name matching (add to the model's `aliases` in data.json); never hand-edit `per_priority` |
 | "Change schedule" | Edit cron expression in `.github/workflows/daily-refresh.yml` |
-| "Update the cost/value table" (paste an Artificial Analysis leaderboard screenshot) | Transcribe rows into `data.json`'s `cost_efficiency.entries` (model, vendor, context_window, intelligence_index, cost_per_task_usd), bump `last_manual_update`. Frontier/dominated-option logic is computed client-side in index.html — no manual ranking needed. |
 
 ## Composite calculation
 
 All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 
 1. **Raw values:** each source's full leaderboard goes into `data.json` → `raw_benchmarks` (a cache with `fetched_at`). A failed fetch, or one that returns fewer than half the cached rows, keeps the old values, which are shown with "as of <date>" once more than 14 days old.
-2. **Name matching & reasoning effort:** `norm_name()` canonicalizes names. Each model targets Zmir's configured reasoning effort: **medium** for heavyweight tiers (`Opus`, `Fable`, `Grok`, `Sol`, `Astra`); **high** for fast/cheaper tiers (`Sonnet`, `Haiku`, `Luna`, `Gemini`). Scrapers pick the target effort run, falling back to the closest available or board default.
+2. **Name matching & reasoning effort:** `norm_name()` canonicalizes names. Each model targets Zmir's configured reasoning effort: **medium** for heavyweight tiers (`Opus`, `Fable`, `Carbon`, `Grok`, `Sol`, `Astra`); **high** for fast/cheaper or single-effort tiers (`Sonnet`, `Haiku`, `Luna`, `Argon`, `Gemini`). Scrapers pick the target effort run, falling back to the closest available or board default.
 3. **Normalization (0–100):** linear benchmarks = value ÷ best on the whole board × 100. METR hours = −25 per doubling from the best. Cost is log-scaled across the tracked models only: cheapest 100, priciest 0 (a fixed −25/doubling clamped everyone to 0 once $0.20 GPT-6 Luna joined).
 4. **Priority score** = mean of that priority's benchmark scores. Status is `measured`, `partial` (some boards don't list the model), `provisional` (uses inherited values) or `none`. Coverage ratios (`measured/total`) are computed overall and per priority.
-5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board, but only when that version is less than 1.0 older (Opus 4.7 → 5.5 yes, Grok 3 → 4.7 no). It's flagged Provisional with its coverage ratio (e.g. `5/8`) and replaced automatically once the board lists the model. A board that hasn't directly tested any tracked model released in the last 90 days (`LIVE_BOARD_DAYS`) is dropped (`dropped_benchmarks` in data.json) instead of feeding inherited values forever — AA retired IFBench/Terminal-Bench Hard/τ²-Bench, and Vectara HHEM was dropped on 2026-10-12.
+5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board within the same major version (`Opus 5 → 5.5` yes, `Gemini 3.1 → 4.0` no). It's flagged Provisional with its coverage ratio (e.g. `5/8`) and replaced automatically once the board lists the model. A board that hasn't directly tested any tracked model released in the last 90 days (`LIVE_BOARD_DAYS`) is dropped (`dropped_benchmarks` in data.json) instead of feeding inherited values forever — AA retired IFBench/Terminal-Bench Hard/τ²-Bench, and Vectara HHEM was dropped on 2026-10-12.
 6. **Composite** = weighted mean over the priorities at least half the models have a score for (`composite_basis.included`), with the weights rescaled. A model missing one of those priorities is unranked (`composite_basis.unranked`) rather than scored on fewer priorities, so every ranked model is compared on the same mix.
 
-Artificial Analysis data needs the `AA_API_KEY` repo secret (free key from artificialanalysis.ai). Without it the AA benchmarks keep their cached values, and long context has no source at all.
+Artificial Analysis data is fetched directly from AA's public `leaderboards/models` Next.js RSC stream (Intelligence Index v5.0, LCR, Terminal-Bench 4.0, τ-Bench Banking, and 3:1 blended pricing), optionally supplemented by `AA_API_KEY` on `/api/v2/language/models/free`.
 
 The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority.
-
-## Cost vs intelligence (`data.json` → `_archived_cost_efficiency`) [Archived / Hidden]
-
-Separate from the composite — this is a "given two options of similar capability, which one is wasting money" lens, sourced from Artificial Analysis' model leaderboard (Intelligence Index vs $/task per model×reasoning-effort row). Manually refreshed (the AA page is JS-rendered) by pasting a fresh screenshot and transcribing rows into `cost_efficiency.entries`. The dashboard's "Cost vs intelligence" tab computes the cost/intelligence Pareto frontier client-side and flags every dominated entry with which frontier option beats it outright (cheaper, smarter, or both) — e.g. it's how "Opus xhigh over Fable 5" or "Opus medium over Sonnet max" type calls get surfaced automatically instead of eyeballed. It also ranks the frontier by intelligence-per-dollar to surface a "Top 3 for everyday tasks" pick.
-
-**Scope: Zmir's shortlist only** — Claude Sonnet & Opus (every reasoning effort: low/medium/high/xhigh/max) vs Gemini vs Grok. Not the full AA roster (no GPT, Kimi, Qwen, GLM, etc.) and not Claude Fable — leave those out even if they're in the screenshot. When AA doesn't publish a given Claude effort level (or a Gemini/Grok row), set `"estimated": true` and write a one-line `estimate_basis` explaining the interpolation — don't silently guess. Replace estimated entries with real numbers the next time a screenshot covers them.
 
 ## Stack
 

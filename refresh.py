@@ -212,6 +212,20 @@ def detect_gemini_flash():
     version = best if isinstance(best, str) else best[0]
     return _result(f"Gemini {version} Flash", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
+def detect_gemini_carbon():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Carbon\b", include_body=True)
+    if not best:
+        best = _find_best_match(soup, r"Carbon (\d+(?:\.\d+)?)", include_body=True)
+        if best:
+            version = best if isinstance(best, str) else best[0]
+            return _result(f"Gemini {version} Carbon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Carbon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
 def detect_gemini_argon():
     soup = _get_google_soup()
     if not soup:
@@ -258,6 +272,7 @@ TIER_DETECTORS = {
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
     ("Google",    "Pro"):     detect_gemini_pro,
+    ("Google",    "Carbon"):  detect_gemini_carbon,
     ("Google",    "Argon"):   detect_gemini_argon,
     ("Google",    "Flash"):   detect_gemini_flash,
     ("OpenAI",    "Astra"):   detect_openai_astra,
@@ -486,6 +501,7 @@ TARGET_EFFORT_MAP = {
     "haiku": "high",
     "luna": "high",
     "gemini": "high",
+    "carbon": "medium",
     "argon": "medium",
 }
 

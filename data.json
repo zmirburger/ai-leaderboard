@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-13T02:35:49Z",
+  "last_updated": "2026-11-13T05:42:33Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {

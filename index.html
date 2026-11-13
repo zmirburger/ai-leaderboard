@@ -555,7 +555,7 @@ function renderDebugTab(d) {
         <td>${inComp && v != null ? (v * eff).toFixed(2) : '—'}</td>
       </tr><tr><td colspan="5" class="dbg-basis">${inputs.join('<br>') || 'No benchmark data yet.'}</td></tr>`;
     }).join('');
-    const formula = cb.included.map(k => `${pp[k]}×${(w[k] / incW).toFixed(2)}`).join(' + ') + ` = ${m.composite_unrounded ?? '—'} → ${m.composite_overall ?? '—'}`;
+    const formula = cb.included.map(k => `${pp[k] ?? '—'}×${(w[k] / incW).toFixed(2)}`).join(' + ') + ` = ${m.composite_unrounded ?? '—'} → ${m.composite_overall ?? '—'}`;
     return `<div class="dbg-card">
       <div class="dbg-head">
         <div class="model-name-row"><p class="model-name">${idx + 1}. ${esc(m.name)}</p>${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}${m.target_effort ? `<span class="tier-chip">${esc(m.target_effort)} effort</span>` : ''}${isProvisional(m) ? `<span class="calibrating-chip" title="${cov.measured}/${cov.total} benchmarks measured">Provisional (${cov.measured}/${cov.total})</span>` : `<span class="new-chip">${cov.measured}/${cov.total} measured</span>`}</div>

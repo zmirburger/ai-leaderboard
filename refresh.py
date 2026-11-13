@@ -291,6 +291,20 @@ def detect_gemini_argon():
     version = best if isinstance(best, str) else best[0]
     return _result(f"Gemini {version} Argon", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
+def detect_gemini_hydrogen():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Hydrogen\b", include_body=True)
+    if not best:
+        best = _find_best_match(soup, r"Hydrogen (\d+(?:\.\d+)?)", include_body=True)
+        if best:
+            version = best if isinstance(best, str) else best[0]
+            return _result(f"Gemini {version} Hydrogen", soup.get_text(" ", strip=True), _GOOGLE_URL)
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Hydrogen", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
 # ---------- xAI ----------
 
 _XAI_URL = "https://docs.x.ai/developers/release-notes"
@@ -328,10 +342,11 @@ TIER_DETECTORS = {
     ("Anthropic", "Opus"):    detect_anthropic_opus,
     ("Anthropic", "Sonnet"):  detect_anthropic_sonnet,
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
-    ("Google",    "Pro"):     detect_gemini_pro,
-    ("Google",    "Carbon"):  detect_gemini_carbon,
-    ("Google",    "Argon"):   detect_gemini_argon,
-    ("Google",    "Flash"):   detect_gemini_flash,
+    ("Google",    "Pro"):      detect_gemini_pro,
+    ("Google",    "Carbon"):   detect_gemini_carbon,
+    ("Google",    "Argon"):    detect_gemini_argon,
+    ("Google",    "Hydrogen"): detect_gemini_hydrogen,
+    ("Google",    "Flash"):    detect_gemini_flash,
     ("OpenAI",    "Astra"):   detect_openai_astra,
     ("OpenAI",    "Sol"):     detect_openai_sol,
     ("OpenAI",    "Luna"):    detect_openai_luna,
@@ -619,6 +634,7 @@ TARGET_EFFORT_MAP = {
     "gemini": "high",
     "carbon": "medium",
     "argon": "high",
+    "hydrogen": "high",
 }
 
 def get_target_effort(model):

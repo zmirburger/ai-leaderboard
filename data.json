@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-13T05:42:33Z",
+  "last_updated": "2026-11-14T05:32:51Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -66,7 +66,7 @@
               "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -78,7 +78,7 @@
               "board_name": "Claude Fable 5.2",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -101,7 +101,7 @@
               "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -124,7 +124,7 @@
               "board_name": "claude-fable-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -136,7 +136,7 @@
               "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -148,7 +148,7 @@
               "board_name": "Claude Fable 5.1 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -171,7 +171,7 @@
               "board_name": "claude-fable-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -183,7 +183,7 @@
               "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -239,7 +239,7 @@
               "board_name": "Claude Fable 5.2 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -251,7 +251,7 @@
               "board_name": "Claude Fable 5.2",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -274,7 +274,7 @@
               "board_name": "Claude Fable 5.2 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -297,7 +297,7 @@
               "board_name": "claude-fable-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -309,7 +309,7 @@
               "board_name": "Claude Fable 5.2 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -321,7 +321,7 @@
               "board_name": "Claude Fable 5.1 (High, Default Fallback)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -344,7 +344,7 @@
               "board_name": "claude-fable-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -356,7 +356,7 @@
               "board_name": "Claude Fable 5.2 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -411,7 +411,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -423,7 +423,7 @@
               "board_name": "Claude Opus 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -446,7 +446,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -469,7 +469,7 @@
               "board_name": "claude-opus-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -481,7 +481,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -493,7 +493,7 @@
               "board_name": "Claude Opus 5 (Medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -516,7 +516,7 @@
               "board_name": "claude-opus-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -528,7 +528,7 @@
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -584,7 +584,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -596,7 +596,7 @@
               "board_name": "Claude Opus 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -619,7 +619,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -642,7 +642,7 @@
               "board_name": "claude-opus-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -654,7 +654,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -666,7 +666,7 @@
               "board_name": "Claude Opus 5 (High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -689,7 +689,7 @@
               "board_name": "claude-opus-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -701,7 +701,7 @@
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -758,7 +758,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -770,7 +770,7 @@
               "board_name": "Claude Sonnet 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -793,7 +793,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -816,7 +816,7 @@
               "board_name": "claude-sonnet-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -828,7 +828,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -840,7 +840,7 @@
               "board_name": "Claude Sonnet 5 (Non-reasoning, High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -863,7 +863,7 @@
               "board_name": "claude-sonnet-5 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -875,7 +875,7 @@
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -931,7 +931,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -943,7 +943,7 @@
               "board_name": "Claude Sonnet 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -966,7 +966,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -989,7 +989,7 @@
               "board_name": "claude-sonnet-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1001,7 +1001,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1013,7 +1013,7 @@
               "board_name": "Claude Sonnet 5 (Non-reasoning, High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1036,7 +1036,7 @@
               "board_name": "claude-sonnet-5 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1048,7 +1048,7 @@
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1103,7 +1103,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1115,7 +1115,7 @@
               "board_name": "Claude Haiku 5.5",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1138,7 +1138,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1161,7 +1161,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1187,7 +1187,7 @@
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1243,7 +1243,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1255,7 +1255,7 @@
               "board_name": "GPT-6 Astra",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1278,7 +1278,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1301,7 +1301,7 @@
               "board_name": "gpt-6-astra (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1313,7 +1313,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1325,7 +1325,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1348,7 +1348,7 @@
               "board_name": "gpt-6-astra (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1360,7 +1360,7 @@
               "board_name": "GPT-6 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1415,7 +1415,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1427,7 +1427,7 @@
               "board_name": "GPT-6.1 Sol",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1450,7 +1450,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1473,7 +1473,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1499,7 +1499,7 @@
               "board_name": "GPT-6.1 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1556,7 +1556,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1568,7 +1568,7 @@
               "board_name": "GPT-6 Luna",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1591,7 +1591,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1614,7 +1614,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1640,7 +1640,7 @@
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1698,7 +1698,7 @@
               "board_name": "Gemini 3.1 Pro",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1723,7 +1723,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1746,7 +1746,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1758,7 +1758,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1770,7 +1770,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1793,7 +1793,7 @@
               "board_name": "gemini-3-1-pro-preview (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1805,7 +1805,7 @@
               "board_name": "Gemini 3.1 Pro Preview",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1867,7 +1867,7 @@
               "board_name": "Gemini 4 Carbon (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -1879,7 +1879,7 @@
               "board_name": "Gemini 4 Carbon",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1902,7 +1902,7 @@
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1925,7 +1925,7 @@
               "board_name": "Gemini 4 Carbon (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -1951,7 +1951,7 @@
               "board_name": "Gemini 4 Carbon (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2015,7 +2015,7 @@
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2027,7 +2027,7 @@
               "board_name": "Gemini 4 Carbon",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2050,7 +2050,7 @@
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2073,7 +2073,7 @@
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2099,7 +2099,7 @@
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2163,7 +2163,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2175,7 +2175,7 @@
               "board_name": "Gemini 4 Argon",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2198,7 +2198,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2221,7 +2221,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2247,7 +2247,7 @@
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2311,7 +2311,7 @@
               "board_name": "Gemini 4 Hydrogen (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2323,7 +2323,7 @@
               "board_name": "Gemini 4 Hydrogen",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2358,7 +2358,7 @@
               "board_name": "Gemini 4 Hydrogen (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2384,7 +2384,7 @@
               "board_name": "Gemini 4 Hydrogen (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2448,7 +2448,7 @@
               "board_name": "Gemini 4 Hydrogen (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2460,7 +2460,7 @@
               "board_name": "Gemini 4 Hydrogen",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2495,7 +2495,7 @@
               "board_name": "Gemini 4 Hydrogen (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2521,7 +2521,7 @@
               "board_name": "Gemini 4 Hydrogen (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2578,7 +2578,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2590,7 +2590,7 @@
               "board_name": "Gemini 3.8 Flash",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2613,7 +2613,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2636,7 +2636,7 @@
               "board_name": "gemini-3-8-flash (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2648,7 +2648,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2660,7 +2660,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2683,7 +2683,7 @@
               "board_name": "gemini-3-8-flash (medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2695,7 +2695,7 @@
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2751,7 +2751,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2763,7 +2763,7 @@
               "board_name": "Gemini 3.8 Flash",
               "effort": null,
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2786,7 +2786,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2809,7 +2809,7 @@
               "board_name": "gemini-3-8-flash (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2821,7 +2821,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2833,7 +2833,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2856,7 +2856,7 @@
               "board_name": "gemini-3-8-flash (high)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2868,7 +2868,7 @@
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2924,7 +2924,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2936,7 +2936,7 @@
               "board_name": "Grok 4.6",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2959,7 +2959,7 @@
               "board_name": "Grok 4.7 (Low)",
               "effort": "low",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -2982,7 +2982,7 @@
               "board_name": "grok-4-6 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -2994,7 +2994,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3006,7 +3006,7 @@
               "board_name": "Grok 4.6 (Medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3029,7 +3029,7 @@
               "board_name": "grok-4-6 (medium)",
               "effort": "medium",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3041,7 +3041,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3097,7 +3097,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3109,7 +3109,7 @@
               "board_name": "Grok 4.6",
               "effort": null,
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3132,7 +3132,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3155,7 +3155,7 @@
               "board_name": "grok-4-6 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3167,7 +3167,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3179,7 +3179,7 @@
               "board_name": "Grok 4.6 (High)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3202,7 +3202,7 @@
               "board_name": "grok-4-6 (high)",
               "effort": "high",
               "inherited": true,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             },
             {
@@ -3214,7 +3214,7 @@
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
-              "as_of": "2026-11-13",
+              "as_of": "2026-11-14",
               "stale": false
             }
           ],
@@ -3250,7 +3250,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index",
         "description": "Composite of 10 hard evals",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3296,7 +3296,7 @@
         "url": "https://benchlm.ai/compare",
         "description": "Composite across verified benchmarks",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3344,7 +3344,7 @@
         "url": "https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning",
         "description": "Reasoning over ~100k-token document sets",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3392,7 +3392,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Long-horizon real-world SWE tasks (pass@1, best effort)",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3438,7 +3438,7 @@
         "url": "https://artificialanalysis.ai/evaluations/terminalbench-4-0",
         "description": "Agentic terminal tasks",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3484,7 +3484,7 @@
         "url": "https://artificialanalysis.ai/evaluations/tau3-banking",
         "description": "Tool use in banking customer-service flows",
         "lower_better": false,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "whole board",
         "top5": [
@@ -3532,7 +3532,7 @@
         "url": "https://deepswe.datacurve.ai/",
         "description": "Cost per task on the model's best DeepSWE run",
         "lower_better": true,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "tracked models",
         "top5": [
@@ -3578,7 +3578,7 @@
         "url": "https://artificialanalysis.ai/models",
         "description": "$/1M tokens, 3:1 input:output blend",
         "lower_better": true,
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-14",
         "stale": false,
         "scope": "tracked models",
         "top5": [
@@ -3622,7 +3622,7 @@
   },
   "raw_benchmarks": {
     "benchlm": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Claude Fable 5.2": 93.9,
         "Gemini 4 Carbon": 89.19,
@@ -3677,7 +3677,7 @@
       }
     },
     "deepswe": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "gpt-6-astra (xhigh)": 74.115,
         "gemini-3-8-flash (high)": 73.8255,
@@ -3752,7 +3752,7 @@
       }
     },
     "deepswe_cost": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "gpt-6-astra (xhigh)": 4.4291,
         "gemini-3-8-flash (high)": 2.3623,
@@ -3827,7 +3827,7 @@
       }
     },
     "metr": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Claude 3.5 Sonnet (2024-06-20)": 0.1899,
         "Claude 3.5 Sonnet (2024-10-22)": 0.342,
@@ -3857,7 +3857,7 @@
       }
     },
     "aa_intelligence_index": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Claude Sonnet 5.5 (Medium, Default Fallback)": 30.8196,
         "Apodex 1.1": 13.6713,
@@ -3984,11 +3984,13 @@
         "Gemini 4 Hydrogen (Low)": 26.8937,
         "Gemini 4 Hydrogen (Xhigh)": 53.9192,
         "Gemini 4 Hydrogen (High)": 50.7871,
-        "Gemini 4 Hydrogen (Medium)": 41.233
+        "Gemini 4 Hydrogen (Medium)": 41.233,
+        "Gemini 4 Argon (Medium)": 47.6041,
+        "DeepSeek V4 Pro 0813 (High)": 20.7994
       }
     },
     "aa_lcr": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Gemini 4 Carbon (High)": 79.3333,
         "Claude Opus 5.5 (Max, Default Fallback)": 84.6667,
@@ -4585,11 +4587,13 @@
         "Claude Fable 5.2 (Low, Default Fallback)": 80.0,
         "Agnes 2.5 Pro Theta": 84.6667,
         "Inkling 2 Small": 83.3333,
-        "Claude Fable 5.2 (High, Default Fallback)": 83.3333
+        "Claude Fable 5.2 (High, Default Fallback)": 83.3333,
+        "Gemini 4 Argon (Medium)": 78.3333,
+        "DeepSeek V4 Pro 0813 (High)": 79.3333
       }
     },
     "aa_price": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Gemini 4 Carbon (High)": 4.0,
         "Claude Opus 5.5 (Max, Default Fallback)": 8.0,
@@ -4669,15 +4673,15 @@
         "Qwen3.8 27B (Medium)": 1.125,
         "Kimi K3 (Low)": 6.0,
         "Qwen3.8 27B (Low)": 1.125,
-        "Nemotron 3.5 Super VL": 0.2562,
+        "Nemotron 3.5 Super VL": 0.275,
         "Inkling Small": 0.525,
         "Inkling (Xhigh)": 1.7625,
-        "Nemotron 3 Ultra 550B A55B (Reasoning)": 1.125,
+        "Nemotron 3 Ultra 550B A55B (Reasoning)": 1.05,
         "Gemini 3.5 Flash-Lite": 0.85,
         "Qwen3.8 27B (Non-reasoning)": 1.125,
         "GPT-6 Luna (Low)": 0.2,
         "GPT-6 Luna (Non-reasoning)": 0.2,
-        "Muse Glimmer (High)": 0.525,
+        "Muse Glimmer (High)": 0.5813,
         "Nemotron 3.5 Lightning": 0.095,
         "Granite 4.2 8B": 0.1075,
         "Mistral Small 4 (Reasoning)": 0.2625,
@@ -4736,13 +4740,13 @@
         "DeepSeek V4 Flash 0420 (High)": 0.1424,
         "DeepSeek V4 Flash 0420 (Max)": 0.1424,
         "DeepSeek V4 Flash 0420 (Non-reasoning)": 0.1172,
-        "DeepSeek V4 Flash 0731 (Max)": 0.17,
+        "DeepSeek V4 Flash 0731 (Max)": 0.175,
         "DeepSeek V4 Flash Vision (Max)": 0.66,
         "DeepSeek V4 Pro 0424 (High)": 2.0,
-        "DeepSeek V4 Pro 0424 (Max)": 1.7662,
+        "DeepSeek V4 Pro 0424 (Max)": 1.9262,
         "DeepSeek V4 Pro 0424 (Non-reasoning)": 2.175,
         "DeepSeek V4 Pro 0813 (Non-reasoning)": 1.98,
-        "DeepSeek V4.1 Flash (Max)": 0.5175,
+        "DeepSeek V4.1 Flash (Max)": 0.525,
         "DeepSeek V4.1 Flash (Non-reasoning)": 0.525,
         "Gemini 2.5 Flash (Non-reasoning)": 0.85,
         "Gemini 2.5 Flash (Reasoning)": 0.85,
@@ -4914,7 +4918,7 @@
         "MiMo-V2-Flash (Reasoning)": 0.15,
         "MiMo-V2.5": 0.14,
         "MiMo-V2.5-Pro (Non-reasoning)": 0.435,
-        "MiMo-V2.5-Pro (Reasoning)": 0.4894,
+        "MiMo-V2.5-Pro (Reasoning)": 0.435,
         "MiniMax M1 80k": 0.9625,
         "MiniMax-M2": 0.525,
         "MiniMax-M2.1": 0.525,
@@ -5036,11 +5040,13 @@
         "Gemini 4 Hydrogen (Low)": 3.0,
         "Gemini 4 Hydrogen (Xhigh)": 3.0,
         "Gemini 4 Hydrogen (High)": 3.0,
-        "Gemini 4 Hydrogen (Medium)": 3.0
+        "Gemini 4 Hydrogen (Medium)": 3.0,
+        "Gemini 4 Argon (Medium)": 4.0,
+        "DeepSeek V4 Pro 0813 (High)": 1.98
       }
     },
     "aa_terminalbench_v4": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "Gemini 4 Carbon (High)": 65.1515,
         "Claude Opus 5.5 (Max, Default Fallback)": 59.596,
@@ -5298,11 +5304,13 @@
         "Gemini 4 Hydrogen (Low)": 6.5657,
         "Gemini 4 Hydrogen (Xhigh)": 53.5354,
         "Gemini 4 Hydrogen (High)": 54.0404,
-        "Gemini 4 Hydrogen (Medium)": 29.2929
+        "Gemini 4 Hydrogen (Medium)": 29.2929,
+        "Gemini 4 Argon (Medium)": 55.0505,
+        "DeepSeek V4 Pro 0813 (High)": 6.0606
       }
     },
     "aa_tau_banking": {
-      "fetched_at": "2026-11-13",
+      "fetched_at": "2026-11-14",
       "values": {
         "GPT-6 Astra (Max)": 41.4433,
         "GPT-6 Astra (Xhigh)": 43.0928,

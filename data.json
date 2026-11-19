@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-19T15:32:00Z",
+  "last_updated": "2026-11-19T15:37:54Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -2382,6 +2382,154 @@
       "composite_overall": null
     },
     {
+      "id": "gemini_4_argon_med",
+      "name": "Gemini 4 Argon (Medium)",
+      "base_name": "Gemini 4 Argon",
+      "target_effort": "medium",
+      "vendor": "Google",
+      "tier": "Argon",
+      "released": "2026-10-13",
+      "previous": "Gemini 3.1 Pro",
+      "changelog": "Generally available (GA). Most capable model for complex coding, agentic workflows, math, and science with 1M unified context and tunable reasoning effort.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 4 Argon",
+        "Argon 4",
+        "gemini-4-argon",
+        "argon-4"
+      ],
+      "per_priority": {
+        "accuracy": 80,
+        "long_context": 88,
+        "agent": 82,
+        "cost": 32
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 47.6041,
+              "display": "47.6",
+              "score": 73.7,
+              "board_name": "Gemini 4 Argon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 79.21,
+              "display": "79.2",
+              "score": 85.4,
+              "board_name": "Gemini 4 Argon",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_lcr",
+              "name": "AA Long-Context Reasoning",
+              "value": 78.3333,
+              "display": "78.3%",
+              "score": 88.3,
+              "board_name": "Gemini 4 Argon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 55.0505,
+              "display": "55.1%",
+              "score": 82.0,
+              "board_name": "Gemini 4 Argon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_price",
+              "name": "AA blended price",
+              "value": 4.0,
+              "display": "$4.00/MTok",
+              "score": 31.6,
+              "board_name": "Gemini 4 Argon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE $/task"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (medium) 47.6 → 74 · BenchLM 79.2 → 85",
+        "long_context": "AA Long-Context Reasoning (medium) 78.3% → 88",
+        "agent": "Terminal-Bench 4.0 (AA) (medium) 55.1% → 82 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA blended price (medium) $4.00/MTok → 32 · not on DeepSWE $/task"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 70.5,
+      "composite_overall": 70
+    },
+    {
       "id": "gemini_4_argon_high",
       "name": "Gemini 4 Argon (High)",
       "base_name": "Gemini 4 Argon",
@@ -3150,6 +3298,153 @@
       "base_name": "Gemini 3.8 Flash"
     },
     {
+      "id": "gemini_3_5_flash_lite",
+      "name": "Gemini 3.5 Flash-Lite",
+      "target_effort": "high",
+      "vendor": "Google",
+      "tier": "Flash-Lite",
+      "released": "2026-07-21",
+      "previous": "Gemini 3.1 Flash-Lite",
+      "changelog": "Generally available (GA). Low-latency, high-throughput multimodal budget model (AA Intelligence Index 11.7, LCR 76.0%, τ-Bench Banking 17.5%; $0.85/MTok blended).",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 3.5 Flash-Lite",
+        "gemini-3.5-flash-lite",
+        "gemini-3-5-flash-lite"
+      ],
+      "per_priority": {
+        "accuracy": 18,
+        "long_context": 86,
+        "agent": 18,
+        "cost": 67
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 11.6563,
+              "display": "11.7",
+              "score": 18.1,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "BenchLM"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_lcr",
+              "name": "AA Long-Context Reasoning",
+              "value": 76.0,
+              "display": "76.0%",
+              "score": 85.7,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 1.0101,
+              "display": "1.0%",
+              "score": 1.5,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 17.5258,
+              "display": "17.5%",
+              "score": 34.1,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE"
+          ],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_price",
+              "name": "AA blended price",
+              "value": 0.85,
+              "display": "$0.85/MTok",
+              "score": 67.0,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE $/task"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index 11.7 → 18 · not on BenchLM",
+        "long_context": "AA Long-Context Reasoning 76.0% → 86",
+        "agent": "Terminal-Bench 4.0 (AA) 1.0% → 2 · τ-Bench Banking (AA) 17.5% → 34 · not on DeepSWE",
+        "cost": "AA blended price $0.85/MTok → 67 · not on DeepSWE $/task"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 47.25,
+      "composite_overall": 47
+    },
+    {
       "id": "grok_4_5_med",
       "name": "Grok 4.7 (Medium)",
       "vendor": "xAI",
@@ -3845,16 +4140,16 @@
             "value": "$0.20/MTok"
           },
           {
+            "model": "Gemini 3.5 Flash-Lite",
+            "value": "$0.85/MTok"
+          },
+          {
             "model": "Gemini 3.8 Flash (High)",
             "value": "$1.50/MTok"
           },
           {
             "model": "Gemini 3.8 Flash (Medium)",
             "value": "$1.50/MTok"
-          },
-          {
-            "model": "Gemini 4 Hydrogen (High)",
-            "value": "$3.00/MTok"
           }
         ],
         "top3": [
@@ -3867,8 +4162,8 @@
             "value": "$0.20/MTok"
           },
           {
-            "model": "Gemini 3.8 Flash (High)",
-            "value": "$1.50/MTok"
+            "model": "Gemini 3.5 Flash-Lite",
+            "value": "$0.85/MTok"
           }
         ]
       }

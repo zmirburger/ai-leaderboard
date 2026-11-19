@@ -263,6 +263,17 @@ def detect_gemini_flash():
     version = best if isinstance(best, str) else best[0]
     return _result(f"Gemini {version} Flash", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
+def detect_gemini_flash_lite():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    # Exclude specialized TTS/Image/Live/Audio Flash-Lite variants (e.g. Gemini 3.8 Flash-Lite TTS)
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Flash[- ]Lite\b(?!\s+(?:TTS|Image|Live|Audio)\b)", include_body=True)
+    if not best:
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Flash-Lite", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
 def detect_gemini_carbon():
     soup = _get_google_soup()
     if not soup:
@@ -362,6 +373,7 @@ TIER_DETECTORS = {
     ("Google",    "Argon"):    detect_gemini_argon,
     ("Google",    "Hydrogen"): detect_gemini_hydrogen,
     ("Google",    "Flash"):    detect_gemini_flash,
+    ("Google",    "Flash-Lite"): detect_gemini_flash_lite,
     ("OpenAI",    "Astra"):   detect_openai_astra,
     ("OpenAI",    "Sol"):     detect_openai_sol,
     ("OpenAI",    "Luna"):    detect_openai_luna,
@@ -651,6 +663,7 @@ TARGET_EFFORT_MAP = {
     "neon": "medium",
     "argon": "high",
     "hydrogen": "high",
+    "flash-lite": "high",
 }
 
 def get_target_effort(model):

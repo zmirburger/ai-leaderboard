@@ -40,7 +40,7 @@ To change weights, edit `data.json` and re-run `refresh.py` (or adjust custom we
 
 ## Tracked vendors
 
-Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT Astra/Sol/Luna), Google (Gemini Carbon/Argon/Hydrogen/Pro/Flash), xAI (Grok)
+Anthropic (Claude Fable/Opus/Sonnet/Haiku), OpenAI (GPT Astra/Sol/Luna), Google (Gemini Carbon/Neon/Argon/Hydrogen/Pro/Flash), xAI (Grok)
 
 ## Hosting
 

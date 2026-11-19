@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-19T06:33:15Z",
+  "last_updated": "2026-11-19T15:32:00Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -11,7 +11,7 @@
   "best_overall": {
     "model": "GPT-6.2 Astra",
     "composite": 76,
-    "rationale": "Computed from benchmarks: accuracy 92, long context 90, agent 85, cost 36 → 75.75. Next: Claude Opus 5.5 (Medium) 75.50; Gemini 3.8 Flash (Medium) 75.25; GPT-6.2 Sol 74.00; Gemini 4 Carbon (High) 73.75. Provisional on long context, agent, cost (4/8 benchmarks measured, 4 inherited). Not ranked (missing data): Gemini 4 Hydrogen (Medium) (long context); Gemini 4 Hydrogen (High) (long context)."
+    "rationale": "Computed from benchmarks: accuracy 92, long context 90, agent 85, cost 36 → 75.75. Next: Claude Opus 5.5 (Medium) 75.50; Gemini 3.8 Flash (Medium) 75.25; GPT-6.2 Sol 74.00; Gemini 4 Carbon (High) 73.75. Provisional on long context, agent, cost (4/8 benchmarks measured, 4 inherited). Not ranked (missing data): Gemini 4 Neon (Medium) (long context); Gemini 4 Neon (High) (long context); Gemini 4 Hydrogen (Medium) (long context); Gemini 4 Hydrogen (High) (long context)."
   },
   "best_per_priority": {
     "accuracy": {
@@ -2126,6 +2126,260 @@
       },
       "composite_unrounded": 73.75,
       "composite_overall": 74
+    },
+    {
+      "id": "gemini_4_neon_med",
+      "name": "Gemini 4 Neon (Medium)",
+      "base_name": "Gemini 4 Neon",
+      "target_effort": "medium",
+      "vendor": "Google",
+      "tier": "Neon",
+      "released": "2026-11-18",
+      "previous": "Gemini 4 Argon",
+      "changelog": "Generally available (GA). Balanced frontier Gemini 4 model between Carbon and Hydrogen (AA Intelligence Index 59.6 at High / 61.4 at Xhigh, Terminal-Bench 4.0 61.6% at High / 63.6% at Xhigh). 1M unified context + long decode, low/medium/high/xhigh effort; $3/$15 per MTok.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 4 Neon",
+        "Neon 4",
+        "gemini-4-neon",
+        "neon-4"
+      ],
+      "per_priority": {
+        "accuracy": 85,
+        "long_context": null,
+        "agent": 81,
+        "cost": 22
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 54.8623,
+              "display": "54.9",
+              "score": 85.0,
+              "board_name": "Gemini 4 Neon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "BenchLM"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "none",
+          "inputs": [],
+          "missing": [
+            "AA Long-Context Reasoning"
+          ],
+          "coverage": {
+            "measured": 0,
+            "total": 0,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 54.5455,
+              "display": "54.5%",
+              "score": 81.2,
+              "board_name": "Gemini 4 Neon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_price",
+              "name": "AA blended price",
+              "value": 6.0,
+              "display": "$6.00/MTok",
+              "score": 22.4,
+              "board_name": "Gemini 4 Neon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE $/task"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (medium) 54.9 → 85 · not on BenchLM",
+        "long_context": "not on AA Long-Context Reasoning",
+        "agent": "Terminal-Bench 4.0 (AA) (medium) 54.5% → 81 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA blended price (medium) $6.00/MTok → 22 · not on DeepSWE $/task"
+      },
+      "coverage": {
+        "measured": 3,
+        "total": 3,
+        "provisional": 0
+      },
+      "composite_unrounded": null,
+      "composite_overall": null
+    },
+    {
+      "id": "gemini_4_neon_high",
+      "name": "Gemini 4 Neon (High)",
+      "base_name": "Gemini 4 Neon",
+      "target_effort": "high",
+      "vendor": "Google",
+      "tier": "Neon",
+      "released": "2026-11-18",
+      "previous": "Gemini 4 Argon",
+      "changelog": "Generally available (GA). Balanced frontier Gemini 4 model between Carbon and Hydrogen (AA Intelligence Index 59.6 at High / 61.4 at Xhigh, Terminal-Bench 4.0 61.6% at High / 63.6% at Xhigh). 1M unified context + long decode, low/medium/high/xhigh effort; $3/$15 per MTok.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 4 Neon",
+        "Neon 4",
+        "gemini-4-neon",
+        "neon-4"
+      ],
+      "per_priority": {
+        "accuracy": 92,
+        "long_context": null,
+        "agent": 92,
+        "cost": 22
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 59.6189,
+              "display": "59.6",
+              "score": 92.3,
+              "board_name": "Gemini 4 Neon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "BenchLM"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "none",
+          "inputs": [],
+          "missing": [
+            "AA Long-Context Reasoning"
+          ],
+          "coverage": {
+            "measured": 0,
+            "total": 0,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 61.6162,
+              "display": "61.6%",
+              "score": 91.7,
+              "board_name": "Gemini 4 Neon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_price",
+              "name": "AA blended price",
+              "value": 6.0,
+              "display": "$6.00/MTok",
+              "score": 22.4,
+              "board_name": "Gemini 4 Neon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-19",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE $/task"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (high) 59.6 → 92 · not on BenchLM",
+        "long_context": "not on AA Long-Context Reasoning",
+        "agent": "Terminal-Bench 4.0 (AA) (high) 61.6% → 92 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA blended price (high) $6.00/MTok → 22 · not on DeepSWE $/task"
+      },
+      "coverage": {
+        "measured": 3,
+        "total": 3,
+        "provisional": 0
+      },
+      "composite_unrounded": null,
+      "composite_overall": null
     },
     {
       "id": "gemini_4_argon_high",
@@ -5602,6 +5856,12 @@
     ],
     "excluded": {},
     "unranked": {
+      "Gemini 4 Neon (Medium)": [
+        "long_context"
+      ],
+      "Gemini 4 Neon (High)": [
+        "long_context"
+      ],
       "Gemini 4 Hydrogen (Medium)": [
         "long_context"
       ],

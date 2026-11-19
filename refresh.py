@@ -305,6 +305,20 @@ def detect_gemini_hydrogen():
     version = best if isinstance(best, str) else best[0]
     return _result(f"Gemini {version} Hydrogen", soup.get_text(" ", strip=True), _GOOGLE_URL)
 
+def detect_gemini_neon():
+    soup = _get_google_soup()
+    if not soup:
+        return None
+    best = _find_best_match(soup, r"Gemini (\d+(?:\.\d+)?) Neon\b", include_body=True)
+    if not best:
+        best = _find_best_match(soup, r"Neon (\d+(?:\.\d+)?)", include_body=True)
+        if best:
+            version = best if isinstance(best, str) else best[0]
+            return _result(f"Gemini {version} Neon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+        return None
+    version = best if isinstance(best, str) else best[0]
+    return _result(f"Gemini {version} Neon", soup.get_text(" ", strip=True), _GOOGLE_URL)
+
 # ---------- xAI ----------
 
 _XAI_URL = "https://docs.x.ai/developers/release-notes"
@@ -344,6 +358,7 @@ TIER_DETECTORS = {
     ("Anthropic", "Haiku"):   detect_anthropic_haiku,
     ("Google",    "Pro"):      detect_gemini_pro,
     ("Google",    "Carbon"):   detect_gemini_carbon,
+    ("Google",    "Neon"):     detect_gemini_neon,
     ("Google",    "Argon"):    detect_gemini_argon,
     ("Google",    "Hydrogen"): detect_gemini_hydrogen,
     ("Google",    "Flash"):    detect_gemini_flash,
@@ -633,6 +648,7 @@ TARGET_EFFORT_MAP = {
     "luna": "high",
     "gemini": "high",
     "carbon": "medium",
+    "neon": "medium",
     "argon": "high",
     "hydrogen": "high",
 }

@@ -104,10 +104,11 @@ _AA_LEADERBOARD_URL = "https://artificialanalysis.ai/leaderboards/models"
 _AA_FREE_API_URL = "https://artificialanalysis.ai/api/v2/language/models/free"
 _AA_RSC_SCORES = {
     "aa_lcr": "artificial-analysis-long-context-reasoning",
+    "aa_gdp": "gdp-pdf",
     "aa_terminalbench_v4": "terminalbench-4-0",
     "aa_tau_banking": "tau3-banking",
 }
-_AA_MERGE_BENCHES = {"aa_lcr", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
+_AA_MERGE_BENCHES = {"aa_lcr", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
 _aa_rsc_cache = None
 
 def _get_aa_rsc():
@@ -454,7 +455,7 @@ def _supplement_aa_free_api(out, key):
 def fetch_aa():
     """Artificial Analysis leaderboard RSC stream (+ optional Free V2 API supplement)."""
     models_arr, _ = _get_aa_rsc()
-    out = {b: {} for b in ("aa_intelligence_index", "aa_lcr", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
+    out = {b: {} for b in ("aa_intelligence_index", "aa_lcr", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
     for it in models_arr:
         name = it.get("name")
         if not name:
@@ -623,6 +624,8 @@ BENCHMARKS = [
          url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
     dict(id="aa_lcr", priority="long_context", name="AA Long-Context Reasoning", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning", description="Reasoning over ~100k-token document sets"),
+    dict(id="aa_gdp", priority="long_context", name="GDP.pdf (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
+         url="https://artificialanalysis.ai/evaluations/gdp-pdf", description="Reasoning & granular instruction following over long professional PDFs"),
     dict(id="deepswe_cost", priority="cost", name="DeepSWE $/task", unit="usd", scale="log", higher_better=False, reference="tracked",
          url="https://deepswe.datacurve.ai/", description="Cost per task on the model's best DeepSWE run"),
     dict(id="aa_price", priority="cost", name="AA blended price", unit="usd_mtok", scale="log", higher_better=False, reference="tracked",

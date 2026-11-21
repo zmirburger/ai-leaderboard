@@ -37,7 +37,7 @@ All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board within the same major version (`Opus 5 → 5.5` yes, `Gemini 3.1 → 4.0` no). It's flagged Provisional with its coverage ratio (e.g. `5/8`) and replaced automatically once the board lists the model. A board that hasn't directly tested any tracked model released in the last 90 days (`LIVE_BOARD_DAYS`) is dropped (`dropped_benchmarks` in data.json) instead of feeding inherited values forever — AA retired IFBench/Terminal-Bench Hard/τ²-Bench, and Vectara HHEM was dropped on 2026-10-12.
 6. **Composite** = weighted mean over the priorities at least half the models have a score for (`composite_basis.included`), with the weights rescaled. A model missing one of those priorities is unranked (`composite_basis.unranked`) rather than scored on fewer priorities, so every ranked model is compared on the same mix.
 
-Artificial Analysis data is fetched directly from AA's public `leaderboards/models` Next.js RSC stream (Intelligence Index v5.0, LCR, Terminal-Bench 4.0, τ-Bench Banking, and 3:1 blended pricing), optionally supplemented by `AA_API_KEY` on `/api/v2/language/models/free`.
+Artificial Analysis data is fetched directly from AA's public `leaderboards/models` Next.js RSC stream (Intelligence Index v5.0, LCR, GDP.pdf, Terminal-Bench 4.0, τ-Bench Banking, and 3:1 blended pricing), optionally supplemented by `AA_API_KEY` on `/api/v2/language/models/free`.
 
 The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority.
 

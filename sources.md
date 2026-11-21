@@ -6,7 +6,7 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 | Source | Endpoint | Feeds | Key? |
 |--------|----------|-------|------|
-| Artificial Analysis | https://artificialanalysis.ai/leaderboards/models (RSC stream) + `/api/v2/language/models/free` | Intelligence Index v5.0 (accuracy) · Long-Context Reasoning (long context) · Terminal-Bench 4.0, τ-Bench Banking (agent) · 3:1 blended $/MTok (cost) | optional (`AA_API_KEY` supplements historical rows) |
+| Artificial Analysis | https://artificialanalysis.ai/leaderboards/models (RSC stream) + `/api/v2/language/models/free` | Intelligence Index v5.0 (accuracy) · Long-Context Reasoning, GDP.pdf (long context) · Terminal-Bench 4.0, τ-Bench Banking (agent) · 3:1 blended $/MTok (cost) | optional (`AA_API_KEY` supplements historical rows) |
 | BenchLM | https://benchlm.ai/api/leaderboard | accuracy | no |
 | DeepSWE | https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json | agent (pass@1) · cost ($/task, if the row publishes it) | no |
 | METR | https://metr.org/time-horizons/ (`benchmarkDataV1_1` / `benchmark_results_1_1.yaml`) | agent (50% time horizon, v1.1) | no |

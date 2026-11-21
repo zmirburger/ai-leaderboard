@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-21T06:10:04Z",
+  "last_updated": "2026-11-21T11:31:58Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -9,9 +9,9 @@
     "cost": 0.25
   },
   "best_overall": {
-    "model": "GPT-6.2 Astra",
-    "composite": 76,
-    "rationale": "Computed from benchmarks: accuracy 93, long context 90, agent 85, cost 36 → 76.00. Next: Gemini 3.8 Flash (Medium) 75.75; Claude Opus 5.5 (Medium) 75.00; Gemini 4 Carbon (High) 74.25; Gemini 3.8 Flash (High) 73.75. Provisional on long context, agent, cost (4/8 benchmarks measured, 4 inherited). Not ranked (missing data): Gemini 4 Neon (Medium) (long context); Gemini 4 Neon (High) (long context); Gemini 4 Hydrogen (Medium) (long context); Gemini 4 Hydrogen (High) (long context)."
+    "model": "Gemini 4 Neon (High)",
+    "composite": 77,
+    "rationale": "Computed from benchmarks: accuracy 95, long context 100, agent 92, cost 22 → 77.25. Next: Gemini 3.8 Flash (Medium) 75.75; GPT-6.2 Astra 75.25; Gemini 3.8 Flash (High) 73.75; Gemini 4 Carbon (High) 73.50."
   },
   "best_per_priority": {
     "accuracy": {
@@ -20,9 +20,9 @@
       "supporting": "AA Intelligence Index · BenchLM"
     },
     "long_context": {
-      "model": "Claude Opus 5.5 (Medium)",
-      "summary": "AA Long-Context Reasoning (medium) 84.3% → 95",
-      "supporting": "AA Long-Context Reasoning"
+      "model": "Gemini 4 Neon (High)",
+      "summary": "GDP.pdf (AA) (high) 33.4% → 100 · not on AA Long-Context Reasoning",
+      "supporting": "AA Long-Context Reasoning · GDP.pdf (AA)"
     },
     "agent": {
       "model": "Gemini 4 Carbon (High)",
@@ -49,7 +49,7 @@
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "per_priority": {
         "accuracy": 94,
-        "long_context": 90,
+        "long_context": 81,
         "agent": 83,
         "cost": 13
       },
@@ -103,12 +103,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 23.8,
+              "display": "23.8%",
+              "score": 71.3,
+              "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -197,17 +209,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 56.4 → 87 · BenchLM 93.3 → 100",
-        "long_context": "AA Long-Context Reasoning (medium) 80.0% → 90",
+        "long_context": "AA Long-Context Reasoning (medium) 80.0% → 90 · GDP.pdf (AA) (medium) 23.8% → 71",
         "agent": "DeepSWE (medium) 65.4% → 88 (inherited from claude-fable-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 55.1% → 82 · τ-Bench Banking (AA) (medium) 41.0% → 80 (inherited from Claude Fable 5.1 (Medium, Default Fallback))",
         "cost": "DeepSWE $/task (medium) $6.09 → 27 (inherited from claude-fable-5 (medium)) · AA blended price (medium) $16.00/MTok → 0"
       },
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
-      "composite_unrounded": 70.0,
-      "composite_overall": 70
+      "composite_unrounded": 67.75,
+      "composite_overall": 68
     },
     {
       "id": "claude_fable_5_high",
@@ -222,7 +234,7 @@
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "per_priority": {
         "accuracy": 98,
-        "long_context": 94,
+        "long_context": 80,
         "agent": 88,
         "cost": 0
       },
@@ -276,12 +288,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 21.8,
+              "display": "21.8%",
+              "score": 65.3,
+              "board_name": "Claude Fable 5.2 (High, Default Fallback)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -370,17 +394,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 61.8 → 96 · BenchLM 93.3 → 100",
-        "long_context": "AA Long-Context Reasoning (high) 83.3% → 94",
+        "long_context": "AA Long-Context Reasoning (high) 83.3% → 94 · GDP.pdf (AA) (high) 21.8% → 65",
         "agent": "DeepSWE (high) 68.6% → 93 (inherited from claude-fable-5 (high)) · Terminal-Bench 4.0 (AA) (high) 59.6% → 89 · τ-Bench Banking (AA) (high) 43.1% → 84 (inherited from Claude Fable 5.1 (High, Default Fallback))",
         "cost": "DeepSWE $/task (high) $9.18 → 0 (inherited from claude-fable-5 (high)) · AA blended price (high) $16.00/MTok → 0"
       },
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
-      "composite_unrounded": 70.0,
-      "composite_overall": 70
+      "composite_unrounded": 66.5,
+      "composite_overall": 66
     },
     {
       "id": "claude_opus_4_7_med",
@@ -391,10 +415,10 @@
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 75,
+      "composite_overall": 73,
       "per_priority": {
         "accuracy": 82,
-        "long_context": 95,
+        "long_context": 86,
         "agent": 82,
         "cost": 41
       },
@@ -448,12 +472,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 25.6,
+              "display": "25.6%",
+              "score": 76.6,
+              "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -542,14 +578,14 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 48.2 → 75 · BenchLM 82.7 → 89",
-        "long_context": "AA Long-Context Reasoning (medium) 84.3% → 95",
+        "long_context": "AA Long-Context Reasoning (medium) 84.3% → 95 · GDP.pdf (AA) (medium) 25.6% → 77",
         "agent": "DeepSWE (medium) 68.9% → 93 (inherited from claude-opus-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 52.5% → 78 · τ-Bench Banking (AA) (medium) 38.6% → 75 (inherited from Claude Opus 5 (Medium))",
         "cost": "DeepSWE $/task (medium) $3.29 → 67 (inherited from claude-opus-5 (medium)) · AA blended price (medium) $8.00/MTok → 16"
       },
-      "composite_unrounded": 75.0,
+      "composite_unrounded": 72.75,
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
       "target_effort": "medium",
@@ -564,10 +600,10 @@
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 72,
+      "composite_overall": 71,
       "per_priority": {
         "accuracy": 84,
-        "long_context": 93,
+        "long_context": 90,
         "agent": 90,
         "cost": 21
       },
@@ -621,12 +657,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.8,
+              "display": "28.8%",
+              "score": 86.2,
+              "board_name": "Claude Opus 5.5 (High, Default Fallback)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -715,14 +763,14 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 51.8 → 80 · BenchLM 82.7 → 89",
-        "long_context": "AA Long-Context Reasoning (high) 82.7% → 93",
+        "long_context": "AA Long-Context Reasoning (high) 82.7% → 93 · GDP.pdf (AA) (high) 28.8% → 86",
         "agent": "DeepSWE (high) 72.8% → 98 (inherited from claude-opus-5 (high)) · Terminal-Bench 4.0 (AA) (high) 56.6% → 84 · τ-Bench Banking (AA) (high) 44.7% → 87 (inherited from Claude Opus 5 (High))",
         "cost": "DeepSWE $/task (high) $6.08 → 27 (inherited from claude-opus-5 (high)) · AA blended price (high) $8.00/MTok → 16"
       },
-      "composite_unrounded": 72.0,
+      "composite_unrounded": 71.25,
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
       "target_effort": "high",
@@ -741,7 +789,7 @@
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "per_priority": {
         "accuracy": 66,
-        "long_context": 86,
+        "long_context": 73,
         "agent": 43,
         "cost": 42
       },
@@ -795,12 +843,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 20.2,
+              "display": "20.2%",
+              "score": 60.5,
+              "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -889,17 +949,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 30.8 → 48 · BenchLM 77.8 → 83",
-        "long_context": "AA Long-Context Reasoning (medium) 76.3% → 86",
+        "long_context": "AA Long-Context Reasoning (medium) 76.3% → 86 · GDP.pdf (AA) (medium) 20.2% → 60",
         "agent": "DeepSWE (medium) 39.8% → 54 (inherited from claude-sonnet-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 29.8% → 44 · τ-Bench Banking (AA) (high) 15.7% → 30 (inherited from Claude Sonnet 5 (Non-reasoning, High))",
         "cost": "DeepSWE $/task (medium) $4.08 → 53 (inherited from claude-sonnet-5 (medium)) · AA blended price (medium) $4.00/MTok → 32"
       },
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
-      "composite_unrounded": 59.25,
-      "composite_overall": 59
+      "composite_unrounded": 56.0,
+      "composite_overall": 56
     },
     {
       "id": "claude_sonnet_4_6_high",
@@ -914,7 +974,7 @@
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "per_priority": {
         "accuracy": 74,
-        "long_context": 88,
+        "long_context": 82,
         "agent": 54,
         "cost": 23
       },
@@ -968,12 +1028,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 25.2,
+              "display": "25.2%",
+              "score": 75.4,
+              "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -1062,17 +1134,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 41.5 → 64 · BenchLM 77.8 → 83",
-        "long_context": "AA Long-Context Reasoning (high) 78.0% → 88",
+        "long_context": "AA Long-Context Reasoning (high) 78.0% → 88 · GDP.pdf (AA) (high) 25.2% → 75",
         "agent": "DeepSWE (high) 48.2% → 65 (inherited from claude-sonnet-5 (high)) · Terminal-Bench 4.0 (AA) (high) 43.9% → 65 · τ-Bench Banking (AA) (high) 15.7% → 30 (inherited from Claude Sonnet 5 (Non-reasoning, High))",
         "cost": "DeepSWE $/task (high) $7.43 → 14 (inherited from claude-sonnet-5 (high)) · AA blended price (high) $4.00/MTok → 32"
       },
       "coverage": {
-        "measured": 5,
-        "total": 8,
+        "measured": 6,
+        "total": 9,
         "provisional": 3
       },
-      "composite_unrounded": 59.75,
-      "composite_overall": 60
+      "composite_unrounded": 58.25,
+      "composite_overall": 58
     },
     {
       "id": "claude_haiku_4_5",
@@ -1083,10 +1155,10 @@
       "previous": "Claude Haiku 4.5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 69,
+      "composite_overall": 64,
       "per_priority": {
         "accuracy": 57,
-        "long_context": 87,
+        "long_context": 69,
         "agent": 32,
         "cost": 100
       },
@@ -1140,12 +1212,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 17.2,
+              "display": "17.2%",
+              "score": 51.5,
+              "board_name": "Claude Haiku 5.5 (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -1203,14 +1287,14 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 29.9 → 46 · BenchLM 63.7 → 68",
-        "long_context": "AA Long-Context Reasoning (high) 77.3% → 87",
+        "long_context": "AA Long-Context Reasoning (high) 77.3% → 87 · GDP.pdf (AA) (high) 17.2% → 52",
         "agent": "Terminal-Bench 4.0 (AA) (high) 21.7% → 32 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $0.20/MTok → 100 · not on DeepSWE $/task"
       },
-      "composite_unrounded": 69.0,
+      "composite_unrounded": 64.5,
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
       "target_effort": "high"
@@ -1226,7 +1310,7 @@
       "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
       "per_priority": {
         "accuracy": 93,
-        "long_context": 90,
+        "long_context": 87,
         "agent": 85,
         "cost": 36
       },
@@ -1280,12 +1364,24 @@
               "inherited": true,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.4,
+              "display": "28.4%",
+              "score": 85.0,
+              "board_name": "GPT-6.2 Astra (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 0,
-            "total": 1,
+            "measured": 1,
+            "total": 2,
             "provisional": 1
           }
         },
@@ -1374,15 +1470,15 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 57.0 → 88 · BenchLM 90.8 → 97",
-        "long_context": "AA Long-Context Reasoning (medium) 79.7% → 90 (inherited from GPT-6 Astra (Medium))",
+        "long_context": "AA Long-Context Reasoning (medium) 79.7% → 90 (inherited from GPT-6 Astra (Medium)) · GDP.pdf (AA) (medium) 28.4% → 85",
         "agent": "DeepSWE (medium) 72.8% → 98 (inherited from gpt-6-astra (medium)) · Terminal-Bench 4.0 (AA) (medium) 58.6% → 87 · τ-Bench Banking (AA) (medium) 35.5% → 69 (inherited from GPT-6 Astra (Medium))",
         "cost": "DeepSWE $/task (medium) $3.08 → 71 (inherited from gpt-6-astra (medium)) · AA blended price (medium) $16.00/MTok → 0"
       },
-      "composite_unrounded": 76.0,
-      "composite_overall": 76,
+      "composite_unrounded": 75.25,
+      "composite_overall": 75,
       "coverage": {
-        "measured": 4,
-        "total": 8,
+        "measured": 5,
+        "total": 9,
         "provisional": 4
       },
       "target_effort": "medium"
@@ -1398,7 +1494,7 @@
       "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
       "per_priority": {
         "accuracy": 84,
-        "long_context": 94,
+        "long_context": 91,
         "agent": 84,
         "cost": 32
       },
@@ -1452,12 +1548,24 @@
               "inherited": true,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 29.2,
+              "display": "29.2%",
+              "score": 87.4,
+              "board_name": "GPT-6.2 Sol (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 0,
-            "total": 1,
+            "measured": 1,
+            "total": 2,
             "provisional": 1
           }
         },
@@ -1515,15 +1623,15 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 52.7 → 82 · BenchLM 81.0 → 87",
-        "long_context": "AA Long-Context Reasoning (medium) 83.3% → 94 (inherited from GPT-6.1 Sol (Medium))",
+        "long_context": "AA Long-Context Reasoning (medium) 83.3% → 94 (inherited from GPT-6.1 Sol (Medium)) · GDP.pdf (AA) (medium) 29.2% → 87",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 56.1% → 84 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (medium) $4.00/MTok → 32 · not on DeepSWE $/task"
       },
-      "composite_unrounded": 73.5,
-      "composite_overall": 74,
+      "composite_unrounded": 72.75,
+      "composite_overall": 73,
       "coverage": {
-        "measured": 4,
-        "total": 5,
+        "measured": 5,
+        "total": 6,
         "provisional": 1
       },
       "target_effort": "medium"
@@ -1539,7 +1647,7 @@
       "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
       "per_priority": {
         "accuracy": 49,
-        "long_context": 90,
+        "long_context": 72,
         "agent": 7,
         "cost": 100
       },
@@ -1593,12 +1701,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 18.2,
+              "display": "18.2%",
+              "score": 54.5,
+              "board_name": "GPT-6 Luna (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -1656,15 +1776,15 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 21.4 → 33 · BenchLM 61.2 → 66",
-        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90",
+        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90 · GDP.pdf (AA) (high) 18.2% → 54",
         "agent": "Terminal-Bench 4.0 (AA) (high) 4.5% → 7 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $0.20/MTok → 100 · not on DeepSWE $/task"
       },
-      "composite_unrounded": 61.5,
-      "composite_overall": 62,
+      "composite_unrounded": 57.0,
+      "composite_overall": 57,
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
       "target_effort": "high"
@@ -1678,10 +1798,10 @@
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": 60,
+      "composite_overall": 55,
       "per_priority": {
         "accuracy": 65,
-        "long_context": 92,
+        "long_context": 73,
         "agent": 21,
         "cost": 62
       },
@@ -1725,12 +1845,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 17.8,
+              "display": "17.8%",
+              "score": 53.3,
+              "board_name": "Gemini 3.1 Pro Preview",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -1819,14 +1951,14 @@
       },
       "score_basis": {
         "accuracy": "BenchLM 61.0 → 65 · not on AA Intelligence Index",
-        "long_context": "AA Long-Context Reasoning 82.0% → 92",
+        "long_context": "AA Long-Context Reasoning 82.0% → 92 · GDP.pdf (AA) 17.8% → 53",
         "agent": "DeepSWE (high) 11.7% → 16 · Terminal-Bench 4.0 (AA) 4.0% → 6 · τ-Bench Banking (AA) 21.4% → 42",
         "cost": "DeepSWE $/task (high) $2.14 → 94 · AA blended price $4.50/MTok → 29"
       },
-      "composite_unrounded": 60.0,
+      "composite_unrounded": 55.25,
       "coverage": {
-        "measured": 7,
-        "total": 7,
+        "measured": 8,
+        "total": 8,
         "provisional": 0
       },
       "target_effort": "high"
@@ -1850,7 +1982,7 @@
       ],
       "per_priority": {
         "accuracy": 92,
-        "long_context": 90,
+        "long_context": 89,
         "agent": 90,
         "cost": 16
       },
@@ -1904,12 +2036,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 29.6,
+              "display": "29.6%",
+              "score": 88.6,
+              "board_name": "Gemini 4 Carbon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -1967,16 +2111,16 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 58.3 → 90 · BenchLM 88.0 → 94",
-        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90",
+        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90 · GDP.pdf (AA) (medium) 29.6% → 89",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 60.6% → 90 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (medium) $8.00/MTok → 16 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
-      "composite_unrounded": 72.0,
+      "composite_unrounded": 71.75,
       "composite_overall": 72
     },
     {
@@ -1998,7 +2142,7 @@
       ],
       "per_priority": {
         "accuracy": 94,
-        "long_context": 90,
+        "long_context": 87,
         "agent": 97,
         "cost": 16
       },
@@ -2052,12 +2196,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.4,
+              "display": "28.4%",
+              "score": 85.0,
+              "board_name": "Gemini 4 Carbon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -2115,16 +2271,16 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 60.0 → 93 · BenchLM 88.0 → 94",
-        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90",
+        "long_context": "AA Long-Context Reasoning (high) 79.3% → 90 · GDP.pdf (AA) (high) 28.4% → 85",
         "agent": "Terminal-Bench 4.0 (AA) (high) 65.2% → 97 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $8.00/MTok → 16 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
-      "composite_unrounded": 74.25,
+      "composite_unrounded": 73.5,
       "composite_overall": 74
     },
     {
@@ -2146,7 +2302,7 @@
       ],
       "per_priority": {
         "accuracy": 91,
-        "long_context": null,
+        "long_context": 98,
         "agent": 81,
         "cost": 22
       },
@@ -2187,14 +2343,27 @@
           }
         },
         "long_context": {
-          "status": "none",
-          "inputs": [],
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 32.8,
+              "display": "32.8%",
+              "score": 98.2,
+              "board_name": "Gemini 4 Neon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
+            }
+          ],
           "missing": [
             "AA Long-Context Reasoning"
           ],
           "coverage": {
-            "measured": 0,
-            "total": 0,
+            "measured": 1,
+            "total": 1,
             "provisional": 0
           }
         },
@@ -2252,17 +2421,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 54.9 → 85 · BenchLM 91.3 → 98",
-        "long_context": "not on AA Long-Context Reasoning",
+        "long_context": "GDP.pdf (AA) (medium) 32.8% → 98 · not on AA Long-Context Reasoning",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 54.5% → 81 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (medium) $6.00/MTok → 22 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 4,
-        "total": 4,
+        "measured": 5,
+        "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": null,
-      "composite_overall": null
+      "composite_unrounded": 73.0,
+      "composite_overall": 73
     },
     {
       "id": "gemini_4_neon_high",
@@ -2283,7 +2452,7 @@
       ],
       "per_priority": {
         "accuracy": 95,
-        "long_context": null,
+        "long_context": 100,
         "agent": 92,
         "cost": 22
       },
@@ -2324,14 +2493,27 @@
           }
         },
         "long_context": {
-          "status": "none",
-          "inputs": [],
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 33.4,
+              "display": "33.4%",
+              "score": 100.0,
+              "board_name": "Gemini 4 Neon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
+            }
+          ],
           "missing": [
             "AA Long-Context Reasoning"
           ],
           "coverage": {
-            "measured": 0,
-            "total": 0,
+            "measured": 1,
+            "total": 1,
             "provisional": 0
           }
         },
@@ -2389,17 +2571,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 59.6 → 92 · BenchLM 91.3 → 98",
-        "long_context": "not on AA Long-Context Reasoning",
+        "long_context": "GDP.pdf (AA) (high) 33.4% → 100 · not on AA Long-Context Reasoning",
         "agent": "Terminal-Bench 4.0 (AA) (high) 61.6% → 92 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $6.00/MTok → 22 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 4,
-        "total": 4,
+        "measured": 5,
+        "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": null,
-      "composite_overall": null
+      "composite_unrounded": 77.25,
+      "composite_overall": 77
     },
     {
       "id": "gemini_4_argon_med",
@@ -2420,7 +2602,7 @@
       ],
       "per_priority": {
         "accuracy": 79,
-        "long_context": 88,
+        "long_context": 82,
         "agent": 82,
         "cost": 16
       },
@@ -2474,12 +2656,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 25.6,
+              "display": "25.6%",
+              "score": 76.6,
+              "board_name": "Gemini 4 Argon (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -2537,17 +2731,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 47.6 → 74 · BenchLM 79.0 → 85",
-        "long_context": "AA Long-Context Reasoning (medium) 78.3% → 88",
+        "long_context": "AA Long-Context Reasoning (medium) 78.3% → 88 · GDP.pdf (AA) (medium) 25.6% → 77",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 55.1% → 82 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (medium) $8.00/MTok → 16 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
-      "composite_unrounded": 66.25,
-      "composite_overall": 66
+      "composite_unrounded": 64.75,
+      "composite_overall": 65
     },
     {
       "id": "gemini_4_argon_high",
@@ -2568,7 +2762,7 @@
       ],
       "per_priority": {
         "accuracy": 81,
-        "long_context": 90,
+        "long_context": 78,
         "agent": 85,
         "cost": 16
       },
@@ -2622,12 +2816,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 21.8,
+              "display": "21.8%",
+              "score": 65.3,
+              "board_name": "Gemini 4 Argon (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -2685,17 +2891,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 50.4 → 78 · BenchLM 79.0 → 85",
-        "long_context": "AA Long-Context Reasoning (high) 79.7% → 90",
+        "long_context": "AA Long-Context Reasoning (high) 79.7% → 90 · GDP.pdf (AA) (high) 21.8% → 65",
         "agent": "Terminal-Bench 4.0 (AA) (high) 57.1% → 85 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $8.00/MTok → 16 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
-      "composite_unrounded": 68.0,
-      "composite_overall": 68
+      "composite_unrounded": 65.0,
+      "composite_overall": 65
     },
     {
       "id": "gemini_4_hydrogen_med",
@@ -2716,7 +2922,7 @@
       ],
       "per_priority": {
         "accuracy": 74,
-        "long_context": null,
+        "long_context": 98,
         "agent": 44,
         "cost": 38
       },
@@ -2757,14 +2963,27 @@
           }
         },
         "long_context": {
-          "status": "none",
-          "inputs": [],
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 32.8,
+              "display": "32.8%",
+              "score": 98.2,
+              "board_name": "Gemini 4 Hydrogen (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
+            }
+          ],
           "missing": [
             "AA Long-Context Reasoning"
           ],
           "coverage": {
-            "measured": 0,
-            "total": 0,
+            "measured": 1,
+            "total": 1,
             "provisional": 0
           }
         },
@@ -2822,17 +3041,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 41.2 → 64 · BenchLM 78.7 → 84",
-        "long_context": "not on AA Long-Context Reasoning",
+        "long_context": "GDP.pdf (AA) (medium) 32.8% → 98 · not on AA Long-Context Reasoning",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 29.3% → 44 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (medium) $3.00/MTok → 38 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 4,
-        "total": 4,
+        "measured": 5,
+        "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": null,
-      "composite_overall": null
+      "composite_unrounded": 63.5,
+      "composite_overall": 64
     },
     {
       "id": "gemini_4_hydrogen_high",
@@ -2853,7 +3072,7 @@
       ],
       "per_priority": {
         "accuracy": 82,
-        "long_context": null,
+        "long_context": 90,
         "agent": 80,
         "cost": 38
       },
@@ -2894,14 +3113,27 @@
           }
         },
         "long_context": {
-          "status": "none",
-          "inputs": [],
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 30.0,
+              "display": "30.0%",
+              "score": 89.8,
+              "board_name": "Gemini 4 Hydrogen (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
+            }
+          ],
           "missing": [
             "AA Long-Context Reasoning"
           ],
           "coverage": {
-            "measured": 0,
-            "total": 0,
+            "measured": 1,
+            "total": 1,
             "provisional": 0
           }
         },
@@ -2959,17 +3191,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 50.8 → 79 · BenchLM 78.7 → 84",
-        "long_context": "not on AA Long-Context Reasoning",
+        "long_context": "GDP.pdf (AA) (high) 30.0% → 90 · not on AA Long-Context Reasoning",
         "agent": "Terminal-Bench 4.0 (AA) (high) 54.0% → 80 · not on DeepSWE, τ-Bench Banking (AA)",
         "cost": "AA blended price (high) $3.00/MTok → 38 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 4,
-        "total": 4,
+        "measured": 5,
+        "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": null,
-      "composite_overall": null
+      "composite_unrounded": 72.5,
+      "composite_overall": 72
     },
     {
       "id": "gemini_3_1_flash_med",
@@ -3024,7 +3256,7 @@
           }
         },
         "long_context": {
-          "status": "measured",
+          "status": "partial",
           "inputs": [
             {
               "bench": "aa_lcr",
@@ -3039,7 +3271,9 @@
               "stale": false
             }
           ],
-          "missing": [],
+          "missing": [
+            "GDP.pdf (AA)"
+          ],
           "coverage": {
             "measured": 1,
             "total": 1,
@@ -3131,7 +3365,7 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (medium) 30.1 → 47 · BenchLM 67.7 → 73",
-        "long_context": "AA Long-Context Reasoning (medium) 84.0% → 95",
+        "long_context": "AA Long-Context Reasoning (medium) 84.0% → 95 · not on GDP.pdf (AA)",
         "agent": "DeepSWE (medium) 71.0% → 96 · Terminal-Bench 4.0 (AA) (medium) 19.7% → 29 · τ-Bench Banking (AA) (medium) 45.8% → 89",
         "cost": "DeepSWE $/task (medium) $1.97 → 100 · AA blended price (medium) $1.50/MTok → 54"
       },
@@ -3197,7 +3431,7 @@
           }
         },
         "long_context": {
-          "status": "measured",
+          "status": "partial",
           "inputs": [
             {
               "bench": "aa_lcr",
@@ -3212,7 +3446,9 @@
               "stale": false
             }
           ],
-          "missing": [],
+          "missing": [
+            "GDP.pdf (AA)"
+          ],
           "coverage": {
             "measured": 1,
             "total": 1,
@@ -3304,7 +3540,7 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 30.8 → 48 · BenchLM 67.7 → 73",
-        "long_context": "AA Long-Context Reasoning (high) 81.3% → 92",
+        "long_context": "AA Long-Context Reasoning (high) 81.3% → 92 · not on GDP.pdf (AA)",
         "agent": "DeepSWE (high) 73.8% → 100 · Terminal-Bench 4.0 (AA) (high) 19.7% → 29 · τ-Bench Banking (AA) (high) 44.9% → 88",
         "cost": "DeepSWE $/task (high) $2.36 → 88 · AA blended price (high) $1.50/MTok → 54"
       },
@@ -3334,7 +3570,7 @@
       ],
       "per_priority": {
         "accuracy": 18,
-        "long_context": 86,
+        "long_context": 63,
         "agent": 18,
         "cost": 67
       },
@@ -3378,12 +3614,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 13.6,
+              "display": "13.6%",
+              "score": 40.7,
+              "board_name": "Gemini 3.5 Flash-Lite",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -3452,17 +3700,17 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index 11.7 → 18 · not on BenchLM",
-        "long_context": "AA Long-Context Reasoning 76.0% → 86",
+        "long_context": "AA Long-Context Reasoning 76.0% → 86 · GDP.pdf (AA) 13.6% → 41",
         "agent": "Terminal-Bench 4.0 (AA) 1.0% → 2 · τ-Bench Banking (AA) 17.5% → 34 · not on DeepSWE",
         "cost": "AA blended price $0.85/MTok → 67 · not on DeepSWE $/task"
       },
       "coverage": {
-        "measured": 5,
-        "total": 5,
+        "measured": 6,
+        "total": 6,
         "provisional": 0
       },
-      "composite_unrounded": 47.25,
-      "composite_overall": 47
+      "composite_unrounded": 41.5,
+      "composite_overall": 42
     },
     {
       "id": "grok_4_5_med",
@@ -3473,10 +3721,10 @@
       "previous": "Grok 4.6",
       "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 68,
+      "composite_overall": 66,
       "per_priority": {
         "accuracy": 62,
-        "long_context": 90,
+        "long_context": 80,
         "agent": 71,
         "cost": 51
       },
@@ -3530,12 +3778,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 23.2,
+              "display": "23.2%",
+              "score": 69.5,
+              "board_name": "Grok 4.7 (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -3624,14 +3884,14 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 35.2 → 54 · BenchLM 65.1 → 70 (inherited from Grok 4.6)",
-        "long_context": "AA Long-Context Reasoning (low) 80.0% → 90",
+        "long_context": "AA Long-Context Reasoning (low) 80.0% → 90 · GDP.pdf (AA) (high) 23.2% → 70",
         "agent": "DeepSWE (medium) 67.5% → 91 (inherited from grok-4-6 (medium)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 37 · τ-Bench Banking (AA) (medium) 44.3% → 86 (inherited from Grok 4.6 (Medium))",
         "cost": "DeepSWE $/task (medium) $3.45 → 64 (inherited from grok-4-6 (medium)) · AA blended price (high) $3.00/MTok → 38"
       },
-      "composite_unrounded": 68.5,
+      "composite_unrounded": 66.0,
       "coverage": {
-        "measured": 4,
-        "total": 8,
+        "measured": 5,
+        "total": 9,
         "provisional": 4
       },
       "target_effort": "medium",
@@ -3646,10 +3906,10 @@
       "previous": "Grok 4.6",
       "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 67,
+      "composite_overall": 64,
       "per_priority": {
         "accuracy": 62,
-        "long_context": 87,
+        "long_context": 78,
         "agent": 75,
         "cost": 43
       },
@@ -3703,12 +3963,24 @@
               "inherited": false,
               "as_of": "2026-11-21",
               "stale": false
+            },
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 23.2,
+              "display": "23.2%",
+              "score": 69.5,
+              "board_name": "Grok 4.7 (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-21",
+              "stale": false
             }
           ],
           "missing": [],
           "coverage": {
-            "measured": 1,
-            "total": 1,
+            "measured": 2,
+            "total": 2,
             "provisional": 0
           }
         },
@@ -3797,14 +4069,14 @@
       },
       "score_basis": {
         "accuracy": "AA Intelligence Index (high) 35.2 → 54 · BenchLM 65.1 → 70 (inherited from Grok 4.6)",
-        "long_context": "AA Long-Context Reasoning (high) 77.0% → 87",
+        "long_context": "AA Long-Context Reasoning (high) 77.0% → 87 · GDP.pdf (AA) (high) 23.2% → 70",
         "agent": "DeepSWE (high) 65.2% → 88 (inherited from grok-4-6 (high)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 37 · τ-Bench Banking (AA) (high) 50.7% → 99 (inherited from Grok 4.6 (High))",
         "cost": "DeepSWE $/task (high) $4.38 → 48 (inherited from grok-4-6 (high)) · AA blended price (high) $3.00/MTok → 38"
       },
-      "composite_unrounded": 66.75,
+      "composite_unrounded": 64.5,
       "coverage": {
-        "measured": 4,
-        "total": 8,
+        "measured": 5,
+        "total": 9,
         "provisional": 4
       },
       "target_effort": "high",
@@ -3950,6 +4222,52 @@
           {
             "model": "MiMo-V2.6-Pro",
             "value": "86.3%"
+          }
+        ]
+      },
+      {
+        "id": "aa_gdp",
+        "name": "GDP.pdf (AA)",
+        "url": "https://artificialanalysis.ai/evaluations/gdp-pdf",
+        "description": "Reasoning & granular instruction following over long professional PDFs",
+        "lower_better": false,
+        "as_of": "2026-11-21",
+        "stale": false,
+        "scope": "whole board",
+        "top5": [
+          {
+            "model": "Gemini 4 Neon (High)",
+            "value": "33.4%"
+          },
+          {
+            "model": "Gemini 4 Hydrogen (Medium)",
+            "value": "32.8%"
+          },
+          {
+            "model": "Muse Wonder Full (Max)",
+            "value": "32.6%"
+          },
+          {
+            "model": "Kimi K3.1 Pro",
+            "value": "31.4%"
+          },
+          {
+            "model": "Muse Wonder (Max)",
+            "value": "30.6%"
+          }
+        ],
+        "top3": [
+          {
+            "model": "Gemini 4 Neon (High)",
+            "value": "33.4%"
+          },
+          {
+            "model": "Gemini 4 Hydrogen (Medium)",
+            "value": "32.8%"
+          },
+          {
+            "model": "Muse Wonder Full (Max)",
+            "value": "32.6%"
           }
         ]
       }
@@ -6164,6 +6482,171 @@
         "Trinity Large Thinking": 5.7732,
         "Inkling 2 Small": 40.4124
       }
+    },
+    "aa_gdp": {
+      "fetched_at": "2026-11-21",
+      "values": {
+        "Claude Sonnet 5.5 (Medium, Default Fallback)": 20.2,
+        "Apodex 1.1": 11.2,
+        "Gemini 3.5 Flash-Lite": 13.6,
+        "Step 5 Preview": 14.8,
+        "Gemini 4 Neon (Low)": 31.4,
+        "Granite 4.2 3B": 0.2,
+        "Claude Fable 5.2 (Medium, Default Fallback)": 23.8,
+        "GPT-6.1 Terra (Non-reasoning)": 23.2,
+        "Gemini 4 Carbon (Medium)": 29.6,
+        "Inkling (Xhigh)": 12.8,
+        "Qwen3.5 397B A17B (Reasoning)": 12.2,
+        "Granite 4.2 30B": 1.8,
+        "K2 Horizon 7B": 3.2,
+        "MiMo-V2.6-Flash": 9.0,
+        "Solar Pro 4": 7.0,
+        "K-EXAONE 2.0": 4.2,
+        "GLM-5.3-Flash": 15.4,
+        "GPT-6 Luna (Xhigh)": 18.6,
+        "North Mini Code": 1.8,
+        "Claude Haiku 5.5 (High)": 17.2,
+        "Grok 4.7 (Low)": 21.4,
+        "Qwen3.5 122B A10B (Reasoning)": 3.4,
+        "MiMo-V2.6-Pro": 19.2,
+        "Claude Sonnet 5.5 (High, Default Fallback)": 25.2,
+        "Grok 4.7 (High)": 23.2,
+        "MiniMax-M3": 9.8,
+        "Mistral Large 4 (Medium)": 16.8,
+        "GPT-6.2 Sol (Xhigh)": 28.4,
+        "Nemotron 3.5 Lightning": 3.0,
+        "LFM3-VL-2B": 0.0,
+        "Gemini 4 Neon (Medium)": 32.8,
+        "Qwen3.5 9B (Reasoning)": 6.6,
+        "Command A+": 1.0,
+        "Claude Opus 5.5 (Max, Default Fallback)": 26.2,
+        "K2 Horizon 3.7B": 3.2,
+        "Qwen3.8 27B (Non-reasoning)": 5.2,
+        "Muse Spark Open (Xhigh)": 18.6,
+        "GPT-6 Luna (Medium)": 13.8,
+        "gpt-oss-20b (High)": 2.0,
+        "Muse Wonder (High)": 29.2,
+        "Nex-N2-Pro (Based on Qwen3.5-397B-A17B)": 12.6,
+        "Mistral Small 4 (Reasoning)": 0.0,
+        "Claude Haiku 5.5 (Xhigh)": 18.2,
+        "Claude Haiku 5.5 (Low)": 11.2,
+        "Ling-3.0-flash-VL": 8.4,
+        "Claude Opus 5.5 (Low, Default Fallback)": 25.6,
+        "Gemini 4 Argon (Medium)": 25.6,
+        "Nanbeige4.3-33B": 11.2,
+        "Ling 3.1 Flash 1019": 12.6,
+        "K2 Horizon MoVA 36B A4B": 4.2,
+        "DeepSeek V4.1 Flash 1017 (Non-reasoning)": 4.4,
+        "Muse Glimmer (High)": 10.0,
+        "GPT-6.2 Astra (Xhigh)": 28.0,
+        "Claude Fable 5.2 (Max, Default Fallback)": 24.2,
+        "Grok 4.7 (Xhigh)": 20.0,
+        "Nemotron 3 Ultra 550B A55B (Reasoning)": 5.0,
+        "LongCat 2.0": 6.4,
+        "JoyAI-VL-Preview": 20.6,
+        "Solar Mini 4": 5.0,
+        "GPT-6 Luna (Non-reasoning)": 5.8,
+        "MiniCPM5-2B": 1.4,
+        "Qwen3.8 27B (Medium)": 12.8,
+        "Kimi K3.1 Pro": 31.4,
+        "Ministral 3 3B": 0.0,
+        "Beam 1.0": 11.6,
+        "Ling-3.0-flash-Fin": 5.4,
+        "Gemma 4 26B A4B (Reasoning)": 2.6,
+        "GPT-6 Luna (Max)": 22.8,
+        "Ministral 3 14B": 1.2,
+        "GPT-6.2 Astra (Max)": 29.8,
+        "Mercury 2.5": 3.6,
+        "Claude Fable 5.2 (Xhigh, Default Fallback)": 21.4,
+        "NVIDIA Nemotron 3 Nano 30B A3B (Reasoning)": 1.0,
+        "DeepSeek V4 Flash Vision (Max)": 12.0,
+        "Muse Ember (Xhigh)": 22.4,
+        "Gemini 4 Neon (Xhigh)": 28.0,
+        "Claude Haiku 5.5 (Max)": 20.8,
+        "GPT-6 Luna (High)": 18.2,
+        "Nemotron 3.5 Bolt 74B-A9B": 2.8,
+        "Qwen3.8 27B (Low)": 10.4,
+        "Ling 3.0 Tiny": 0.8,
+        "Celeris-1": 1.2,
+        "A.X-K2": 6.4,
+        "GPT-6.2 Sol (Medium)": 29.2,
+        "DeepSeek V4 Pro 0813 (Max)": 11.4,
+        "Qwen3.6 35B A3B (Reasoning)": 6.6,
+        "Gemini 4 Hydrogen (Low)": 28.2,
+        "GPT-6.2 Astra (Medium)": 28.4,
+        "Kimi K2.7 Code": 11.2,
+        "Qwen3.8 2.4T A95B": 15.6,
+        "K2 Horizon 32B": 3.8,
+        "Gemini 4 Carbon (High)": 28.4,
+        "Llama 4 Maverick": 0.8,
+        "Ministral 3 8B": 0.8,
+        "Claude Sonnet 5.5 (Xhigh, Default Fallback)": 24.6,
+        "Qwen3.8-Flash-Next": 15.6,
+        "Gemini 4 Neon (High)": 33.4,
+        "K2 Horizon 0.9B": 0.8,
+        "NVIDIA Nemotron 3 Nano 4B": 0.4,
+        "GPT-6.2 Sol (Max)": 30.0,
+        "GPT-6.2 Sol (Low)": 28.6,
+        "Qwen3.7 Plus": 12.2,
+        "Llama 4 Scout": 0.0,
+        "Granite 4.2 8B": 0.6,
+        "Claude Haiku 5.5 (Medium)": 15.2,
+        "Qwen3.8 27B (Xhigh)": 16.4,
+        "Motif 3": 5.2,
+        "GPT-6.1 Terra (Max)": 28.6,
+        "Claude Sonnet 5.5 (Max, Default Fallback)": 25.8,
+        "JT-4.1 Flash 236B A21B": 6.6,
+        "Gemini 4 Carbon (Low)": 28.6,
+        "Trinity Large Thinking": 1.2,
+        "Inkling (High)": 13.0,
+        "K2 Horizon 375B A23B": 7.4,
+        "Claude Sonnet 5.5 (Low, Default Fallback)": 16.0,
+        "Gemini 3.1 Pro Preview": 17.8,
+        "GPT-6 Luna (Low)": 9.0,
+        "DeepSeek V4.1 Flash 1017 (High)": 14.2,
+        "GPT-5.5 Instant (June 2026)": 20.2,
+        "GPT-6.1 Terra (Medium)": 28.4,
+        "LFM3-1.7B": 0.4,
+        "GPT-6.1 Terra (Low)": 25.6,
+        "GLM-5.3 (Low)": 8.8,
+        "GPT-6.2 Astra (Low)": 28.0,
+        "Gemma 4 31B (Reasoning)": 6.0,
+        "GLM-5.3 (Max)": 11.2,
+        "GPT-6.2 Sol (High)": 28.8,
+        "Claude Fable 5.2 (Low, Default Fallback)": 26.8,
+        "Tencent Hy4": 21.6,
+        "Gemini 4 Argon (High)": 21.8,
+        "MiniMax-M3.1-Flash": 20.8,
+        "Agnes 2.5 Pro Theta": 14.2,
+        "DeepSeek V4 Pro 0813 (Non-reasoning)": 3.6,
+        "Gemma 4 E4B (Reasoning)": 1.0,
+        "Inkling 2 Mini": 16.8,
+        "Gemini 4 Hydrogen (Xhigh)": 27.6,
+        "Gemini 4 Hydrogen (High)": 30.0,
+        "Muse Ember (Max)": 22.8,
+        "Mistral Medium 3.5": 2.8,
+        "Claude Opus 5.5 (Xhigh, Default Fallback)": 26.6,
+        "Nemotron 3.5 Super VL": 8.0,
+        "Inkling 2 Small": 25.2,
+        "GPT-6.1 Terra (Xhigh)": 26.6,
+        "DeepSeek V4 Pro 0813 (High)": 10.4,
+        "Muse Wonder Full (Max)": 32.6,
+        "GPT-6.1 Terra (High)": 28.0,
+        "Mistral Large 4 (High)": 17.6,
+        "Claude Opus 5.5 (Medium, Default Fallback)": 25.6,
+        "Ring-2.6-1T": 3.8,
+        "gpt-oss-120b (High)": 4.2,
+        "Gemini 4 Hydrogen (Medium)": 32.8,
+        "DeepSeek V4.1 Flash 1017 (Max)": 17.2,
+        "Claude Opus 5.5 (High, Default Fallback)": 28.8,
+        "Quasar 438B (Max, Based on GLM-5.2)": 5.4,
+        "Qwen3 Coder Next": 2.6,
+        "Claude Fable 5.2 (High, Default Fallback)": 21.8,
+        "GPT-6.2 Astra (High)": 28.6,
+        "Gemma 4 12B (Reasoning)": 1.8,
+        "Qwen4 Max": 26.2,
+        "Muse Wonder (Max)": 30.6
+      }
     }
   },
   "composite_basis": {
@@ -6174,20 +6657,7 @@
       "cost"
     ],
     "excluded": {},
-    "unranked": {
-      "Gemini 4 Neon (Medium)": [
-        "long_context"
-      ],
-      "Gemini 4 Neon (High)": [
-        "long_context"
-      ],
-      "Gemini 4 Hydrogen (Medium)": [
-        "long_context"
-      ],
-      "Gemini 4 Hydrogen (High)": [
-        "long_context"
-      ]
-    }
+    "unranked": {}
   },
   "dropped_benchmarks": {
     "METR Time Horizon": "hasn't tested any tracked model released in the last 90 days"

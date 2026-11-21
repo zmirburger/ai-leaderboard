@@ -103,13 +103,22 @@ def _result(name, soup_text, url):
 _AA_LEADERBOARD_URL = "https://artificialanalysis.ai/leaderboards/models"
 _AA_FREE_API_URL = "https://artificialanalysis.ai/api/v2/language/models/free"
 _AA_RSC_SCORES = {
-    "aa_lcr": "artificial-analysis-long-context-reasoning",
     "aa_gdp": "gdp-pdf",
     "aa_terminalbench_v4": "terminalbench-4-0",
     "aa_tau_banking": "tau3-banking",
 }
-_AA_MERGE_BENCHES = {"aa_lcr", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
+_AA_MERGE_BENCHES = {"aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
 _aa_rsc_cache = None
+
+def _extract_rsc_stream(html):
+    """Extract concatenated Next.js RSC push payload from an HTML document."""
+    chunks = []
+    for m in re.finditer(r'self\.__next_f\.push\(\[1,\s*("(?:\\.|[^"\\])*")\]\)', html or ""):
+        try:
+            chunks.append(json.loads(m.group(1)))
+        except json.JSONDecodeError:
+            continue
+    return "".join(chunks)
 
 def _get_aa_rsc():
     """Fetch and decode Artificial Analysis Next.js RSC stream once per run.
@@ -121,13 +130,7 @@ def _get_aa_rsc():
     if not html:
         _aa_rsc_cache = ([], [])
         return _aa_rsc_cache
-    chunks = []
-    for m in re.finditer(r'self\.__next_f\.push\(\[1,\s*("(?:\\.|[^"\\])*")\]\)', html):
-        try:
-            chunks.append(json.loads(m.group(1)))
-        except json.JSONDecodeError:
-            continue
-    stream = "".join(chunks)
+    stream = _extract_rsc_stream(html)
     decoder = json.JSONDecoder()
     models_arr, releases_arr = [], []
     i = 0
@@ -452,10 +455,55 @@ def _supplement_aa_free_api(out, key):
         if not (payload.get("pagination") or {}).get("has_more"):
             break
 
+def _supplement_aa_model_gdp(out_gdp, releases_arr):
+    """Backfill GDP.pdf scores from AA model pages for tracked releases hidden by deprecated=true."""
+    if not DATA_PATH.exists():
+        return
+    present = {norm_name(k) for k in out_gdp}
+    tracked_groups = [
+        [norm_name(m["name"])] + [norm_name(a) for a in m.get("aliases", [])]
+        for m in load_data().get("models", [])
+    ]
+    missing = {k for keys in tracked_groups if not any(k in present for k in keys) for k in keys if k}
+    if not missing:
+        return
+    seen_slugs = set()
+    decoder = json.JSONDecoder()
+    for rel in releases_arr:
+        slug = rel.get("slug")
+        if not slug or slug in seen_slugs:
+            continue
+        rel_keys = [norm_name(rel.get("name") or "")] + [norm_name(mn) for mn in (rel.get("modelNames") or [])]
+        if not any(k in missing for k in rel_keys):
+            continue
+        seen_slugs.add(slug)
+        html = fetch(f"https://artificialanalysis.ai/models/{slug}")
+        if not html:
+            continue
+        stream = _extract_rsc_stream(html)
+        page_gdp = {}
+        i = 0
+        while (idx := stream.find("[{", i)) != -1:
+            try:
+                arr, end = decoder.raw_decode(stream, idx)
+                if isinstance(arr, list) and arr and isinstance(arr[0], dict) and "gdpPdfAllPass" in arr[0]:
+                    for r in arr:
+                        rname, val = r.get("name"), r.get("gdpPdfAllPass")
+                        if rname and isinstance(val, (int, float)):
+                            page_gdp[rname] = float(val)
+                i = end
+            except json.JSONDecodeError:
+                i = idx + 2
+        if page_gdp:
+            if max(page_gdp.values()) <= 1.0:
+                page_gdp = {k: v * 100.0 for k, v in page_gdp.items()}
+            for k, v in page_gdp.items():
+                out_gdp.setdefault(k, v)
+
 def fetch_aa():
     """Artificial Analysis leaderboard RSC stream (+ optional Free V2 API supplement)."""
-    models_arr, _ = _get_aa_rsc()
-    out = {b: {} for b in ("aa_intelligence_index", "aa_lcr", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
+    models_arr, releases_arr = _get_aa_rsc()
+    out = {b: {} for b in ("aa_intelligence_index", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
     for it in models_arr:
         name = it.get("name")
         if not name:
@@ -477,6 +525,7 @@ def fetch_aa():
         vals = out[bench]
         if vals and max(vals.values()) <= 1.0:
             out[bench] = {k: v * 100.0 for k, v in vals.items()}
+    _supplement_aa_model_gdp(out["aa_gdp"], releases_arr)
     key = os.environ.get("AA_API_KEY")
     if key:
         _supplement_aa_free_api(out, key)
@@ -622,8 +671,6 @@ BENCHMARKS = [
          url="https://artificialanalysis.ai/evaluations/artificial-analysis-intelligence-index", description="Composite of 10 hard evals"),
     dict(id="benchlm", priority="accuracy", name="BenchLM", unit="score", scale="linear", higher_better=True, reference="board",
          url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
-    dict(id="aa_lcr", priority="long_context", name="AA Long-Context Reasoning", unit="pct", scale="linear", higher_better=True, reference="board",
-         url="https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning", description="Reasoning over ~100k-token document sets"),
     dict(id="aa_gdp", priority="long_context", name="GDP.pdf (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/gdp-pdf", description="Reasoning & granular instruction following over long professional PDFs"),
     dict(id="deepswe_cost", priority="cost", name="DeepSWE $/task", unit="usd", scale="log", higher_better=False, reference="tracked",
@@ -805,6 +852,7 @@ def update_benchmarks(data):
     short fetch keeps the previous values and their original date, so a slow or broken
     board shows as 'as of <date>' instead of silently vanishing."""
     cache = data.setdefault("raw_benchmarks", {})
+    cache.pop("aa_lcr", None)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     changes = []
     sources_succeeded = 0

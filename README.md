@@ -35,7 +35,7 @@ To change weights, edit `data.json` and re-run `refresh.py` (or adjust custom we
 
 **Agent:** DeepSWE, Terminal-Bench 4.0 (AA), τ-Bench Banking (AA), METR Time Horizon
 **Accuracy:** AA Intelligence Index, BenchLM
-**Long context:** AA Long-Context Reasoning, GDP.pdf (AA)
+**Long context:** GDP.pdf (AA)
 **Cost:** DeepSWE $/task, AA blended $/MTok
 
 ## Tracked vendors

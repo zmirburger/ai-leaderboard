@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-24T00:44:52Z",
+  "last_updated": "2026-11-24T08:59:44Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -7485,7 +7485,8 @@
         "Gemini 4 Neon (High)": 59.6189,
         "K2 Horizon 0.9B": 2.7176,
         "Inkling 2 Mini": 20.1315,
-        "Ling-3.2-air": 23.3878
+        "Ling-3.2-air": 23.3878,
+        "GLM-5.3-Flash (Max)": 27.8
       }
     },
     "aa_terminalbench_v4": {

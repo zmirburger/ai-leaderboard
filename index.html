@@ -1317,6 +1317,7 @@ async function load() {
 
 const effState = {
   maxCost: '',
+  maxSolved: '',
   scope: 'all',
   sortKey: 'cost_per_task',
   sortDir: 'asc',
@@ -1334,6 +1335,10 @@ function getFilteredSortedEfficiency(d) {
   const maxVal = maxStr === '' ? NaN : parseFloat(maxStr);
   const hasMax = maxStr !== '' && !isNaN(maxVal) && maxVal >= 0;
 
+  const maxSolvedStr = String(effState.maxSolved ?? '').trim();
+  const maxSolvedVal = maxSolvedStr === '' ? NaN : parseFloat(maxSolvedStr);
+  const hasMaxSolved = maxSolvedStr !== '' && !isNaN(maxSolvedVal) && maxSolvedVal >= 0;
+
   const rows = all.filter(r => {
     if (!filterState.vendors.has(r.vendor)) return false;
     if (filterState.excludedBaseModels.has(r.model)) return false;
@@ -1342,6 +1347,11 @@ function getFilteredSortedEfficiency(d) {
     if (hasMax) {
       const cmpVal = r.cost_per_task < 0.01 ? r.cost_per_task : Math.round(r.cost_per_task * 100) / 100;
       if (cmpVal > maxVal + 1e-9) return false;
+    }
+    if (hasMaxSolved) {
+      if (r.cost_per_solved == null) return false;
+      const cmpSolved = r.cost_per_solved < 0.01 ? r.cost_per_solved : Math.round(r.cost_per_solved * 100) / 100;
+      if (cmpSolved > maxSolvedVal + 1e-9) return false;
     }
     return true;
   });
@@ -1372,10 +1382,10 @@ function renderEfficiencyShell(d) {
     { key: 'effort', label: 'Effort' },
     { key: 'cost_per_task', label: 'Cost / Task' },
     { key: 'intelligence_index', label: 'AA II' },
-    { key: 'cost_per_solved', label: '$/Solved' },
+    { key: 'cost_per_solved', label: '$/Solved', title: 'Expected USD per solved task = Cost/Task ÷ (AA II / 100)' },
   ];
   const ths = cols.map(c =>
-    `<th class="sortable" data-eff-sort="${c.key}" onclick="toggleEffSort('${c.key}')">${c.label}<span class="sort-arrow"></span></th>`
+    `<th class="sortable" data-eff-sort="${c.key}" onclick="toggleEffSort('${c.key}')"${c.title ? ` title="${esc(c.title)}"` : ''}>${c.label}<span class="sort-arrow"></span></th>`
   ).join('');
 
   const effMap = new Map();
@@ -1410,6 +1420,22 @@ function renderEfficiencyShell(d) {
           <div class="filter-chips" style="flex:0 1 auto;">
             <button type="button" class="filter-chip" data-eff-scope="all" onclick="setEffScope('all')">All AA efforts</button>
             <button type="button" class="filter-chip" data-eff-scope="tracked" onclick="setEffScope('tracked')">Tracked only</button>
+          </div>
+        </div>
+        <div class="eff-row">
+          <div class="eff-input-wrap">
+            <span class="filter-label" style="min-width:auto;" title="Expected USD per solved task: Cost/Task ÷ (AA Intelligence Index / 100)">Max $/Solved:</span>
+            <div class="eff-input-group">
+              <span class="eff-prefix">$</span>
+              <input id="eff-max-solved" class="eff-input" type="number" step="0.5" min="0" placeholder="No limit" value="${esc(effState.maxSolved)}" oninput="handleEffMaxSolved(this.value)">
+              <button id="eff-solved-clear-btn" class="eff-clear-btn" type="button" onclick="setEffMaxSolvedPreset('')" title="Clear limit" style="display:${effState.maxSolved !== '' ? 'inline' : 'none'};">✕</button>
+            </div>
+            <div class="filter-chips" style="flex:0 1 auto;">
+              <button type="button" class="filter-chip" data-eff-solved-preset="" onclick="setEffMaxSolvedPreset('')">All</button>
+              <button type="button" class="filter-chip" data-eff-solved-preset="2" onclick="setEffMaxSolvedPreset('2')">≤ $2</button>
+              <button type="button" class="filter-chip" data-eff-solved-preset="5" onclick="setEffMaxSolvedPreset('5')">≤ $5</button>
+              <button type="button" class="filter-chip" data-eff-solved-preset="10" onclick="setEffMaxSolvedPreset('10')">≤ $10</button>
+            </div>
           </div>
         </div>
         ${effChips ? `
@@ -1466,11 +1492,22 @@ function updateEfficiencyTable() {
   const clearBtn = document.getElementById('eff-clear-btn');
   if (clearBtn) clearBtn.style.display = String(effState.maxCost ?? '').trim() !== '' ? 'inline' : 'none';
 
+  const clearSolvedBtn = document.getElementById('eff-solved-clear-btn');
+  if (clearSolvedBtn) clearSolvedBtn.style.display = String(effState.maxSolved ?? '').trim() !== '' ? 'inline' : 'none';
+
   document.querySelectorAll('[data-eff-preset]').forEach(btn => {
     const val = btn.dataset.effPreset;
     const match = val === ''
       ? String(effState.maxCost ?? '').trim() === ''
       : parseFloat(effState.maxCost) === parseFloat(val);
+    btn.classList.toggle('active', match);
+  });
+
+  document.querySelectorAll('[data-eff-solved-preset]').forEach(btn => {
+    const val = btn.dataset.effSolvedPreset;
+    const match = val === ''
+      ? String(effState.maxSolved ?? '').trim() === ''
+      : parseFloat(effState.maxSolved) === parseFloat(val);
     btn.classList.toggle('active', match);
   });
 
@@ -1507,6 +1544,18 @@ function handleEffMaxCost(val) {
 function setEffMaxPreset(val) {
   effState.maxCost = val;
   const input = document.getElementById('eff-max-cost');
+  if (input) input.value = val;
+  updateEfficiencyTable();
+}
+
+function handleEffMaxSolved(val) {
+  effState.maxSolved = val;
+  updateEfficiencyTable();
+}
+
+function setEffMaxSolvedPreset(val) {
+  effState.maxSolved = val;
+  const input = document.getElementById('eff-max-solved');
   if (input) input.value = val;
   updateEfficiencyTable();
 }

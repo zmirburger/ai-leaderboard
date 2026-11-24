@@ -6,9 +6,9 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 | Source | Endpoint | Feeds | Key? |
 |--------|----------|-------|------|
-| Artificial Analysis | https://artificialanalysis.ai/leaderboards/models (RSC stream) + `/models/<slug>` (deprecated GDP.pdf RSC backfill) + `/api/v2/language/models/free` | Intelligence Index v5.0 (accuracy) · GDP.pdf (long context) · Terminal-Bench 4.0, τ-Bench Banking (agent) · 3:1 blended $/MTok (cost) | optional (`AA_API_KEY` supplements historical rows) |
+| Artificial Analysis | https://artificialanalysis.ai/leaderboards/models (RSC stream) + `/models/<slug>` (deprecated GDP.pdf + Cost/Solved Task RSC backfill) + `/api/v2/language/models/free` | Intelligence Index v5.0 (accuracy) · GDP.pdf (long context) · Terminal-Bench 4.0, τ-Bench Banking (agent) · Cost per Solved Task = Cost per Task ÷ (II/100) (cost) | optional (`AA_API_KEY` supplements historical rows) |
 | BenchLM | https://benchlm.ai/api/leaderboard | accuracy | no |
-| DeepSWE | https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json | agent (pass@1) · cost ($/task, if the row publishes it) | no |
+| DeepSWE | https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json | agent (pass@1) | no |
 | METR | https://metr.org/time-horizons/ (`benchmarkDataV1_1` / `benchmark_results_1_1.yaml`) | agent (50% time horizon, v1.1) | no |
 
 ## Vendor release pages
@@ -20,6 +20,7 @@ Every source is fetched as a full leaderboard (all models), cached in `data.json
 
 ## Dropped
 
+- **AA blended price ($/MTok) & DeepSWE $/task** (2026-11-24): List $/MTok was identical across reasoning efforts (causing Medium/High ties on Gemini 4), and DeepSWE $/task missed 12/24 models and relied on 9 inherited rows. Standardized Cost on AA Cost per Solved Task (`intelligenceIndexCostPerTask ÷ (intelligenceIndex / 100)`).
 - **AA Long-Context Reasoning (AA-LCR)** (2026-11-21): AA dropped AA-LCR from Intelligence Index v5.0.1 launch evaluations after 2026-11-09 (omitting Hydrogen, Neon, and GPT-6.2), creating a split scoring regime when mixed with GDP.pdf. Standardized long context on GDP.pdf across all tracked models.
 - **Vectara HHEM** (2026-10-12): Stalled on legacy versions (only listed Claude 4.7 and Gemini 3 Preview), causing persistent provisional scores across all current models. Accuracy is now evaluated via AA Intelligence Index and BenchLM.
 - Scraping AA's HTML pages, LMArena, τ-bench README, BrowseComp, Scale SEAL, and Fiction.LiveBench. They were either never fetched automatically (their top-3 lists were typed in by hand) or failed to parse on every run. The AA API replaces the AA pages. AA Omniscience isn't in the API, so it's dropped.

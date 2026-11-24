@@ -587,7 +587,7 @@ function renderDebugTab(d) {
 
     <p class="section-label">Per model: every input behind every score</p>
     ${cards}
-    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional (X/Y)</b> showing the ratio of directly measured to total benchmarks until the board lists it. A board that hasn't tested any model released in the last 90 days is dropped rather than left to feed old results. Cost is scaled across the tracked models on a log scale: the cheapest scores 100, the priciest 0. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
+    <p class="cl-note">How a raw result becomes 0–100: most benchmarks use <b>value ÷ best on that leaderboard × 100</b>. Time horizons span orders of magnitude, so those lose <b>25 points per doubling</b> away from the best. A model a leaderboard hasn't tested yet borrows the result of its newest older version, if that version is less than one major version back, and is marked <b>Provisional (X/Y)</b> showing the ratio of directly measured to total benchmarks until the board lists it. A board that hasn't tested any model released in the last 90 days is dropped rather than left to feed old results. Cost efficiency uses AA Cost per Solved Task (AA Cost per Task ÷ Intelligence Index) scaled across tracked models on a log scale: the lowest $/solved task scores 100, the highest 0. When a leaderboard can't be fetched, its last good values stay in use with their date shown. All numbers are computed by refresh.py; none are typed in by hand.</p>
   `;
 }
 
@@ -1190,7 +1190,7 @@ function render(d) {
           agent: 'Autonomous agent',
           accuracy: 'Accuracy & low hallucination',
           long_context: 'Long instructions & context',
-          cost: 'Cost efficiency (cost / task)'
+          cost: 'Cost efficiency ($ / solved task)'
         };
         const rankedList = ranked(k);
         if (!rankedList.length || !rankedList.some(m => m.per_priority[k] != null)) {

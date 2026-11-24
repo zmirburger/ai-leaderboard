@@ -11,7 +11,7 @@ Daily-refreshed view of the leading AI model across four priorities.
 | Accuracy & low hallucination | 25% |
 | Long context & instructions | 25% |
 | Autonomous agent | 25% |
-| Cost efficiency (cost / task) | 25% |
+| Cost efficiency ($ / solved task) | 25% |
 
 To change weights, edit `data.json` and re-run `refresh.py` (or adjust custom weight sliders in the dashboard UI).
 
@@ -36,7 +36,7 @@ To change weights, edit `data.json` and re-run `refresh.py` (or adjust custom we
 **Agent:** DeepSWE, Terminal-Bench 4.0 (AA), τ-Bench Banking (AA), METR Time Horizon
 **Accuracy:** AA Intelligence Index, BenchLM
 **Long context:** GDP.pdf (AA)
-**Cost:** DeepSWE $/task, AA blended $/MTok
+**Cost:** AA Cost / Solved Task (AA Cost per Task ÷ Intelligence Index)
 
 ## Tracked vendors
 

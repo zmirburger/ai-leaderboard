@@ -107,7 +107,7 @@ _AA_RSC_SCORES = {
     "aa_terminalbench_v4": "terminalbench-4-0",
     "aa_tau_banking": "tau3-banking",
 }
-_AA_MERGE_BENCHES = {"aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price"}
+_AA_MERGE_BENCHES = {"aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved"}
 _aa_rsc_cache = None
 
 def _extract_rsc_stream(html):
@@ -429,8 +429,18 @@ def update_releases(data):
 # the board (not just a top 3), or None when the fetch/parse fails. Values are in
 # natural units: percentages 0-100, hours, USD.
 
+def _extract_aa_cpt(raw_cpt):
+    """Extract float Cost per Task USD from either leaderboard float or model-page nested dict."""
+    if isinstance(raw_cpt, (int, float)):
+        return float(raw_cpt) if raw_cpt > 0 else None
+    if isinstance(raw_cpt, dict):
+        total = (raw_cpt.get("cost") or {}).get("total")
+        if isinstance(total, (int, float)) and total > 0:
+            return float(total)
+    return None
+
 def _supplement_aa_free_api(out, key):
-    """Optionally backfill historical Intelligence Index v5.0 & blended price via AA Free V2 API."""
+    """Optionally backfill historical Intelligence Index v5.0 via AA Free V2 API."""
     for page in range(1, 10):
         raw = fetch(f"{_AA_FREE_API_URL}?page={page}", retries=1, extra_headers={"x-api-key": key})
         if not raw:
@@ -446,25 +456,29 @@ def _supplement_aa_free_api(out, key):
             ii = (it.get("evaluations") or {}).get("artificial_analysis_intelligence_index")
             if isinstance(ii, (int, float)):
                 out["aa_intelligence_index"].setdefault(name, float(ii))
-            pricing = it.get("pricing") or {}
-            inp, outp = pricing.get("price_1m_input_tokens"), pricing.get("price_1m_output_tokens")
-            if isinstance(inp, (int, float)) and isinstance(outp, (int, float)):
-                blended = (3.0 * float(inp) + float(outp)) / 4.0
-                if blended > 0:
-                    out["aa_price"].setdefault(name, blended)
         if not (payload.get("pagination") or {}).get("has_more"):
             break
 
-def _supplement_aa_model_gdp(out_gdp, releases_arr):
-    """Backfill GDP.pdf scores from AA model pages for tracked releases hidden by deprecated=true."""
+def _supplement_aa_model_pages(out, releases_arr):
+    """Backfill GDP.pdf and Cost/Solved Task from AA model pages for tracked releases hidden by deprecated=true."""
     if not DATA_PATH.exists():
         return
-    present = {norm_name(k) for k in out_gdp}
+    present = {
+        b: {norm_name(k) for k in out[b]}
+        for b in ("aa_gdp", "aa_cost_solved", "aa_intelligence_index")
+    }
     tracked_groups = [
         [norm_name(m["name"])] + [norm_name(a) for a in m.get("aliases", [])]
         for m in load_data().get("models", [])
     ]
-    missing = {k for keys in tracked_groups if not any(k in present for k in keys) for k in keys if k}
+    missing = {
+        k
+        for b_present in present.values()
+        for keys in tracked_groups
+        if not any(k in b_present for k in keys)
+        for k in keys
+        if k
+    }
     if not missing:
         return
     seen_slugs = set()
@@ -486,11 +500,20 @@ def _supplement_aa_model_gdp(out_gdp, releases_arr):
         while (idx := stream.find("[{", i)) != -1:
             try:
                 arr, end = decoder.raw_decode(stream, idx)
-                if isinstance(arr, list) and arr and isinstance(arr[0], dict) and "gdpPdfAllPass" in arr[0]:
+                if isinstance(arr, list) and arr and isinstance(arr[0], dict) and ("gdpPdfAllPass" in arr[0] or "intelligenceIndexCostPerTask" in arr[0]):
                     for r in arr:
-                        rname, val = r.get("name"), r.get("gdpPdfAllPass")
-                        if rname and isinstance(val, (int, float)):
+                        rname = r.get("name")
+                        if not rname:
+                            continue
+                        val = r.get("gdpPdfAllPass")
+                        if isinstance(val, (int, float)):
                             page_gdp[rname] = float(val)
+                        ii = r.get("intelligenceIndex")
+                        cpt = _extract_aa_cpt(r.get("intelligenceIndexCostPerTask"))
+                        if isinstance(ii, (int, float)) and ii > 0:
+                            out["aa_intelligence_index"].setdefault(rname, float(ii))
+                            if cpt is not None:
+                                out["aa_cost_solved"].setdefault(rname, cpt / (float(ii) / 100.0))
                 i = end
             except json.JSONDecodeError:
                 i = idx + 2
@@ -498,12 +521,12 @@ def _supplement_aa_model_gdp(out_gdp, releases_arr):
             if max(page_gdp.values()) <= 1.0:
                 page_gdp = {k: v * 100.0 for k, v in page_gdp.items()}
             for k, v in page_gdp.items():
-                out_gdp.setdefault(k, v)
+                out["aa_gdp"].setdefault(k, v)
 
 def fetch_aa():
     """Artificial Analysis leaderboard RSC stream (+ optional Free V2 API supplement)."""
     models_arr, releases_arr = _get_aa_rsc()
-    out = {b: {} for b in ("aa_intelligence_index", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_price")}
+    out = {b: {} for b in ("aa_intelligence_index", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved")}
     for it in models_arr:
         name = it.get("name")
         if not name:
@@ -516,16 +539,14 @@ def fetch_aa():
             v = scores.get(score_key)
             if isinstance(v, (int, float)):
                 out[bench][name] = float(v)
-        inp, outp = it.get("price1mInputTokens"), it.get("price1mOutputTokens")
-        if isinstance(inp, (int, float)) and isinstance(outp, (int, float)):
-            blended = (3.0 * float(inp) + float(outp)) / 4.0
-            if blended > 0:
-                out["aa_price"][name] = blended
+        cpt = _extract_aa_cpt(it.get("intelligenceIndexCostPerTask"))
+        if isinstance(ii, (int, float)) and ii > 0 and cpt is not None:
+            out["aa_cost_solved"][name] = cpt / (float(ii) / 100.0)
     for bench in _AA_RSC_SCORES:
         vals = out[bench]
         if vals and max(vals.values()) <= 1.0:
             out[bench] = {k: v * 100.0 for k, v in vals.items()}
-    _supplement_aa_model_gdp(out["aa_gdp"], releases_arr)
+    _supplement_aa_model_pages(out, releases_arr)
     key = os.environ.get("AA_API_KEY")
     if key:
         _supplement_aa_free_api(out, key)
@@ -547,7 +568,7 @@ def fetch_benchlm():
     return {"benchlm": vals}
 
 def fetch_deepswe():
-    """pass@1 and $/task per model x reasoning effort."""
+    """pass@1 per model x reasoning effort."""
     raw = fetch("https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json")
     if not raw:
         return None
@@ -564,14 +585,11 @@ def fetch_deepswe():
         key = f"{name} ({effort})" if effort and effort != "none" else name
         if key not in runs or p1 > runs[key].get("pass_at_1", -1):
             runs[key] = r
-    pass1, cost = {}, {}
+    pass1 = {}
     for key, r in runs.items():
         p1 = r["pass_at_1"]
         pass1[key] = p1 * 100 if p1 <= 1 else float(p1)
-        c = r.get("mean_cost_usd")
-        if isinstance(c, (int, float)) and c > 0:
-            cost[key] = float(c)
-    return {"deepswe": pass1, "deepswe_cost": cost}
+    return {"deepswe": pass1}
 
 def _format_metr_key(raw_key):
     """Convert METR v1.1 snake_case model key (e.g. claude_opus_4_6_inspect) to display name."""
@@ -673,10 +691,8 @@ BENCHMARKS = [
          url="https://benchlm.ai/compare", description="Composite across verified benchmarks"),
     dict(id="aa_gdp", priority="long_context", name="GDP.pdf (AA)", unit="pct", scale="linear", higher_better=True, reference="board",
          url="https://artificialanalysis.ai/evaluations/gdp-pdf", description="Reasoning & granular instruction following over long professional PDFs"),
-    dict(id="deepswe_cost", priority="cost", name="DeepSWE $/task", unit="usd", scale="log", higher_better=False, reference="tracked",
-         url="https://deepswe.datacurve.ai/", description="Cost per task on the model's best DeepSWE run"),
-    dict(id="aa_price", priority="cost", name="AA blended price", unit="usd_mtok", scale="log", higher_better=False, reference="tracked",
-         url="https://artificialanalysis.ai/models", description="$/1M tokens, 3:1 input:output blend"),
+    dict(id="aa_cost_solved", priority="cost", name="AA Cost / Solved Task", unit="usd_solved", scale="log", higher_better=False, reference="tracked",
+         url="https://artificialanalysis.ai/leaderboards/models", description="Expected $/solved task: AA Cost per Task ÷ (Intelligence Index / 100)"),
 ]
 BENCH_BY_ID = {b["id"]: b for b in BENCHMARKS}
 STALE_DAYS = 14
@@ -691,6 +707,8 @@ def fmt_value(bench, v):
         return f"{v:.1f}%"
     if u == "hours":
         return f"{v:.0f}h" if v >= 10 else (f"{v:.1f}h" if v >= 1 else f"{v * 60:.0f}m")
+    if u == "usd_solved":
+        return f"${v:.2f}/solved"
     if u == "usd":
         return f"${v:.2f}"
     if u == "usd_mtok":
@@ -751,7 +769,9 @@ def pick_variants(variants, targets, higher_better):
         t_rank = EFFORT_RANKS.get(t, 3)
         with_effort = [v for v in variants if v[2] in EFFORT_RANKS]
         if with_effort:
-            return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))]
+            # Tie-break equidistant efforts (e.g. Low vs High when Medium is absent) consistently by effort rank
+            # so a model never mixes High intelligence with Low cost.
+            return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -EFFORT_RANKS[v[2]], -v[0] if higher_better else v[0]))]
         return [max(variants, key=lambda x: x[0] if higher_better else -x[0])]
 
     exact_runs = []
@@ -773,7 +793,8 @@ def pick_variants(variants, targets, higher_better):
     t_rank = EFFORT_RANKS.get(targets[0], 3)
     with_effort = [v for v in variants if v[2] in EFFORT_RANKS]
     if with_effort:
-        return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -v[0] if higher_better else v[0]))]
+        # Tie-break equidistant efforts consistently by effort rank across higher_better and lower_better boards.
+        return [min(with_effort, key=lambda v: (abs(EFFORT_RANKS[v[2]] - t_rank), -EFFORT_RANKS[v[2]], -v[0] if higher_better else v[0]))]
     return [max(variants, key=lambda x: x[0] if higher_better else -x[0])]
 
 def pick_variant(variants, target_effort, higher_better):
@@ -853,6 +874,8 @@ def update_benchmarks(data):
     board shows as 'as of <date>' instead of silently vanishing."""
     cache = data.setdefault("raw_benchmarks", {})
     cache.pop("aa_lcr", None)
+    cache.pop("aa_price", None)
+    cache.pop("deepswe_cost", None)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     changes = []
     sources_succeeded = 0

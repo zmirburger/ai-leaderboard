@@ -39,7 +39,7 @@ All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 
 Artificial Analysis data is fetched directly from AA's public `leaderboards/models` Next.js RSC stream (Intelligence Index v5.0, GDP.pdf, Terminal-Bench 4.0, τ-Bench Banking, and Cost per Solved Task = Cost per Task ÷ Intelligence Index; plus `/models/<slug>` RSC backfill for deprecated tracked releases covering GDP.pdf and Cost per Solved Task), optionally supplemented by `AA_API_KEY` on `/api/v2/language/models/free`.
 
-The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority, "Latest releases" groups by base model, and the sortable "Efficiency" tab renders `efficiency` (raw AA `Cost / Task` in USD with effort-level filtering and a max cost/task cap).
+The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority, "Latest releases" groups by base model, and the sortable "Efficiency" tab renders `efficiency` (raw AA `Cost / Task` in USD with effort-level filtering and max Cost/Task & $/Solved caps).
 
 ## Stack
 

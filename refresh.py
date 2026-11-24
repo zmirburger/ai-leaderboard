@@ -400,7 +400,7 @@ def update_releases(data):
             print(f"  no entry for {vendor}/{tier} in data.json")
             continue
         for existing in matching:
-            has_effort_suffix = " (high)" in existing["name"].lower() or " (medium)" in existing["name"].lower()
+            has_effort_suffix = any(f" ({eff})" in existing["name"].lower() for eff in ("low", "medium", "high", "xhigh", "max"))
             target_name = f"{name} ({existing['target_effort'].capitalize()})" if has_effort_suffix else name
             if existing["name"] != target_name:
                 old = existing["name"]
@@ -1052,7 +1052,7 @@ def compute_scores(data):
     }
     tracked_families = {}
     for m in models:
-        base_name = m.get("base_name") or re.sub(r"\s*\((?:Medium|High)\)\s*$", "", m["name"], flags=re.I)
+        base_name = m.get("base_name") or re.sub(r"\s*\((?:Low|Medium|High|Xhigh|Max)\)\s*$", "", m["name"], flags=re.I)
         vendor = m.get("vendor", "")
         keys = [norm_name(m["name"])] + [norm_name(a) for a in m.get("aliases", [])]
         for k in keys:

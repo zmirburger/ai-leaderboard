@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-24T00:31:27Z",
+  "last_updated": "2026-11-24T00:44:52Z",
   "data_status": "auto_refreshed",
   "note": "Per-priority scores are computed by refresh.py from raw benchmark values (raw_benchmarks). Each model's score_basis/score_detail shows the inputs. Model names/versions are auto-detected from vendor release pages.",
   "weights": {
@@ -9,14 +9,14 @@
     "cost": 0.25
   },
   "best_overall": {
-    "model": "GPT-6.2 Sol",
-    "composite": 84,
-    "rationale": "Computed from benchmarks: accuracy 85, long context 87, agent 84, cost 81 → 84.25. Next: Gemini 4 Neon (High) 79.75; Gemini 4 Neon (Medium) 79.25; GPT-6.2 Astra 78.50; Gemini 4 Hydrogen (High) 74.25. Not ranked (missing data): Gemini 3.1 Pro (accuracy, cost)."
+    "model": "GPT-6.2 Sol (Medium)",
+    "composite": 83,
+    "rationale": "Computed from benchmarks: accuracy 85, long context 87, agent 84, cost 77 → 83.25. Next: GPT-6.2 Sol (High) 82.75; GPT-6.2 Sol (Max) 82.25; GPT-6.2 Sol (Xhigh) 81.25; Gemini 4 Neon (High) 80.75. Not ranked (missing data): Gemini 3.1 Pro (accuracy, cost)."
   },
   "best_per_priority": {
     "accuracy": {
-      "model": "Claude Fable 5.2 (High)",
-      "summary": "AA Intelligence Index (high) 61.8 → 96 · BenchLM 93.3 → 100",
+      "model": "Claude Fable 5.2 (Max)",
+      "summary": "AA Intelligence Index (max) 64.6 → 100 · BenchLM 93.3 → 100",
       "supporting": "AA Intelligence Index · BenchLM"
     },
     "long_context": {
@@ -30,8 +30,8 @@
       "supporting": "DeepSWE · Terminal-Bench 4.0 (AA) · τ-Bench Banking (AA)"
     },
     "cost": {
-      "model": "GPT-6 Luna",
-      "summary": "AA Cost / Solved Task (high) $0.34/solved → 100",
+      "model": "GPT-6 Luna (Medium)",
+      "summary": "AA Cost / Solved Task (medium) $0.23/solved → 100",
       "supporting": "AA Cost / Solved Task"
     }
   },
@@ -51,7 +51,7 @@
         "accuracy": 94,
         "long_context": 71,
         "agent": 83,
-        "cost": 31
+        "cost": 35
       },
       "score_detail": {
         "accuracy": {
@@ -167,7 +167,7 @@
               "name": "AA Cost / Solved Task",
               "value": 6.7412,
               "display": "$6.74/solved",
-              "score": 30.6,
+              "score": 34.8,
               "board_name": "Claude Fable 5.2 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
@@ -187,15 +187,15 @@
         "accuracy": "AA Intelligence Index (medium) 56.4 → 87 · BenchLM 93.3 → 100",
         "long_context": "GDP.pdf (AA) (medium) 23.8% → 71",
         "agent": "DeepSWE (medium) 65.4% → 88 (inherited from claude-fable-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 55.1% → 82 · τ-Bench Banking (AA) (medium) 41.0% → 80 (inherited from Claude Fable 5.1 (Medium, Default Fallback))",
-        "cost": "AA Cost / Solved Task (medium) $6.74/solved → 31"
+        "cost": "AA Cost / Solved Task (medium) $6.74/solved → 35"
       },
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "composite_unrounded": 69.75,
-      "composite_overall": 70
+      "composite_unrounded": 70.75,
+      "composite_overall": 71
     },
     {
       "id": "claude_fable_5_high",
@@ -212,7 +212,7 @@
         "accuracy": 98,
         "long_context": 65,
         "agent": 88,
-        "cost": 12
+        "cost": 20
       },
       "score_detail": {
         "accuracy": {
@@ -328,7 +328,7 @@
               "name": "AA Cost / Solved Task",
               "value": 14.6848,
               "display": "$14.68/solved",
-              "score": 12.5,
+              "score": 19.8,
               "board_name": "Claude Fable 5.2 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
@@ -348,31 +348,354 @@
         "accuracy": "AA Intelligence Index (high) 61.8 → 96 · BenchLM 93.3 → 100",
         "long_context": "GDP.pdf (AA) (high) 21.8% → 65",
         "agent": "DeepSWE (high) 68.6% → 93 (inherited from claude-fable-5 (high)) · Terminal-Bench 4.0 (AA) (high) 59.6% → 89 · τ-Bench Banking (AA) (high) 43.1% → 84 (inherited from Claude Fable 5.1 (High, Default Fallback))",
-        "cost": "AA Cost / Solved Task (high) $14.68/solved → 12"
+        "cost": "AA Cost / Solved Task (high) $14.68/solved → 20"
       },
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "composite_unrounded": 65.75,
+      "composite_unrounded": 67.75,
+      "composite_overall": 68
+    },
+    {
+      "id": "claude_fable_5_xhigh",
+      "name": "Claude Fable 5.2 (Xhigh)",
+      "base_name": "Claude Fable 5.2",
+      "target_effort": "xhigh",
+      "vendor": "Anthropic",
+      "tier": "Fable",
+      "released": "2026-11-09",
+      "previous": "Claude Fable 5.1 (High)",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 98,
+        "long_context": 64,
+        "agent": 92,
+        "cost": 10
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 62.2167,
+              "display": "62.2",
+              "score": 96.4,
+              "board_name": "Claude Fable 5.2 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 93.3,
+              "display": "93.3",
+              "score": 100.0,
+              "board_name": "Claude Fable 5.2",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 21.4,
+              "display": "21.4%",
+              "score": 64.1,
+              "board_name": "Claude Fable 5.2 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 69.9115,
+              "display": "69.9%",
+              "score": 94.3,
+              "board_name": "claude-fable-5 (xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 61.6162,
+              "display": "61.6%",
+              "score": 91.7,
+              "board_name": "Claude Fable 5.2 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 45.7732,
+              "display": "45.8%",
+              "score": 89.2,
+              "board_name": "Claude Fable 5.1 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 23.8338,
+              "display": "$23.83/solved",
+              "score": 10.5,
+              "board_name": "Claude Fable 5.2 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 62.2 → 96 · BenchLM 93.3 → 100",
+        "long_context": "GDP.pdf (AA) (xhigh) 21.4% → 64",
+        "agent": "DeepSWE (xhigh) 69.9% → 94 (inherited from claude-fable-5 (xhigh)) · Terminal-Bench 4.0 (AA) (xhigh) 61.6% → 92 · τ-Bench Banking (AA) (xhigh) 45.8% → 89 (inherited from Claude Fable 5.1 (Xhigh, Default Fallback))",
+        "cost": "AA Cost / Solved Task (xhigh) $23.83/solved → 10"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 66.0,
+      "composite_overall": 66
+    },
+    {
+      "id": "claude_fable_5_max",
+      "name": "Claude Fable 5.2 (Max)",
+      "base_name": "Claude Fable 5.2",
+      "target_effort": "max",
+      "vendor": "Anthropic",
+      "tier": "Fable",
+      "released": "2026-11-09",
+      "previous": "Claude Fable 5.1 (High)",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 100,
+        "long_context": 72,
+        "agent": 92,
+        "cost": 0
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 64.5636,
+              "display": "64.6",
+              "score": 100.0,
+              "board_name": "Claude Fable 5.2 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 93.3,
+              "display": "93.3",
+              "score": 100.0,
+              "board_name": "Claude Fable 5.2",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 24.2,
+              "display": "24.2%",
+              "score": 72.5,
+              "board_name": "Claude Fable 5.2 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 69.7248,
+              "display": "69.7%",
+              "score": 94.1,
+              "board_name": "claude-fable-5 (max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 59.596,
+              "display": "59.6%",
+              "score": 88.7,
+              "board_name": "Claude Fable 5.2 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 47.2165,
+              "display": "47.2%",
+              "score": 92.0,
+              "board_name": "Claude Fable 5.1 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 41.1045,
+              "display": "$41.10/solved",
+              "score": 0.0,
+              "board_name": "Claude Fable 5.2 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 64.6 → 100 · BenchLM 93.3 → 100",
+        "long_context": "GDP.pdf (AA) (max) 24.2% → 72",
+        "agent": "DeepSWE (max) 69.7% → 94 (inherited from claude-fable-5 (max)) · Terminal-Bench 4.0 (AA) (max) 59.6% → 89 · τ-Bench Banking (AA) (max) 47.2% → 92 (inherited from Claude Fable 5.1 (Max, Default Fallback))",
+        "cost": "AA Cost / Solved Task (max) $41.10/solved → 0"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 66.0,
       "composite_overall": 66
     },
     {
       "id": "claude_opus_4_7_med",
       "name": "Claude Opus 5.5 (Medium)",
+      "base_name": "Claude Opus 5.5",
+      "target_effort": "medium",
       "vendor": "Anthropic",
       "tier": "Opus",
       "released": "2026-09-22",
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 70,
       "per_priority": {
         "accuracy": 82,
         "long_context": 77,
         "agent": 82,
-        "cost": 37
+        "cost": 40
       },
       "score_detail": {
         "accuracy": {
@@ -488,7 +811,7 @@
               "name": "AA Cost / Solved Task",
               "value": 5.0844,
               "display": "$5.08/solved",
-              "score": 37.2,
+              "score": 40.3,
               "board_name": "Claude Opus 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
@@ -508,32 +831,32 @@
         "accuracy": "AA Intelligence Index (medium) 48.2 → 75 · BenchLM 82.7 → 89",
         "long_context": "GDP.pdf (AA) (medium) 25.6% → 77",
         "agent": "DeepSWE (medium) 68.9% → 93 (inherited from claude-opus-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 52.5% → 78 · τ-Bench Banking (AA) (medium) 38.6% → 75 (inherited from Claude Opus 5 (Medium))",
-        "cost": "AA Cost / Solved Task (medium) $5.08/solved → 37"
+        "cost": "AA Cost / Solved Task (medium) $5.08/solved → 40"
       },
-      "composite_unrounded": 69.5,
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "target_effort": "medium",
-      "base_name": "Claude Opus 5.5"
+      "composite_unrounded": 70.25,
+      "composite_overall": 70
     },
     {
       "id": "claude_opus_4_7_high",
       "name": "Claude Opus 5.5 (High)",
+      "base_name": "Claude Opus 5.5",
+      "target_effort": "high",
       "vendor": "Anthropic",
       "tier": "Opus",
       "released": "2026-09-22",
       "previous": "Claude Opus 5",
       "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 73,
       "per_priority": {
         "accuracy": 84,
         "long_context": 86,
         "agent": 90,
-        "cost": 31
+        "cost": 35
       },
       "score_detail": {
         "accuracy": {
@@ -649,7 +972,7 @@
               "name": "AA Cost / Solved Task",
               "value": 6.6839,
               "display": "$6.68/solved",
-              "score": 30.8,
+              "score": 35.0,
               "board_name": "Claude Opus 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
@@ -669,16 +992,337 @@
         "accuracy": "AA Intelligence Index (high) 51.8 → 80 · BenchLM 82.7 → 89",
         "long_context": "GDP.pdf (AA) (high) 28.8% → 86",
         "agent": "DeepSWE (high) 72.8% → 98 (inherited from claude-opus-5 (high)) · Terminal-Bench 4.0 (AA) (high) 56.6% → 84 · τ-Bench Banking (AA) (high) 44.7% → 87 (inherited from Claude Opus 5 (High))",
-        "cost": "AA Cost / Solved Task (high) $6.68/solved → 31"
+        "cost": "AA Cost / Solved Task (high) $6.68/solved → 35"
       },
-      "composite_unrounded": 72.75,
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "target_effort": "high",
-      "base_name": "Claude Opus 5.5"
+      "composite_unrounded": 73.75,
+      "composite_overall": 74
+    },
+    {
+      "id": "claude_opus_4_7_xhigh",
+      "name": "Claude Opus 5.5 (Xhigh)",
+      "base_name": "Claude Opus 5.5",
+      "target_effort": "xhigh",
+      "vendor": "Anthropic",
+      "tier": "Opus",
+      "released": "2026-09-22",
+      "previous": "Claude Opus 5",
+      "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 89,
+        "long_context": 80,
+        "agent": 91,
+        "cost": 26
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 57.4447,
+              "display": "57.4",
+              "score": 89.0,
+              "board_name": "Claude Opus 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 82.7,
+              "display": "82.7",
+              "score": 88.6,
+              "board_name": "Claude Opus 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 26.6,
+              "display": "26.6%",
+              "score": 79.6,
+              "board_name": "Claude Opus 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 73.1544,
+              "display": "73.2%",
+              "score": 98.7,
+              "board_name": "claude-opus-5 (xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 59.596,
+              "display": "59.6%",
+              "score": 88.7,
+              "board_name": "Claude Opus 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 43.299,
+              "display": "43.3%",
+              "score": 84.3,
+              "board_name": "Claude Opus 5 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 10.527,
+              "display": "$10.53/solved",
+              "score": 26.2,
+              "board_name": "Claude Opus 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 57.4 → 89 · BenchLM 82.7 → 89",
+        "long_context": "GDP.pdf (AA) (xhigh) 26.6% → 80",
+        "agent": "DeepSWE (xhigh) 73.2% → 99 (inherited from claude-opus-5 (xhigh)) · Terminal-Bench 4.0 (AA) (xhigh) 59.6% → 89 · τ-Bench Banking (AA) (xhigh) 43.3% → 84 (inherited from Claude Opus 5 (Xhigh))",
+        "cost": "AA Cost / Solved Task (xhigh) $10.53/solved → 26"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 71.5,
+      "composite_overall": 72
+    },
+    {
+      "id": "claude_opus_4_7_max",
+      "name": "Claude Opus 5.5 (Max)",
+      "base_name": "Claude Opus 5.5",
+      "target_effort": "max",
+      "vendor": "Anthropic",
+      "tier": "Opus",
+      "released": "2026-09-22",
+      "previous": "Claude Opus 5",
+      "changelog": "Tops AA Intelligence Index (58, max effort) and Terminal-bench 4.0 (66.4%); BenchLM ~87. 1M context / 128K output. $4/$20 per MTok, ~40% cheaper per task than Opus 5.",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 90,
+        "long_context": 78,
+        "agent": 90,
+        "cost": 17
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 59.106,
+              "display": "59.1",
+              "score": 91.5,
+              "board_name": "Claude Opus 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 82.7,
+              "display": "82.7",
+              "score": 88.6,
+              "board_name": "Claude Opus 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 26.2,
+              "display": "26.2%",
+              "score": 78.4,
+              "board_name": "Claude Opus 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 73.6486,
+              "display": "73.6%",
+              "score": 99.4,
+              "board_name": "claude-opus-5 (max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 59.596,
+              "display": "59.6%",
+              "score": 88.7,
+              "board_name": "Claude Opus 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 42.0619,
+              "display": "42.1%",
+              "score": 81.9,
+              "board_name": "Claude Opus 5 (Max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 16.9803,
+              "display": "$16.98/solved",
+              "score": 17.0,
+              "board_name": "Claude Opus 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 59.1 → 92 · BenchLM 82.7 → 89",
+        "long_context": "GDP.pdf (AA) (max) 26.2% → 78",
+        "agent": "DeepSWE (max) 73.6% → 99 (inherited from claude-opus-5 (max)) · Terminal-Bench 4.0 (AA) (max) 59.6% → 89 · τ-Bench Banking (AA) (max) 42.1% → 82 (inherited from Claude Opus 5 (Max))",
+        "cost": "AA Cost / Solved Task (max) $16.98/solved → 17"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 68.75,
+      "composite_overall": 69
     },
     {
       "id": "claude_sonnet_4_6_med",
@@ -695,7 +1339,7 @@
         "accuracy": 66,
         "long_context": 60,
         "agent": 43,
-        "cost": 53
+        "cost": 54
       },
       "score_detail": {
         "accuracy": {
@@ -811,7 +1455,7 @@
               "name": "AA Cost / Solved Task",
               "value": 2.533,
               "display": "$2.53/solved",
-              "score": 53.4,
+              "score": 53.7,
               "board_name": "Claude Sonnet 5.5 (Medium, Default Fallback)",
               "effort": "medium",
               "inherited": false,
@@ -831,14 +1475,14 @@
         "accuracy": "AA Intelligence Index (medium) 30.8 → 48 · BenchLM 77.7 → 83",
         "long_context": "GDP.pdf (AA) (medium) 20.2% → 60",
         "agent": "DeepSWE (medium) 39.8% → 54 (inherited from claude-sonnet-5 (medium)) · Terminal-Bench 4.0 (AA) (medium) 29.8% → 44 · τ-Bench Banking (AA) (high) 15.7% → 30 (inherited from Claude Sonnet 5 (Non-reasoning, High))",
-        "cost": "AA Cost / Solved Task (medium) $2.53/solved → 53"
+        "cost": "AA Cost / Solved Task (medium) $2.53/solved → 54"
       },
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "composite_unrounded": 55.5,
+      "composite_unrounded": 55.75,
       "composite_overall": 56
     },
     {
@@ -856,7 +1500,7 @@
         "accuracy": 74,
         "long_context": 75,
         "agent": 54,
-        "cost": 43
+        "cost": 45
       },
       "score_detail": {
         "accuracy": {
@@ -972,7 +1616,7 @@
               "name": "AA Cost / Solved Task",
               "value": 3.941,
               "display": "$3.94/solved",
-              "score": 43.1,
+              "score": 45.2,
               "board_name": "Claude Sonnet 5.5 (High, Default Fallback)",
               "effort": "high",
               "inherited": false,
@@ -992,31 +1636,494 @@
         "accuracy": "AA Intelligence Index (high) 41.5 → 64 · BenchLM 77.7 → 83",
         "long_context": "GDP.pdf (AA) (high) 25.2% → 75",
         "agent": "DeepSWE (high) 48.2% → 65 (inherited from claude-sonnet-5 (high)) · Terminal-Bench 4.0 (AA) (high) 43.9% → 65 · τ-Bench Banking (AA) (high) 15.7% → 30 (inherited from Claude Sonnet 5 (Non-reasoning, High))",
-        "cost": "AA Cost / Solved Task (high) $3.94/solved → 43"
+        "cost": "AA Cost / Solved Task (high) $3.94/solved → 45"
       },
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "composite_unrounded": 61.5,
+      "composite_unrounded": 62.0,
       "composite_overall": 62
     },
     {
-      "id": "claude_haiku_4_5",
-      "name": "Claude Haiku 5.5",
+      "id": "claude_sonnet_4_6_xhigh",
+      "name": "Claude Sonnet 5.5 (Xhigh)",
+      "base_name": "Claude Sonnet 5.5",
+      "target_effort": "xhigh",
+      "vendor": "Anthropic",
+      "tier": "Sonnet",
+      "released": "2026-09-28",
+      "previous": "Claude Sonnet 5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 80,
+        "long_context": 74,
+        "agent": 75,
+        "cost": 31
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 49.924,
+              "display": "49.9",
+              "score": 77.3,
+              "board_name": "Claude Sonnet 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 77.7,
+              "display": "77.7",
+              "score": 83.3,
+              "board_name": "Claude Sonnet 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 24.6,
+              "display": "24.6%",
+              "score": 73.7,
+              "board_name": "Claude Sonnet 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 49.6674,
+              "display": "49.7%",
+              "score": 67.0,
+              "board_name": "claude-sonnet-5 (xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 57.0707,
+              "display": "57.1%",
+              "score": 85.0,
+              "board_name": "Claude Sonnet 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 37.3196,
+              "display": "37.3%",
+              "score": 72.7,
+              "board_name": "Claude Sonnet 5 (Max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 8.1964,
+              "display": "$8.20/solved",
+              "score": 31.1,
+              "board_name": "Claude Sonnet 5.5 (Xhigh, Default Fallback)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 49.9 → 77 · BenchLM 77.7 → 83",
+        "long_context": "GDP.pdf (AA) (xhigh) 24.6% → 74",
+        "agent": "DeepSWE (xhigh) 49.7% → 67 (inherited from claude-sonnet-5 (xhigh)) · Terminal-Bench 4.0 (AA) (xhigh) 57.1% → 85 · τ-Bench Banking (AA) (max) 37.3% → 73 (inherited from Claude Sonnet 5 (Max))",
+        "cost": "AA Cost / Solved Task (xhigh) $8.20/solved → 31"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 65.0,
+      "composite_overall": 65
+    },
+    {
+      "id": "claude_sonnet_4_6_max",
+      "name": "Claude Sonnet 5.5 (Max)",
+      "base_name": "Claude Sonnet 5.5",
+      "target_effort": "max",
+      "vendor": "Anthropic",
+      "tier": "Sonnet",
+      "released": "2026-09-28",
+      "previous": "Claude Sonnet 5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 84,
+        "long_context": 77,
+        "agent": 80,
+        "cost": 16
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 54.5413,
+              "display": "54.5",
+              "score": 84.5,
+              "board_name": "Claude Sonnet 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 77.7,
+              "display": "77.7",
+              "score": 83.3,
+              "board_name": "Claude Sonnet 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 25.8,
+              "display": "25.8%",
+              "score": 77.2,
+              "board_name": "Claude Sonnet 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 53.8462,
+              "display": "53.8%",
+              "score": 72.7,
+              "board_name": "claude-sonnet-5 (max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 63.6364,
+              "display": "63.6%",
+              "score": 94.7,
+              "board_name": "Claude Sonnet 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 37.3196,
+              "display": "37.3%",
+              "score": 72.7,
+              "board_name": "Claude Sonnet 5 (Max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 18.3725,
+              "display": "$18.37/solved",
+              "score": 15.5,
+              "board_name": "Claude Sonnet 5.5 (Max, Default Fallback)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 54.5 → 84 · BenchLM 77.7 → 83",
+        "long_context": "GDP.pdf (AA) (max) 25.8% → 77",
+        "agent": "DeepSWE (max) 53.8% → 73 (inherited from claude-sonnet-5 (max)) · Terminal-Bench 4.0 (AA) (max) 63.6% → 95 · τ-Bench Banking (AA) (max) 37.3% → 73 (inherited from Claude Sonnet 5 (Max))",
+        "cost": "AA Cost / Solved Task (max) $18.37/solved → 16"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 64.25,
+      "composite_overall": 64
+    },
+    {
+      "id": "claude_haiku_4_5_med",
+      "name": "Claude Haiku 5.5 (Medium)",
+      "base_name": "Claude Haiku 5.5",
+      "target_effort": "medium",
       "vendor": "Anthropic",
       "tier": "Haiku",
       "released": "2026-10-08",
       "previous": "Claude Haiku 4.5",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
-      "composite_overall": 58,
+      "per_priority": {
+        "accuracy": 53,
+        "long_context": 46,
+        "agent": 23,
+        "cost": 91
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 24.6013,
+              "display": "24.6",
+              "score": 38.1,
+              "board_name": "Claude Haiku 5.5 (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 63.6,
+              "display": "63.6",
+              "score": 68.2,
+              "board_name": "Claude Haiku 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 15.2,
+              "display": "15.2%",
+              "score": 45.5,
+              "board_name": "Claude Haiku 5.5 (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 15.1515,
+              "display": "15.2%",
+              "score": 22.6,
+              "board_name": "Claude Haiku 5.5 (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 0.373,
+              "display": "$0.37/solved",
+              "score": 90.6,
+              "board_name": "Claude Haiku 5.5 (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (medium) 24.6 → 38 · BenchLM 63.6 → 68",
+        "long_context": "GDP.pdf (AA) (medium) 15.2% → 46",
+        "agent": "Terminal-Bench 4.0 (AA) (medium) 15.2% → 23 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (medium) $0.37/solved → 91"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 53.25,
+      "composite_overall": 53
+    },
+    {
+      "id": "claude_haiku_4_5_high",
+      "name": "Claude Haiku 5.5 (High)",
+      "base_name": "Claude Haiku 5.5",
+      "target_effort": "high",
+      "vendor": "Anthropic",
+      "tier": "Haiku",
+      "released": "2026-10-08",
+      "previous": "Claude Haiku 4.5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
       "per_priority": {
         "accuracy": 57,
         "long_context": 52,
         "agent": 32,
-        "cost": 90
+        "cost": 84
       },
       "score_detail": {
         "accuracy": {
@@ -1111,7 +2218,7 @@
               "name": "AA Cost / Solved Task",
               "value": 0.5308,
               "display": "$0.53/solved",
-              "score": 89.7,
+              "score": 83.8,
               "board_name": "Claude Haiku 5.5 (High)",
               "effort": "high",
               "inherited": false,
@@ -1131,19 +2238,301 @@
         "accuracy": "AA Intelligence Index (high) 29.9 → 46 · BenchLM 63.6 → 68",
         "long_context": "GDP.pdf (AA) (high) 17.2% → 52",
         "agent": "Terminal-Bench 4.0 (AA) (high) 21.7% → 32 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $0.53/solved → 90"
+        "cost": "AA Cost / Solved Task (high) $0.53/solved → 84"
       },
-      "composite_unrounded": 57.75,
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "target_effort": "high"
+      "composite_unrounded": 56.25,
+      "composite_overall": 56
     },
     {
-      "id": "gpt_astra",
-      "name": "GPT-6.2 Astra",
+      "id": "claude_haiku_4_5_xhigh",
+      "name": "Claude Haiku 5.5 (Xhigh)",
+      "base_name": "Claude Haiku 5.5",
+      "target_effort": "xhigh",
+      "vendor": "Anthropic",
+      "tier": "Haiku",
+      "released": "2026-10-08",
+      "previous": "Claude Haiku 4.5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 61,
+        "long_context": 54,
+        "agent": 44,
+        "cost": 78
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 34.6388,
+              "display": "34.6",
+              "score": 53.7,
+              "board_name": "Claude Haiku 5.5 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 63.6,
+              "display": "63.6",
+              "score": 68.2,
+              "board_name": "Claude Haiku 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 18.2,
+              "display": "18.2%",
+              "score": 54.5,
+              "board_name": "Claude Haiku 5.5 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 29.2929,
+              "display": "29.3%",
+              "score": 43.6,
+              "board_name": "Claude Haiku 5.5 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 0.717,
+              "display": "$0.72/solved",
+              "score": 78.0,
+              "board_name": "Claude Haiku 5.5 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 34.6 → 54 · BenchLM 63.6 → 68",
+        "long_context": "GDP.pdf (AA) (xhigh) 18.2% → 54",
+        "agent": "Terminal-Bench 4.0 (AA) (xhigh) 29.3% → 44 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (xhigh) $0.72/solved → 78"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 59.25,
+      "composite_overall": 59
+    },
+    {
+      "id": "claude_haiku_4_5_max",
+      "name": "Claude Haiku 5.5 (Max)",
+      "base_name": "Claude Haiku 5.5",
+      "target_effort": "max",
+      "vendor": "Anthropic",
+      "tier": "Haiku",
+      "released": "2026-10-08",
+      "previous": "Claude Haiku 4.5",
+      "changelog": "(Auto-detected from release notes - full changelog at link)",
+      "release_notes_url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "per_priority": {
+        "accuracy": 62,
+        "long_context": 62,
+        "agent": 49,
+        "cost": 69
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 36.4845,
+              "display": "36.5",
+              "score": 56.5,
+              "board_name": "Claude Haiku 5.5 (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 63.6,
+              "display": "63.6",
+              "score": 68.2,
+              "board_name": "Claude Haiku 5.5",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 20.8,
+              "display": "20.8%",
+              "score": 62.3,
+              "board_name": "Claude Haiku 5.5 (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 32.8283,
+              "display": "32.8%",
+              "score": 48.9,
+              "board_name": "Claude Haiku 5.5 (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 1.1265,
+              "display": "$1.13/solved",
+              "score": 69.3,
+              "board_name": "Claude Haiku 5.5 (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 36.5 → 56 · BenchLM 63.6 → 68",
+        "long_context": "GDP.pdf (AA) (max) 20.8% → 62",
+        "agent": "Terminal-Bench 4.0 (AA) (max) 32.8% → 49 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (max) $1.13/solved → 69"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 60.5,
+      "composite_overall": 60
+    },
+    {
+      "id": "gpt_astra_med",
+      "name": "GPT-6.2 Astra (Medium)",
+      "base_name": "GPT-6.2 Astra",
+      "target_effort": "medium",
       "vendor": "OpenAI",
       "tier": "Astra",
       "released": "2026-11-17",
@@ -1154,7 +2543,7 @@
         "accuracy": 93,
         "long_context": 85,
         "agent": 85,
-        "cost": 51
+        "cost": 52
       },
       "score_detail": {
         "accuracy": {
@@ -1270,7 +2659,7 @@
               "name": "AA Cost / Solved Task",
               "value": 2.8381,
               "display": "$2.84/solved",
-              "score": 50.7,
+              "score": 51.5,
               "board_name": "GPT-6.2 Astra (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -1290,20 +2679,504 @@
         "accuracy": "AA Intelligence Index (medium) 57.0 → 88 · BenchLM 90.8 → 97",
         "long_context": "GDP.pdf (AA) (medium) 28.4% → 85",
         "agent": "DeepSWE (medium) 72.8% → 98 (inherited from gpt-6-astra (medium)) · Terminal-Bench 4.0 (AA) (medium) 58.6% → 87 · τ-Bench Banking (AA) (medium) 35.5% → 69 (inherited from GPT-6 Astra (Medium))",
-        "cost": "AA Cost / Solved Task (medium) $2.84/solved → 51"
+        "cost": "AA Cost / Solved Task (medium) $2.84/solved → 52"
       },
-      "composite_unrounded": 78.5,
-      "composite_overall": 78,
       "coverage": {
         "measured": 5,
         "total": 7,
         "provisional": 2
       },
-      "target_effort": "medium"
+      "composite_unrounded": 78.75,
+      "composite_overall": 79
     },
     {
-      "id": "gpt_sol",
-      "name": "GPT-6.2 Sol",
+      "id": "gpt_astra_high",
+      "name": "GPT-6.2 Astra (High)",
+      "base_name": "GPT-6.2 Astra",
+      "target_effort": "high",
+      "vendor": "OpenAI",
+      "tier": "Astra",
+      "released": "2026-11-17",
+      "previous": "GPT-6 Astra",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 95,
+        "long_context": 86,
+        "agent": 89,
+        "cost": 48
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 60.0882,
+              "display": "60.1",
+              "score": 93.1,
+              "board_name": "GPT-6.2 Astra (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 90.8,
+              "display": "90.8",
+              "score": 97.3,
+              "board_name": "GPT-6.2 Astra",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.6,
+              "display": "28.6%",
+              "score": 85.6,
+              "board_name": "GPT-6.2 Astra (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 73.2301,
+              "display": "73.2%",
+              "score": 98.8,
+              "board_name": "gpt-6-astra (high)",
+              "effort": "high",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 60.101,
+              "display": "60.1%",
+              "score": 89.5,
+              "board_name": "GPT-6.2 Astra (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 40.0,
+              "display": "40.0%",
+              "score": 77.9,
+              "board_name": "GPT-6 Astra (High)",
+              "effort": "high",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 3.4514,
+              "display": "$3.45/solved",
+              "score": 47.7,
+              "board_name": "GPT-6.2 Astra (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (high) 60.1 → 93 · BenchLM 90.8 → 97",
+        "long_context": "GDP.pdf (AA) (high) 28.6% → 86",
+        "agent": "DeepSWE (high) 73.2% → 99 (inherited from gpt-6-astra (high)) · Terminal-Bench 4.0 (AA) (high) 60.1% → 90 · τ-Bench Banking (AA) (high) 40.0% → 78 (inherited from GPT-6 Astra (High))",
+        "cost": "AA Cost / Solved Task (high) $3.45/solved → 48"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 79.5,
+      "composite_overall": 80
+    },
+    {
+      "id": "gpt_astra_xhigh",
+      "name": "GPT-6.2 Astra (Xhigh)",
+      "base_name": "GPT-6.2 Astra",
+      "target_effort": "xhigh",
+      "vendor": "OpenAI",
+      "tier": "Astra",
+      "released": "2026-11-17",
+      "previous": "GPT-6 Astra",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 96,
+        "long_context": 84,
+        "agent": 93,
+        "cost": 44
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 61.5602,
+              "display": "61.6",
+              "score": 95.3,
+              "board_name": "GPT-6.2 Astra (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 90.8,
+              "display": "90.8",
+              "score": 97.3,
+              "board_name": "GPT-6.2 Astra",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.0,
+              "display": "28.0%",
+              "score": 83.8,
+              "board_name": "GPT-6.2 Astra (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 74.115,
+              "display": "74.1%",
+              "score": 100.0,
+              "board_name": "gpt-6-astra (xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 64.1414,
+              "display": "64.1%",
+              "score": 95.5,
+              "board_name": "GPT-6.2 Astra (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 43.0928,
+              "display": "43.1%",
+              "score": 83.9,
+              "board_name": "GPT-6 Astra (Xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 4.0954,
+              "display": "$4.10/solved",
+              "score": 44.4,
+              "board_name": "GPT-6.2 Astra (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 61.6 → 95 · BenchLM 90.8 → 97",
+        "long_context": "GDP.pdf (AA) (xhigh) 28.0% → 84",
+        "agent": "DeepSWE (xhigh) 74.1% → 100 (inherited from gpt-6-astra (xhigh)) · Terminal-Bench 4.0 (AA) (xhigh) 64.1% → 96 · τ-Bench Banking (AA) (xhigh) 43.1% → 84 (inherited from GPT-6 Astra (Xhigh))",
+        "cost": "AA Cost / Solved Task (xhigh) $4.10/solved → 44"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 79.25,
+      "composite_overall": 79
+    },
+    {
+      "id": "gpt_astra_max",
+      "name": "GPT-6.2 Astra (Max)",
+      "base_name": "GPT-6.2 Astra",
+      "target_effort": "max",
+      "vendor": "OpenAI",
+      "tier": "Astra",
+      "released": "2026-11-17",
+      "previous": "GPT-6 Astra",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 97,
+        "long_context": 89,
+        "agent": 92,
+        "cost": 36
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 62.1388,
+              "display": "62.1",
+              "score": 96.2,
+              "board_name": "GPT-6.2 Astra (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 90.8,
+              "display": "90.8",
+              "score": 97.3,
+              "board_name": "GPT-6.2 Astra",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 29.8,
+              "display": "29.8%",
+              "score": 89.2,
+              "board_name": "GPT-6.2 Astra (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 73.2301,
+              "display": "73.2%",
+              "score": 98.8,
+              "board_name": "gpt-6-astra (max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 64.1414,
+              "display": "64.1%",
+              "score": 95.5,
+              "board_name": "GPT-6.2 Astra (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 41.4433,
+              "display": "41.4%",
+              "score": 80.7,
+              "board_name": "GPT-6 Astra (Max)",
+              "effort": "max",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 6.4338,
+              "display": "$6.43/solved",
+              "score": 35.7,
+              "board_name": "GPT-6.2 Astra (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 62.1 → 96 · BenchLM 90.8 → 97",
+        "long_context": "GDP.pdf (AA) (max) 29.8% → 89",
+        "agent": "DeepSWE (max) 73.2% → 99 (inherited from gpt-6-astra (max)) · Terminal-Bench 4.0 (AA) (max) 64.1% → 96 · τ-Bench Banking (AA) (max) 41.4% → 81 (inherited from GPT-6 Astra (Max))",
+        "cost": "AA Cost / Solved Task (max) $6.43/solved → 36"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 7,
+        "provisional": 2
+      },
+      "composite_unrounded": 78.5,
+      "composite_overall": 78
+    },
+    {
+      "id": "gpt_sol_med",
+      "name": "GPT-6.2 Sol (Medium)",
+      "base_name": "GPT-6.2 Sol",
+      "target_effort": "medium",
       "vendor": "OpenAI",
       "tier": "Sol",
       "released": "2026-11-17",
@@ -1314,7 +3187,7 @@
         "accuracy": 85,
         "long_context": 87,
         "agent": 84,
-        "cost": 81
+        "cost": 77
       },
       "score_detail": {
         "accuracy": {
@@ -1409,7 +3282,7 @@
               "name": "AA Cost / Solved Task",
               "value": 0.7708,
               "display": "$0.77/solved",
-              "score": 81.0,
+              "score": 76.6,
               "board_name": "GPT-6.2 Sol (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -1429,20 +3302,581 @@
         "accuracy": "AA Intelligence Index (medium) 52.7 → 82 · BenchLM 82.2 → 88",
         "long_context": "GDP.pdf (AA) (medium) 29.2% → 87",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 56.1% → 84 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (medium) $0.77/solved → 81"
+        "cost": "AA Cost / Solved Task (medium) $0.77/solved → 77"
       },
-      "composite_unrounded": 84.25,
-      "composite_overall": 84,
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "target_effort": "medium"
+      "composite_unrounded": 83.25,
+      "composite_overall": 83
     },
     {
-      "id": "gpt_luna",
-      "name": "GPT-6 Luna",
+      "id": "gpt_sol_high",
+      "name": "GPT-6.2 Sol (High)",
+      "base_name": "GPT-6.2 Sol",
+      "target_effort": "high",
+      "vendor": "OpenAI",
+      "tier": "Sol",
+      "released": "2026-11-17",
+      "previous": "GPT-6.1 Sol",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 87,
+        "long_context": 86,
+        "agent": 87,
+        "cost": 71
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 54.8899,
+              "display": "54.9",
+              "score": 85.0,
+              "board_name": "GPT-6.2 Sol (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 82.2,
+              "display": "82.2",
+              "score": 88.1,
+              "board_name": "GPT-6.2 Sol",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.8,
+              "display": "28.8%",
+              "score": 86.2,
+              "board_name": "GPT-6.2 Sol (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 58.5859,
+              "display": "58.6%",
+              "score": 87.2,
+              "board_name": "GPT-6.2 Sol (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 1.0269,
+              "display": "$1.03/solved",
+              "score": 71.1,
+              "board_name": "GPT-6.2 Sol (High)",
+              "effort": "high",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (high) 54.9 → 85 · BenchLM 82.2 → 88",
+        "long_context": "GDP.pdf (AA) (high) 28.8% → 86",
+        "agent": "Terminal-Bench 4.0 (AA) (high) 58.6% → 87 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (high) $1.03/solved → 71"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 82.75,
+      "composite_overall": 83
+    },
+    {
+      "id": "gpt_sol_xhigh",
+      "name": "GPT-6.2 Sol (Xhigh)",
+      "base_name": "GPT-6.2 Sol",
+      "target_effort": "xhigh",
+      "vendor": "OpenAI",
+      "tier": "Sol",
+      "released": "2026-11-17",
+      "previous": "GPT-6.1 Sol",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 87,
+        "long_context": 85,
+        "agent": 84,
+        "cost": 69
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 55.7351,
+              "display": "55.7",
+              "score": 86.3,
+              "board_name": "GPT-6.2 Sol (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 82.2,
+              "display": "82.2",
+              "score": 88.1,
+              "board_name": "GPT-6.2 Sol",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.4,
+              "display": "28.4%",
+              "score": 85.0,
+              "board_name": "GPT-6.2 Sol (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 56.0606,
+              "display": "56.1%",
+              "score": 83.5,
+              "board_name": "GPT-6.2 Sol (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 1.1626,
+              "display": "$1.16/solved",
+              "score": 68.7,
+              "board_name": "GPT-6.2 Sol (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 55.7 → 86 · BenchLM 82.2 → 88",
+        "long_context": "GDP.pdf (AA) (xhigh) 28.4% → 85",
+        "agent": "Terminal-Bench 4.0 (AA) (xhigh) 56.1% → 84 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (xhigh) $1.16/solved → 69"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 81.25,
+      "composite_overall": 81
+    },
+    {
+      "id": "gpt_sol_max",
+      "name": "GPT-6.2 Sol (Max)",
+      "base_name": "GPT-6.2 Sol",
+      "target_effort": "max",
+      "vendor": "OpenAI",
+      "tier": "Sol",
+      "released": "2026-11-17",
+      "previous": "GPT-6.1 Sol",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 88,
+        "long_context": 90,
+        "agent": 90,
+        "cost": 61
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 57.2576,
+              "display": "57.3",
+              "score": 88.7,
+              "board_name": "GPT-6.2 Sol (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 82.2,
+              "display": "82.2",
+              "score": 88.1,
+              "board_name": "GPT-6.2 Sol",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 30.0,
+              "display": "30.0%",
+              "score": 89.8,
+              "board_name": "GPT-6.2 Sol (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 60.101,
+              "display": "60.1%",
+              "score": 89.5,
+              "board_name": "GPT-6.2 Sol (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 1.7716,
+              "display": "$1.77/solved",
+              "score": 60.6,
+              "board_name": "GPT-6.2 Sol (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 57.3 → 89 · BenchLM 82.2 → 88",
+        "long_context": "GDP.pdf (AA) (max) 30.0% → 90",
+        "agent": "Terminal-Bench 4.0 (AA) (max) 60.1% → 90 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (max) $1.77/solved → 61"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 82.25,
+      "composite_overall": 82
+    },
+    {
+      "id": "gpt_luna_med",
+      "name": "GPT-6 Luna (Medium)",
+      "base_name": "GPT-6 Luna",
+      "target_effort": "medium",
+      "vendor": "OpenAI",
+      "tier": "Luna",
+      "released": "2026-09-22",
+      "previous": "GPT-5.6 mini",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 47,
+        "long_context": 41,
+        "agent": 4,
+        "cost": 100
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 18.4542,
+              "display": "18.5",
+              "score": 28.6,
+              "board_name": "GPT-6 Luna (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 61.3,
+              "display": "61.3",
+              "score": 65.7,
+              "board_name": "GPT-6 Luna",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 13.8,
+              "display": "13.8%",
+              "score": 41.3,
+              "board_name": "GPT-6 Luna (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 2.5253,
+              "display": "2.5%",
+              "score": 3.8,
+              "board_name": "GPT-6 Luna (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 0.2287,
+              "display": "$0.23/solved",
+              "score": 100.0,
+              "board_name": "GPT-6 Luna (Medium)",
+              "effort": "medium",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (medium) 18.5 → 29 · BenchLM 61.3 → 66",
+        "long_context": "GDP.pdf (AA) (medium) 13.8% → 41",
+        "agent": "Terminal-Bench 4.0 (AA) (medium) 2.5% → 4 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (medium) $0.23/solved → 100"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 48.0,
+      "composite_overall": 48
+    },
+    {
+      "id": "gpt_luna_high",
+      "name": "GPT-6 Luna (High)",
+      "base_name": "GPT-6 Luna",
+      "target_effort": "high",
       "vendor": "OpenAI",
       "tier": "Luna",
       "released": "2026-09-22",
@@ -1453,7 +3887,7 @@
         "accuracy": 49,
         "long_context": 54,
         "agent": 7,
-        "cost": 100
+        "cost": 92
       },
       "score_detail": {
         "accuracy": {
@@ -1548,7 +3982,7 @@
               "name": "AA Cost / Solved Task",
               "value": 0.3404,
               "display": "$0.34/solved",
-              "score": 100.0,
+              "score": 92.3,
               "board_name": "GPT-6 Luna (High)",
               "effort": "high",
               "inherited": false,
@@ -1568,27 +4002,307 @@
         "accuracy": "AA Intelligence Index (high) 21.4 → 33 · BenchLM 61.3 → 66",
         "long_context": "GDP.pdf (AA) (high) 18.2% → 54",
         "agent": "Terminal-Bench 4.0 (AA) (high) 4.5% → 7 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $0.34/solved → 100"
+        "cost": "AA Cost / Solved Task (high) $0.34/solved → 92"
       },
-      "composite_unrounded": 52.5,
-      "composite_overall": 52,
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "target_effort": "high"
+      "composite_unrounded": 50.5,
+      "composite_overall": 50
+    },
+    {
+      "id": "gpt_luna_xhigh",
+      "name": "GPT-6 Luna (Xhigh)",
+      "base_name": "GPT-6 Luna",
+      "target_effort": "xhigh",
+      "vendor": "OpenAI",
+      "tier": "Luna",
+      "released": "2026-09-22",
+      "previous": "GPT-5.6 mini",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 51,
+        "long_context": 56,
+        "agent": 12,
+        "cost": 87
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 23.4509,
+              "display": "23.5",
+              "score": 36.3,
+              "board_name": "GPT-6 Luna (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 61.3,
+              "display": "61.3",
+              "score": 65.7,
+              "board_name": "GPT-6 Luna",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 18.6,
+              "display": "18.6%",
+              "score": 55.7,
+              "board_name": "GPT-6 Luna (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 8.0808,
+              "display": "8.1%",
+              "score": 12.0,
+              "board_name": "GPT-6 Luna (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 0.4439,
+              "display": "$0.44/solved",
+              "score": 87.2,
+              "board_name": "GPT-6 Luna (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 23.5 → 36 · BenchLM 61.3 → 66",
+        "long_context": "GDP.pdf (AA) (xhigh) 18.6% → 56",
+        "agent": "Terminal-Bench 4.0 (AA) (xhigh) 8.1% → 12 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (xhigh) $0.44/solved → 87"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 51.5,
+      "composite_overall": 52
+    },
+    {
+      "id": "gpt_luna_max",
+      "name": "GPT-6 Luna (Max)",
+      "base_name": "GPT-6 Luna",
+      "target_effort": "max",
+      "vendor": "OpenAI",
+      "tier": "Luna",
+      "released": "2026-09-22",
+      "previous": "GPT-5.6 mini",
+      "changelog": "(Auto-detected from Artificial Analysis releases)",
+      "release_notes_url": "https://artificialanalysis.ai/leaderboards/models",
+      "per_priority": {
+        "accuracy": 54,
+        "long_context": 68,
+        "agent": 19,
+        "cost": 83
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 27.8552,
+              "display": "27.9",
+              "score": 43.1,
+              "board_name": "GPT-6 Luna (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 61.3,
+              "display": "61.3",
+              "score": 65.7,
+              "board_name": "GPT-6 Luna",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 22.8,
+              "display": "22.8%",
+              "score": 68.3,
+              "board_name": "GPT-6 Luna (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 12.6263,
+              "display": "12.6%",
+              "score": 18.8,
+              "board_name": "GPT-6 Luna (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 0.5455,
+              "display": "$0.55/solved",
+              "score": 83.3,
+              "board_name": "GPT-6 Luna (Max)",
+              "effort": "max",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (max) 27.9 → 43 · BenchLM 61.3 → 66",
+        "long_context": "GDP.pdf (AA) (max) 22.8% → 68",
+        "agent": "Terminal-Bench 4.0 (AA) (max) 12.6% → 19 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (max) $0.55/solved → 83"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 56.0,
+      "composite_overall": 56
     },
     {
       "id": "gemini_3_1_pro",
       "name": "Gemini 3.1 Pro",
+      "base_name": "Gemini 3.1 Pro",
+      "target_effort": "high",
       "vendor": "Google",
       "tier": "Pro",
       "released": "2026-04-15",
       "previous": "Gemini 3.0 Pro",
       "changelog": "Highest reasoning scores - 94.3% GPQA Diamond, 77.1% ARC-AGI-2. Optimized for multi-step agentic workflows. Available via Gemini API, Vertex AI, Gemini app, NotebookLM (preview on API + Vertex).",
       "release_notes_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
-      "composite_overall": null,
       "per_priority": {
         "accuracy": null,
         "long_context": 53,
@@ -1698,13 +4412,13 @@
         "agent": "DeepSWE (high) 11.7% → 16 · Terminal-Bench 4.0 (AA) 4.0% → 6 · τ-Bench Banking (AA) 21.4% → 42",
         "cost": "not on AA Cost / Solved Task"
       },
-      "composite_unrounded": null,
       "coverage": {
         "measured": 4,
         "total": 4,
         "provisional": 0
       },
-      "target_effort": "high"
+      "composite_unrounded": null,
+      "composite_overall": null
     },
     {
       "id": "gemini_4_carbon_med",
@@ -1727,7 +4441,7 @@
         "accuracy": 92,
         "long_context": 89,
         "agent": 90,
-        "cost": 19
+        "cost": 25
       },
       "score_detail": {
         "accuracy": {
@@ -1822,7 +4536,7 @@
               "name": "AA Cost / Solved Task",
               "value": 11.3044,
               "display": "$11.30/solved",
-              "score": 18.6,
+              "score": 24.9,
               "board_name": "Gemini 4 Carbon (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -1842,15 +4556,15 @@
         "accuracy": "AA Intelligence Index (medium) 58.3 → 90 · BenchLM 88.2 → 94",
         "long_context": "GDP.pdf (AA) (medium) 29.6% → 89",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 60.6% → 90 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (medium) $11.30/solved → 19"
+        "cost": "AA Cost / Solved Task (medium) $11.30/solved → 25"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 72.5,
-      "composite_overall": 72
+      "composite_unrounded": 74.0,
+      "composite_overall": 74
     },
     {
       "id": "gemini_4_carbon_high",
@@ -1873,7 +4587,7 @@
         "accuracy": 94,
         "long_context": 85,
         "agent": 97,
-        "cost": 16
+        "cost": 22
       },
       "score_detail": {
         "accuracy": {
@@ -1968,7 +4682,7 @@
               "name": "AA Cost / Solved Task",
               "value": 12.9204,
               "display": "$12.92/solved",
-              "score": 15.5,
+              "score": 22.3,
               "board_name": "Gemini 4 Carbon (High)",
               "effort": "high",
               "inherited": false,
@@ -1988,15 +4702,15 @@
         "accuracy": "AA Intelligence Index (high) 60.0 → 93 · BenchLM 88.2 → 94",
         "long_context": "GDP.pdf (AA) (high) 28.4% → 85",
         "agent": "Terminal-Bench 4.0 (AA) (high) 65.2% → 97 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $12.92/solved → 16"
+        "cost": "AA Cost / Solved Task (high) $12.92/solved → 22"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 73.0,
-      "composite_overall": 73
+      "composite_unrounded": 74.5,
+      "composite_overall": 74
     },
     {
       "id": "gemini_4_neon_med",
@@ -2019,7 +4733,7 @@
         "accuracy": 92,
         "long_context": 98,
         "agent": 81,
-        "cost": 46
+        "cost": 48
       },
       "score_detail": {
         "accuracy": {
@@ -2114,7 +4828,7 @@
               "name": "AA Cost / Solved Task",
               "value": 3.4715,
               "display": "$3.47/solved",
-              "score": 46.0,
+              "score": 47.6,
               "board_name": "Gemini 4 Neon (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -2134,15 +4848,15 @@
         "accuracy": "AA Intelligence Index (medium) 54.9 → 85 · BenchLM 91.8 → 98",
         "long_context": "GDP.pdf (AA) (medium) 32.8% → 98",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 54.5% → 81 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (medium) $3.47/solved → 46"
+        "cost": "AA Cost / Solved Task (medium) $3.47/solved → 48"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 79.25,
-      "composite_overall": 79
+      "composite_unrounded": 79.75,
+      "composite_overall": 80
     },
     {
       "id": "gemini_4_neon_high",
@@ -2165,7 +4879,7 @@
         "accuracy": 95,
         "long_context": 100,
         "agent": 92,
-        "cost": 32
+        "cost": 36
       },
       "score_detail": {
         "accuracy": {
@@ -2260,7 +4974,7 @@
               "name": "AA Cost / Solved Task",
               "value": 6.2778,
               "display": "$6.28/solved",
-              "score": 32.3,
+              "score": 36.2,
               "board_name": "Gemini 4 Neon (High)",
               "effort": "high",
               "inherited": false,
@@ -2280,15 +4994,161 @@
         "accuracy": "AA Intelligence Index (high) 59.6 → 92 · BenchLM 91.8 → 98",
         "long_context": "GDP.pdf (AA) (high) 33.4% → 100",
         "agent": "Terminal-Bench 4.0 (AA) (high) 61.6% → 92 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $6.28/solved → 32"
+        "cost": "AA Cost / Solved Task (high) $6.28/solved → 36"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 79.75,
-      "composite_overall": 80
+      "composite_unrounded": 80.75,
+      "composite_overall": 81
+    },
+    {
+      "id": "gemini_4_neon_xhigh",
+      "name": "Gemini 4 Neon (Xhigh)",
+      "base_name": "Gemini 4 Neon",
+      "target_effort": "xhigh",
+      "vendor": "Google",
+      "tier": "Neon",
+      "released": "2026-11-18",
+      "previous": "Gemini 4 Argon",
+      "changelog": "Generally available (GA). Balanced frontier Gemini 4 model between Carbon and Hydrogen (AA Intelligence Index 59.6 at High / 61.4 at Xhigh, Terminal-Bench 4.0 61.6% at High / 63.6% at Xhigh). 1M unified context + long decode, low/medium/high/xhigh effort; $3/$15 per MTok.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 4 Neon",
+        "Neon 4",
+        "gemini-4-neon",
+        "neon-4"
+      ],
+      "per_priority": {
+        "accuracy": 97,
+        "long_context": 84,
+        "agent": 95,
+        "cost": 26
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 61.3982,
+              "display": "61.4",
+              "score": 95.1,
+              "board_name": "Gemini 4 Neon (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 91.8,
+              "display": "91.8",
+              "score": 98.4,
+              "board_name": "Gemini 4 Neon",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 28.0,
+              "display": "28.0%",
+              "score": 83.8,
+              "board_name": "Gemini 4 Neon (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 63.6364,
+              "display": "63.6%",
+              "score": 94.7,
+              "board_name": "Gemini 4 Neon (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 10.4968,
+              "display": "$10.50/solved",
+              "score": 26.3,
+              "board_name": "Gemini 4 Neon (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 61.4 → 95 · BenchLM 91.8 → 98",
+        "long_context": "GDP.pdf (AA) (xhigh) 28.0% → 84",
+        "agent": "Terminal-Bench 4.0 (AA) (xhigh) 63.6% → 95 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (xhigh) $10.50/solved → 26"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 75.5,
+      "composite_overall": 76
     },
     {
       "id": "gemini_4_argon_med",
@@ -2311,7 +5171,7 @@
         "accuracy": 79,
         "long_context": 77,
         "agent": 82,
-        "cost": 8
+        "cost": 16
       },
       "score_detail": {
         "accuracy": {
@@ -2406,7 +5266,7 @@
               "name": "AA Cost / Solved Task",
               "value": 18.1271,
               "display": "$18.13/solved",
-              "score": 7.6,
+              "score": 15.8,
               "board_name": "Gemini 4 Argon (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -2426,15 +5286,15 @@
         "accuracy": "AA Intelligence Index (medium) 47.6 → 74 · BenchLM 79.1 → 85",
         "long_context": "GDP.pdf (AA) (medium) 25.6% → 77",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 55.1% → 82 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (medium) $18.13/solved → 8"
+        "cost": "AA Cost / Solved Task (medium) $18.13/solved → 16"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 61.5,
-      "composite_overall": 62
+      "composite_unrounded": 63.5,
+      "composite_overall": 64
     },
     {
       "id": "gemini_4_argon_high",
@@ -2457,7 +5317,7 @@
         "accuracy": 81,
         "long_context": 65,
         "agent": 85,
-        "cost": 6
+        "cost": 14
       },
       "score_detail": {
         "accuracy": {
@@ -2552,7 +5412,7 @@
               "name": "AA Cost / Solved Task",
               "value": 19.7306,
               "display": "$19.73/solved",
-              "score": 5.7,
+              "score": 14.1,
               "board_name": "Gemini 4 Argon (High)",
               "effort": "high",
               "inherited": false,
@@ -2572,15 +5432,15 @@
         "accuracy": "AA Intelligence Index (high) 50.4 → 78 · BenchLM 79.1 → 85",
         "long_context": "GDP.pdf (AA) (high) 21.8% → 65",
         "agent": "Terminal-Bench 4.0 (AA) (high) 57.1% → 85 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $19.73/solved → 6"
+        "cost": "AA Cost / Solved Task (high) $19.73/solved → 14"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 59.25,
-      "composite_overall": 59
+      "composite_unrounded": 61.25,
+      "composite_overall": 61
     },
     {
       "id": "gemini_4_hydrogen_med",
@@ -2603,7 +5463,7 @@
         "accuracy": 74,
         "long_context": 98,
         "agent": 44,
-        "cost": 60
+        "cost": 59
       },
       "score_detail": {
         "accuracy": {
@@ -2698,7 +5558,7 @@
               "name": "AA Cost / Solved Task",
               "value": 1.9353,
               "display": "$1.94/solved",
-              "score": 59.6,
+              "score": 58.9,
               "board_name": "Gemini 4 Hydrogen (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -2718,14 +5578,14 @@
         "accuracy": "AA Intelligence Index (medium) 41.2 → 64 · BenchLM 78.8 → 84",
         "long_context": "GDP.pdf (AA) (medium) 32.8% → 98",
         "agent": "Terminal-Bench 4.0 (AA) (medium) 29.3% → 44 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (medium) $1.94/solved → 60"
+        "cost": "AA Cost / Solved Task (medium) $1.94/solved → 59"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 69.0,
+      "composite_unrounded": 68.75,
       "composite_overall": 69
     },
     {
@@ -2749,7 +5609,7 @@
         "accuracy": 82,
         "long_context": 90,
         "agent": 80,
-        "cost": 45
+        "cost": 46
       },
       "score_detail": {
         "accuracy": {
@@ -2844,7 +5704,7 @@
               "name": "AA Cost / Solved Task",
               "value": 3.6886,
               "display": "$3.69/solved",
-              "score": 44.6,
+              "score": 46.4,
               "board_name": "Gemini 4 Hydrogen (High)",
               "effort": "high",
               "inherited": false,
@@ -2864,31 +5724,178 @@
         "accuracy": "AA Intelligence Index (high) 50.8 → 79 · BenchLM 78.8 → 84",
         "long_context": "GDP.pdf (AA) (high) 30.0% → 90",
         "agent": "Terminal-Bench 4.0 (AA) (high) 54.0% → 80 · not on DeepSWE, τ-Bench Banking (AA)",
-        "cost": "AA Cost / Solved Task (high) $3.69/solved → 45"
+        "cost": "AA Cost / Solved Task (high) $3.69/solved → 46"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 74.25,
+      "composite_unrounded": 74.5,
       "composite_overall": 74
+    },
+    {
+      "id": "gemini_4_hydrogen_xhigh",
+      "name": "Gemini 4 Hydrogen (Xhigh)",
+      "base_name": "Gemini 4 Hydrogen",
+      "target_effort": "xhigh",
+      "vendor": "Google",
+      "tier": "Hydrogen",
+      "released": "2026-11-12",
+      "previous": "Gemini 3.8 Flash",
+      "changelog": "Generally available (GA). High-speed Gemini 4 workhorse succeeding 3.8 Flash (AA Intelligence Index 50.8 at High / 53.9 at Xhigh, BenchLM 79.1, Terminal-Bench 4.0 54.0%). 1M unified context, low/medium/high/xhigh effort; $1.50/$7.50 per MTok.",
+      "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "aliases": [
+        "Gemini 4 Hydrogen",
+        "Hydrogen 4",
+        "gemini-4-hydrogen",
+        "hydrogen-4"
+      ],
+      "per_priority": {
+        "accuracy": 84,
+        "long_context": 83,
+        "agent": 80,
+        "cost": 38
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 53.9192,
+              "display": "53.9",
+              "score": 83.5,
+              "board_name": "Gemini 4 Hydrogen (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 78.8,
+              "display": "78.8",
+              "score": 84.5,
+              "board_name": "Gemini 4 Hydrogen",
+              "effort": null,
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 2,
+            "total": 2,
+            "provisional": 0
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 27.6,
+              "display": "27.6%",
+              "score": 82.6,
+              "board_name": "Gemini 4 Hydrogen (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "partial",
+          "inputs": [
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 53.5354,
+              "display": "53.5%",
+              "score": 79.7,
+              "board_name": "Gemini 4 Hydrogen (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [
+            "DeepSWE",
+            "τ-Bench Banking (AA)"
+          ],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 5.8609,
+              "display": "$5.86/solved",
+              "score": 37.5,
+              "board_name": "Gemini 4 Hydrogen (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 53.9 → 84 · BenchLM 78.8 → 84",
+        "long_context": "GDP.pdf (AA) (xhigh) 27.6% → 83",
+        "agent": "Terminal-Bench 4.0 (AA) (xhigh) 53.5% → 80 · not on DeepSWE, τ-Bench Banking (AA)",
+        "cost": "AA Cost / Solved Task (xhigh) $5.86/solved → 38"
+      },
+      "coverage": {
+        "measured": 5,
+        "total": 5,
+        "provisional": 0
+      },
+      "composite_unrounded": 71.25,
+      "composite_overall": 71
     },
     {
       "id": "gemini_3_1_flash_med",
       "name": "Gemini 3.8 Flash (Medium)",
+      "base_name": "Gemini 3.8 Flash",
+      "target_effort": "medium",
       "vendor": "Google",
       "tier": "Flash",
       "released": "2026-09-02",
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 51,
       "per_priority": {
         "accuracy": 60,
         "long_context": 68,
         "agent": 71,
-        "cost": 4
+        "cost": 13
       },
       "score_detail": {
         "accuracy": {
@@ -3004,7 +6011,7 @@
               "name": "AA Cost / Solved Task",
               "value": 20.8075,
               "display": "$20.81/solved",
-              "score": 4.4,
+              "score": 13.1,
               "board_name": "Gemini 3.8 Flash (Medium)",
               "effort": "medium",
               "inherited": false,
@@ -3024,32 +6031,32 @@
         "accuracy": "AA Intelligence Index (medium) 30.1 → 47 · BenchLM 68.0 → 73",
         "long_context": "GDP.pdf (AA) (medium) 22.8% → 68",
         "agent": "DeepSWE (medium) 71.0% → 96 · Terminal-Bench 4.0 (AA) (medium) 19.7% → 29 · τ-Bench Banking (AA) (medium) 45.8% → 89",
-        "cost": "AA Cost / Solved Task (medium) $20.81/solved → 4"
+        "cost": "AA Cost / Solved Task (medium) $20.81/solved → 13"
       },
-      "composite_unrounded": 50.75,
       "coverage": {
         "measured": 7,
         "total": 7,
         "provisional": 0
       },
-      "target_effort": "medium",
-      "base_name": "Gemini 3.8 Flash"
+      "composite_unrounded": 53.0,
+      "composite_overall": 53
     },
     {
       "id": "gemini_3_1_flash_high",
       "name": "Gemini 3.8 Flash (High)",
+      "base_name": "Gemini 3.8 Flash",
+      "target_effort": "high",
       "vendor": "Google",
       "tier": "Flash",
       "released": "2026-09-02",
       "previous": "Gemini 3.7 Flash",
       "changelog": "(Auto-detected from release notes - full changelog at link)",
       "release_notes_url": "https://ai.google.dev/gemini-api/docs/changelog",
-      "composite_overall": 49,
       "per_priority": {
         "accuracy": 60,
         "long_context": 63,
         "agent": 72,
-        "cost": 0
+        "cost": 9
       },
       "score_detail": {
         "accuracy": {
@@ -3165,7 +6172,7 @@
               "name": "AA Cost / Solved Task",
               "value": 25.176,
               "display": "$25.18/solved",
-              "score": 0.0,
+              "score": 9.4,
               "board_name": "Gemini 3.8 Flash (High)",
               "effort": "high",
               "inherited": false,
@@ -3185,20 +6192,20 @@
         "accuracy": "AA Intelligence Index (high) 30.8 → 48 · BenchLM 68.0 → 73",
         "long_context": "GDP.pdf (AA) (high) 21.0% → 63",
         "agent": "DeepSWE (high) 73.8% → 100 · Terminal-Bench 4.0 (AA) (high) 19.7% → 29 · τ-Bench Banking (AA) (high) 44.9% → 88",
-        "cost": "AA Cost / Solved Task (high) $25.18/solved → 0"
+        "cost": "AA Cost / Solved Task (high) $25.18/solved → 9"
       },
-      "composite_unrounded": 48.75,
       "coverage": {
         "measured": 7,
         "total": 7,
         "provisional": 0
       },
-      "target_effort": "high",
-      "base_name": "Gemini 3.8 Flash"
+      "composite_unrounded": 51.0,
+      "composite_overall": 51
     },
     {
       "id": "gemini_3_5_flash_lite",
       "name": "Gemini 3.5 Flash-Lite",
+      "base_name": "Gemini 3.5 Flash-Lite",
       "target_effort": "high",
       "vendor": "Google",
       "tier": "Flash-Lite",
@@ -3215,7 +6222,7 @@
         "accuracy": 18,
         "long_context": 41,
         "agent": 18,
-        "cost": 34
+        "cost": 37
       },
       "score_detail": {
         "accuracy": {
@@ -3311,7 +6318,7 @@
               "name": "AA Cost / Solved Task",
               "value": 5.9444,
               "display": "$5.94/solved",
-              "score": 33.5,
+              "score": 37.2,
               "board_name": "Gemini 3.5 Flash-Lite",
               "effort": null,
               "inherited": false,
@@ -3331,31 +6338,32 @@
         "accuracy": "AA Intelligence Index 11.7 → 18 · not on BenchLM",
         "long_context": "GDP.pdf (AA) 13.6% → 41",
         "agent": "Terminal-Bench 4.0 (AA) 1.0% → 2 · τ-Bench Banking (AA) 17.5% → 34 · not on DeepSWE",
-        "cost": "AA Cost / Solved Task $5.94/solved → 34"
+        "cost": "AA Cost / Solved Task $5.94/solved → 37"
       },
       "coverage": {
         "measured": 5,
         "total": 5,
         "provisional": 0
       },
-      "composite_unrounded": 27.75,
+      "composite_unrounded": 28.5,
       "composite_overall": 28
     },
     {
       "id": "grok_4_5_med",
       "name": "Grok 4.7 (Medium)",
+      "base_name": "Grok 4.7",
+      "target_effort": "medium",
       "vendor": "xAI",
       "tier": "Grok",
       "released": "2026-09-21",
       "previous": "Grok 4.6",
       "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 53,
       "per_priority": {
         "accuracy": 62,
         "long_context": 70,
         "agent": 71,
-        "cost": 8
+        "cost": 16
       },
       "score_detail": {
         "accuracy": {
@@ -3471,7 +6479,7 @@
               "name": "AA Cost / Solved Task",
               "value": 17.5609,
               "display": "$17.56/solved",
-              "score": 8.4,
+              "score": 16.4,
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
@@ -3491,32 +6499,32 @@
         "accuracy": "AA Intelligence Index (high) 35.2 → 54 · BenchLM 65.2 → 70 (inherited from Grok 4.6)",
         "long_context": "GDP.pdf (AA) (high) 23.2% → 70",
         "agent": "DeepSWE (medium) 67.5% → 91 (inherited from grok-4-6 (medium)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 37 · τ-Bench Banking (AA) (medium) 44.3% → 86 (inherited from Grok 4.6 (Medium))",
-        "cost": "AA Cost / Solved Task (high) $17.56/solved → 8"
+        "cost": "AA Cost / Solved Task (high) $17.56/solved → 16"
       },
-      "composite_unrounded": 52.75,
       "coverage": {
         "measured": 4,
         "total": 7,
         "provisional": 3
       },
-      "target_effort": "medium",
-      "base_name": "Grok 4.7"
+      "composite_unrounded": 54.75,
+      "composite_overall": 55
     },
     {
       "id": "grok_4_5_high",
       "name": "Grok 4.7 (High)",
+      "base_name": "Grok 4.7",
+      "target_effort": "high",
       "vendor": "xAI",
       "tier": "Grok",
       "released": "2026-09-21",
       "previous": "Grok 4.6",
       "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
       "release_notes_url": "https://docs.x.ai/developers/release-notes",
-      "composite_overall": 54,
       "per_priority": {
         "accuracy": 62,
         "long_context": 70,
         "agent": 75,
-        "cost": 8
+        "cost": 16
       },
       "score_detail": {
         "accuracy": {
@@ -3632,7 +6640,7 @@
               "name": "AA Cost / Solved Task",
               "value": 17.5609,
               "display": "$17.56/solved",
-              "score": 8.4,
+              "score": 16.4,
               "board_name": "Grok 4.7 (High)",
               "effort": "high",
               "inherited": false,
@@ -3652,16 +6660,176 @@
         "accuracy": "AA Intelligence Index (high) 35.2 → 54 · BenchLM 65.2 → 70 (inherited from Grok 4.6)",
         "long_context": "GDP.pdf (AA) (high) 23.2% → 70",
         "agent": "DeepSWE (high) 65.2% → 88 (inherited from grok-4-6 (high)) · Terminal-Bench 4.0 (AA) (high) 24.7% → 37 · τ-Bench Banking (AA) (high) 50.7% → 99 (inherited from Grok 4.6 (High))",
-        "cost": "AA Cost / Solved Task (high) $17.56/solved → 8"
+        "cost": "AA Cost / Solved Task (high) $17.56/solved → 16"
       },
-      "composite_unrounded": 53.75,
       "coverage": {
         "measured": 4,
         "total": 7,
         "provisional": 3
       },
-      "target_effort": "high",
-      "base_name": "Grok 4.7"
+      "composite_unrounded": 55.75,
+      "composite_overall": 56
+    },
+    {
+      "id": "grok_4_5_xhigh",
+      "name": "Grok 4.7 (Xhigh)",
+      "base_name": "Grok 4.7",
+      "target_effort": "xhigh",
+      "vendor": "xAI",
+      "tier": "Grok",
+      "released": "2026-09-21",
+      "previous": "Grok 4.6",
+      "changelog": "Value pick: $2/$6 per MTok. AA Intelligence Index 46 vs 53 for Fable 5.1 / GPT-6; Terminal-bench 4.0 only 26% (GPT-6 Astra 60%). Leads niche legal (Harvey) and EEBench.",
+      "release_notes_url": "https://docs.x.ai/developers/release-notes",
+      "per_priority": {
+        "accuracy": 62,
+        "long_context": 60,
+        "agent": 71,
+        "cost": 12
+      },
+      "score_detail": {
+        "accuracy": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "aa_intelligence_index",
+              "name": "AA Intelligence Index",
+              "value": 35.485,
+              "display": "35.5",
+              "score": 55.0,
+              "board_name": "Grok 4.7 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "benchlm",
+              "name": "BenchLM",
+              "value": 65.2,
+              "display": "65.2",
+              "score": 69.9,
+              "board_name": "Grok 4.6",
+              "effort": null,
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 2,
+            "provisional": 1
+          }
+        },
+        "long_context": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_gdp",
+              "name": "GDP.pdf (AA)",
+              "value": 20.0,
+              "display": "20.0%",
+              "score": 59.9,
+              "board_name": "Grok 4.7 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        },
+        "agent": {
+          "status": "provisional",
+          "inputs": [
+            {
+              "bench": "deepswe",
+              "name": "DeepSWE",
+              "value": 66.7406,
+              "display": "66.7%",
+              "score": 90.1,
+              "board_name": "grok-4-6 (xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_terminalbench_v4",
+              "name": "Terminal-Bench 4.0 (AA)",
+              "value": 25.7576,
+              "display": "25.8%",
+              "score": 38.3,
+              "board_name": "Grok 4.7 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            },
+            {
+              "bench": "aa_tau_banking",
+              "name": "τ-Bench Banking (AA)",
+              "value": 43.299,
+              "display": "43.3%",
+              "score": 84.3,
+              "board_name": "Grok 4.6 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": true,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 3,
+            "provisional": 2
+          }
+        },
+        "cost": {
+          "status": "measured",
+          "inputs": [
+            {
+              "bench": "aa_cost_solved",
+              "name": "AA Cost / Solved Task",
+              "value": 21.9009,
+              "display": "$21.90/solved",
+              "score": 12.1,
+              "board_name": "Grok 4.7 (Xhigh)",
+              "effort": "xhigh",
+              "inherited": false,
+              "as_of": "2026-11-24",
+              "stale": false
+            }
+          ],
+          "missing": [],
+          "coverage": {
+            "measured": 1,
+            "total": 1,
+            "provisional": 0
+          }
+        }
+      },
+      "score_basis": {
+        "accuracy": "AA Intelligence Index (xhigh) 35.5 → 55 · BenchLM 65.2 → 70 (inherited from Grok 4.6)",
+        "long_context": "GDP.pdf (AA) (xhigh) 20.0% → 60",
+        "agent": "DeepSWE (xhigh) 66.7% → 90 (inherited from grok-4-6 (xhigh)) · Terminal-Bench 4.0 (AA) (xhigh) 25.8% → 38 · τ-Bench Banking (AA) (xhigh) 43.3% → 84 (inherited from Grok 4.6 (Xhigh))",
+        "cost": "AA Cost / Solved Task (xhigh) $21.90/solved → 12"
+      },
+      "coverage": {
+        "measured": 4,
+        "total": 7,
+        "provisional": 3
+      },
+      "composite_unrounded": 51.25,
+      "composite_overall": 51
     }
   ],
   "benchmarks": {
@@ -3959,38 +7127,38 @@
         "scope": "tracked models",
         "top5": [
           {
-            "model": "GPT-6 Luna",
+            "model": "GPT-6 Luna (Medium)",
+            "value": "$0.23/solved"
+          },
+          {
+            "model": "GPT-6 Luna (High)",
             "value": "$0.34/solved"
           },
           {
-            "model": "Claude Haiku 5.5",
+            "model": "Claude Haiku 5.5 (Medium)",
+            "value": "$0.37/solved"
+          },
+          {
+            "model": "GPT-6 Luna (Xhigh)",
+            "value": "$0.44/solved"
+          },
+          {
+            "model": "Claude Haiku 5.5 (High)",
             "value": "$0.53/solved"
-          },
-          {
-            "model": "GPT-6.2 Sol",
-            "value": "$0.77/solved"
-          },
-          {
-            "model": "Gemini 4 Hydrogen (Medium)",
-            "value": "$1.94/solved"
-          },
-          {
-            "model": "Claude Sonnet 5.5 (Medium)",
-            "value": "$2.53/solved"
           }
         ],
         "top3": [
           {
-            "model": "GPT-6 Luna",
+            "model": "GPT-6 Luna (Medium)",
+            "value": "$0.23/solved"
+          },
+          {
+            "model": "GPT-6 Luna (High)",
             "value": "$0.34/solved"
           },
           {
-            "model": "Claude Haiku 5.5",
-            "value": "$0.53/solved"
-          },
-          {
-            "model": "GPT-6.2 Sol",
-            "value": "$0.77/solved"
+            "model": "Claude Haiku 5.5 (Medium)",
+            "value": "$0.37/solved"
           }
         ]
       }
@@ -5260,7 +8428,7 @@
       "cost_per_task": 0.0422,
       "intelligence_index": 18.45,
       "cost_per_solved": 0.2287,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6 Luna (Medium)"
     },
     {
@@ -5308,7 +8476,7 @@
       "cost_per_task": 0.0918,
       "intelligence_index": 24.6,
       "cost_per_solved": 0.373,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Haiku 5.5 (Medium)"
     },
     {
@@ -5320,7 +8488,7 @@
       "cost_per_task": 0.1041,
       "intelligence_index": 23.45,
       "cost_per_solved": 0.4439,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6 Luna (Xhigh)"
     },
     {
@@ -5332,7 +8500,7 @@
       "cost_per_task": 0.152,
       "intelligence_index": 27.86,
       "cost_per_solved": 0.5455,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6 Luna (Max)"
     },
     {
@@ -5368,7 +8536,7 @@
       "cost_per_task": 0.2484,
       "intelligence_index": 34.64,
       "cost_per_solved": 0.717,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Haiku 5.5 (Xhigh)"
     },
     {
@@ -5404,7 +8572,7 @@
       "cost_per_task": 0.411,
       "intelligence_index": 36.48,
       "cost_per_solved": 1.1265,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Haiku 5.5 (Max)"
     },
     {
@@ -5428,7 +8596,7 @@
       "cost_per_task": 0.5636,
       "intelligence_index": 54.89,
       "cost_per_solved": 1.0269,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Sol (High)"
     },
     {
@@ -5440,7 +8608,7 @@
       "cost_per_task": 0.648,
       "intelligence_index": 55.74,
       "cost_per_solved": 1.1626,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Sol (Xhigh)"
     },
     {
@@ -5524,7 +8692,7 @@
       "cost_per_task": 1.0144,
       "intelligence_index": 57.26,
       "cost_per_solved": 1.7716,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Sol (Max)"
     },
     {
@@ -5584,7 +8752,7 @@
       "cost_per_task": 2.0739,
       "intelligence_index": 60.09,
       "cost_per_solved": 3.4514,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Astra (High)"
     },
     {
@@ -5608,7 +8776,7 @@
       "cost_per_task": 2.5211,
       "intelligence_index": 61.56,
       "cost_per_solved": 4.0954,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Astra (Xhigh)"
     },
     {
@@ -5644,7 +8812,7 @@
       "cost_per_task": 3.1602,
       "intelligence_index": 53.92,
       "cost_per_solved": 5.8609,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Gemini 4 Hydrogen (Xhigh)"
     },
     {
@@ -5692,7 +8860,7 @@
       "cost_per_task": 3.9979,
       "intelligence_index": 62.14,
       "cost_per_solved": 6.4338,
-      "tracked": false,
+      "tracked": true,
       "board_name": "GPT-6.2 Astra (Max)"
     },
     {
@@ -5704,7 +8872,7 @@
       "cost_per_task": 4.092,
       "intelligence_index": 49.92,
       "cost_per_solved": 8.1964,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Sonnet 5.5 (Xhigh, Default Fallback)"
     },
     {
@@ -5716,7 +8884,7 @@
       "cost_per_task": 6.0472,
       "intelligence_index": 57.44,
       "cost_per_solved": 10.527,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Opus 5.5 (Xhigh, Default Fallback)"
     },
     {
@@ -5752,7 +8920,7 @@
       "cost_per_task": 6.4448,
       "intelligence_index": 61.4,
       "cost_per_solved": 10.4968,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Gemini 4 Neon (Xhigh)"
     },
     {
@@ -5812,7 +8980,7 @@
       "cost_per_task": 7.7715,
       "intelligence_index": 35.48,
       "cost_per_solved": 21.9009,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Grok 4.7 (Xhigh)"
     },
     {
@@ -5860,7 +9028,7 @@
       "cost_per_task": 10.0206,
       "intelligence_index": 54.54,
       "cost_per_solved": 18.3725,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Sonnet 5.5 (Max, Default Fallback)"
     },
     {
@@ -5872,7 +9040,7 @@
       "cost_per_task": 10.0364,
       "intelligence_index": 59.11,
       "cost_per_solved": 16.9803,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Opus 5.5 (Max, Default Fallback)"
     },
     {
@@ -5884,7 +9052,7 @@
       "cost_per_task": 14.8286,
       "intelligence_index": 62.22,
       "cost_per_solved": 23.8338,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Fable 5.2 (Xhigh, Default Fallback)"
     },
     {
@@ -5896,7 +9064,7 @@
       "cost_per_task": 26.5386,
       "intelligence_index": 64.56,
       "cost_per_solved": 41.1045,
-      "tracked": false,
+      "tracked": true,
       "board_name": "Claude Fable 5.2 (Max, Default Fallback)"
     }
   ]

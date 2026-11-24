@@ -95,8 +95,9 @@
   .pri-rank td:last-child { text-align: right; color: var(--text-muted); font-variant-numeric: tabular-nums; }
   .pri-rank tr:first-child td { font-weight: 600; color: var(--text); }
   .pri-rank tr:first-child td:last-child { color: var(--accent); }
-  .tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 0.5px solid var(--border); margin-bottom: 18px; }
-  .tab-btn { background: transparent; border: 0; color: var(--text-muted); font-size: 13.5px; padding: 9px 14px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; font-weight: 500; }
+  .tabs { display: flex; gap: 4px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; border-bottom: 0.5px solid var(--border); margin-bottom: 18px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: transparent; border: 0; color: var(--text-muted); font-size: 13.5px; padding: 9px 14px; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
   .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
   .tab-pane { display: none; }
   .tab-pane.active { display: block; }
@@ -571,6 +572,61 @@
     margin-left: 6px;
     vertical-align: middle;
   }
+  .filter-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border-strong);
+    margin: 0 2px;
+    align-self: center;
+  }
+  .model-filter-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--text-dim);
+  }
+  .model-filter-group {
+    margin-top: 8px;
+  }
+  .model-filter-vendor {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+  .model-release-efforts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .model-release-efforts-table th {
+    text-align: right;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    padding: 4px 6px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .model-release-efforts-table th:first-child,
+  .model-release-efforts-table td:first-child { text-align: left; padding-left: 0; }
+  .model-release-efforts-table th:last-child,
+  .model-release-efforts-table td:last-child { padding-right: 0; }
+  .model-release-efforts-table td {
+    text-align: right;
+    padding: 5px 6px;
+    font-size: 12px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text-muted);
+  }
+  .model-release-efforts-table tbody tr:last-child td { border-bottom: 0; }
+  .model-release-efforts-table td:nth-child(2) { color: var(--text); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1004,50 +1060,65 @@ function applyWeightsAndRender() {
   render(currentData);
 }
 
+const ALL_EFFORTS = ['medium', 'high', 'xhigh', 'max'];
+const EFFORT_DISPLAY = {
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
+  xhigh: 'Xhigh',
+  max: 'Max',
+  'non-reasoning': 'Non-reasoning',
+  default: 'Default',
+};
+const getBaseName = (m) => m.base_name || String(m.name || '').replace(/\s*\((?:Low|Medium|High|Xhigh|Max)\)\s*$/i, '');
+
 const filterState = {
   vendors: new Set(),
-  efforts: new Set(['high', 'medium']),
-  excludedModels: new Set(),
+  efforts: new Set(ALL_EFFORTS),
+  excludedBaseModels: new Set(),
+  excludedIds: new Set(),
+  bestPerModel: false,
 };
 
 function initFilters(data) {
   const allVendors = [...new Set(data.models.map(m => m.vendor))];
-  const allEfforts = ['high', 'medium'];
 
   try {
-    const saved = localStorage.getItem('airank_filters_v1');
+    const saved = localStorage.getItem('airank_filters_v2');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed.vendors)) {
-        filterState.vendors = new Set(parsed.vendors.filter(v => allVendors.includes(v)));
-      } else {
-        filterState.vendors = new Set(allVendors);
-      }
-      if (Array.isArray(parsed.efforts)) {
-        filterState.efforts = new Set(parsed.efforts.filter(e => allEfforts.includes(e)));
-      } else {
-        filterState.efforts = new Set(allEfforts);
-      }
-      if (Array.isArray(parsed.excluded)) {
-        filterState.excludedModels = new Set(parsed.excluded);
-      } else {
-        filterState.excludedModels = new Set();
-      }
+      filterState.vendors = Array.isArray(parsed.vendors)
+        ? new Set(parsed.vendors.filter(v => allVendors.includes(v)))
+        : new Set(allVendors);
+      filterState.efforts = Array.isArray(parsed.efforts)
+        ? new Set(parsed.efforts.filter(e => ALL_EFFORTS.includes(e)))
+        : new Set(ALL_EFFORTS);
+      filterState.excludedBaseModels = Array.isArray(parsed.excludedBaseModels)
+        ? new Set(parsed.excludedBaseModels)
+        : new Set();
+      filterState.excludedIds = Array.isArray(parsed.excludedIds)
+        ? new Set(parsed.excludedIds)
+        : new Set();
+      filterState.bestPerModel = !!parsed.bestPerModel;
       return;
     }
   } catch (e) {}
 
   filterState.vendors = new Set(allVendors);
-  filterState.efforts = new Set(allEfforts);
-  filterState.excludedModels = new Set();
+  filterState.efforts = new Set(ALL_EFFORTS);
+  filterState.excludedBaseModels = new Set();
+  filterState.excludedIds = new Set();
+  filterState.bestPerModel = false;
 }
 
 function saveFilters() {
   try {
-    localStorage.setItem('airank_filters_v1', JSON.stringify({
+    localStorage.setItem('airank_filters_v2', JSON.stringify({
       vendors: Array.from(filterState.vendors),
       efforts: Array.from(filterState.efforts),
-      excluded: Array.from(filterState.excludedModels),
+      excludedBaseModels: Array.from(filterState.excludedBaseModels),
+      excludedIds: Array.from(filterState.excludedIds),
+      bestPerModel: filterState.bestPerModel,
     }));
   } catch (e) {}
 }
@@ -1056,7 +1127,8 @@ function isModelActive(m) {
   if (!filterState.vendors.has(m.vendor)) return false;
   const eff = (m.target_effort || 'medium').toLowerCase();
   if (!filterState.efforts.has(eff)) return false;
-  if (filterState.excludedModels.has(m.id) || filterState.excludedModels.has(m.name)) return false;
+  if (filterState.excludedBaseModels.has(getBaseName(m))) return false;
+  if (filterState.excludedIds.has(m.id) || filterState.excludedIds.has(m.name)) return false;
   return true;
 }
 
@@ -1081,60 +1153,116 @@ function toggleEffort(effort) {
   if (currentData) render(currentData);
 }
 
-function toggleModelExclude(id, e) {
+function toggleBestPerModel() {
+  filterState.bestPerModel = !filterState.bestPerModel;
+  saveFilters();
+  if (currentData) render(currentData);
+}
+
+function toggleBaseModelExclude(baseName, e) {
   if (e) {
     e.stopPropagation();
     e.preventDefault();
   }
-  if (filterState.excludedModels.has(id)) {
-    filterState.excludedModels.delete(id);
+  if (filterState.excludedBaseModels.has(baseName)) {
+    filterState.excludedBaseModels.delete(baseName);
+    if (currentData) {
+      for (const m of currentData.models) {
+        if (getBaseName(m) === baseName) {
+          filterState.excludedIds.delete(m.id);
+          filterState.excludedIds.delete(m.name);
+        }
+      }
+    }
   } else {
-    filterState.excludedModels.add(id);
+    filterState.excludedBaseModels.add(baseName);
   }
   saveFilters();
   if (currentData) render(currentData);
 }
 
+function toggleModelExclude(id, e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  if (filterState.excludedIds.has(id)) {
+    filterState.excludedIds.delete(id);
+  } else {
+    filterState.excludedIds.add(id);
+  }
+  saveFilters();
+  if (currentData) render(currentData);
+}
+
+function setAllBaseModels(includeAll) {
+  if (!currentData) return;
+  if (includeAll) {
+    filterState.excludedBaseModels = new Set();
+    filterState.excludedIds = new Set();
+  } else {
+    filterState.excludedBaseModels = new Set(currentData.models.map(getBaseName));
+  }
+  saveFilters();
+  render(currentData);
+}
+
 function resetAllFilters() {
   if (!currentData) return;
   filterState.vendors = new Set(currentData.models.map(m => m.vendor));
-  filterState.efforts = new Set(['high', 'medium']);
-  filterState.excludedModels = new Set();
+  filterState.efforts = new Set(ALL_EFFORTS);
+  filterState.excludedBaseModels = new Set();
+  filterState.excludedIds = new Set();
+  filterState.bestPerModel = false;
   saveFilters();
   render(currentData);
 }
 
 function renderFilterBar(d, activeModels) {
   const allVendors = [...new Set(d.models.map(m => m.vendor))];
-  const allEfforts = ['high', 'medium'];
+  const allBaseModels = [...new Set(d.models.map(getBaseName))];
+  const activeBaseCount = allBaseModels.filter(bn => !filterState.excludedBaseModels.has(bn)).length;
+
   const hasAnyFilter = filterState.vendors.size < allVendors.length
-    || filterState.efforts.size < allEfforts.length
-    || filterState.excludedModels.size > 0;
+    || filterState.efforts.size < ALL_EFFORTS.length
+    || filterState.excludedBaseModels.size > 0
+    || filterState.excludedIds.size > 0
+    || filterState.bestPerModel;
 
   const vendorChips = allVendors.map(v => {
     const active = filterState.vendors.has(v);
     return `<button class="filter-chip ${active ? 'active' : 'inactive'}" onclick="toggleVendor('${esc(v)}')">${esc(v)} ${active ? '✓' : ''}</button>`;
   }).join('');
 
-  const effortChips = allEfforts.map(e => {
+  const effortChips = ALL_EFFORTS.map(e => {
     const active = filterState.efforts.has(e);
-    const label = (e === 'high' ? 'High' : 'Medium') + ' effort';
+    const label = EFFORT_DISPLAY[e] || e;
     return `<button class="filter-chip ${active ? 'active' : 'inactive'}" onclick="toggleEffort('${e}')">${label} ${active ? '✓' : ''}</button>`;
   }).join('');
 
-  const excludedChips = [...filterState.excludedModels].map(id => {
+  const bestChip = `<button class="filter-chip ${filterState.bestPerModel ? 'active' : ''}" onclick="toggleBestPerModel()" title="Show only the top-scoring effort per model family">Best effort / model${filterState.bestPerModel ? ' ✓' : ''}</button>`;
+
+  const excludedBaseChips = [...filterState.excludedBaseModels].map(bn =>
+    `<span class="active-exclusion-chip" onclick="toggleBaseModelExclude('${esc(bn)}')" title="Click to unhide">${esc(bn)} (all) ✕</span>`
+  );
+  const excludedIdChips = [...filterState.excludedIds].map(id => {
     const m = d.models.find(x => x.id === id || x.name === id);
     const label = m ? m.name : id;
     return `<span class="active-exclusion-chip" onclick="toggleModelExclude('${esc(id)}')" title="Click to unhide">${esc(label)} ✕</span>`;
-  }).join('');
+  });
+  const excludedChips = [...excludedBaseChips, ...excludedIdChips].join('');
 
-  const modelChecklist = d.models.map(m => {
-    const active = isModelActive(m);
+  const modelGroups = allVendors.map(vendor => {
+    const bases = [...new Set(d.models.filter(m => m.vendor === vendor).map(getBaseName))];
+    const chips = bases.map(bn => {
+      const included = !filterState.excludedBaseModels.has(bn);
+      return `<button type="button" class="filter-chip ${included ? 'active' : 'inactive'}" onclick="toggleBaseModelExclude('${esc(bn)}')">${esc(bn)} ${included ? '✓' : ''}</button>`;
+    }).join('');
     return `
-      <label class="model-checklist-item ${active ? '' : 'excluded'}">
-        <input type="checkbox" ${active ? 'checked' : ''} onchange="toggleModelExclude('${esc(m.id)}')">
-        <span>${esc(m.name)}</span>
-      </label>
+      <div class="model-filter-group">
+        <p class="model-filter-vendor">${esc(vendor)}</p>
+        <div class="filter-chips">${chips}</div>
+      </div>
     `;
   }).join('');
 
@@ -1150,7 +1278,7 @@ function renderFilterBar(d, activeModels) {
       </div>
       <div class="filter-section">
         <span class="filter-label">Effort:</span>
-        <div class="filter-chips">${effortChips}</div>
+        <div class="filter-chips">${effortChips}<span class="filter-sep"></span>${bestChip}</div>
       </div>
       ${excludedChips ? `
         <div class="active-exclusions-bar">
@@ -1159,10 +1287,13 @@ function renderFilterBar(d, activeModels) {
         </div>
       ` : ''}
       <details class="filter-model-details" ${modelDetailsOpen ? 'open' : ''} ontoggle="modelDetailsOpen = this.open">
-        <summary class="filter-summary">Filter specific models (${activeModels.length}/${d.models.length} active)</summary>
-        <div class="model-checklist-grid">
-          ${modelChecklist}
+        <summary class="filter-summary">Filter by model (${activeBaseCount}/${allBaseModels.length} models · ${activeModels.length}/${d.models.length} configs)</summary>
+        <div class="model-filter-head-actions">
+          <button type="button" class="filter-reset-link" onclick="setAllBaseModels(true)">Select all</button>
+          <span>·</span>
+          <button type="button" class="filter-reset-link" onclick="setAllBaseModels(false)">Clear all</button>
         </div>
+        ${modelGroups}
       </details>
     </div>
   `;
@@ -1189,6 +1320,7 @@ const effState = {
   scope: 'all',
   sortKey: 'cost_per_task',
   sortDir: 'asc',
+  excludedEfforts: new Set(),
 };
 
 function fmtUsdTask(v) {
@@ -1204,6 +1336,8 @@ function getFilteredSortedEfficiency(d) {
 
   const rows = all.filter(r => {
     if (!filterState.vendors.has(r.vendor)) return false;
+    if (filterState.excludedBaseModels.has(r.model)) return false;
+    if (effState.excludedEfforts.has(r.effort)) return false;
     if (effState.scope === 'tracked' && !r.tracked) return false;
     if (hasMax) {
       const cmpVal = r.cost_per_task < 0.01 ? r.cost_per_task : Math.round(r.cost_per_task * 100) / 100;
@@ -1244,6 +1378,17 @@ function renderEfficiencyShell(d) {
     `<th class="sortable" data-eff-sort="${c.key}" onclick="toggleEffSort('${c.key}')">${c.label}<span class="sort-arrow"></span></th>`
   ).join('');
 
+  const effMap = new Map();
+  for (const r of (d.efficiency || [])) {
+    if (!effMap.has(r.effort)) {
+      effMap.set(r.effort, { effort: r.effort, label: r.effort_label, rank: r.effort_rank ?? 0 });
+    }
+  }
+  const effOptions = [...effMap.values()].sort((a, b) => a.rank - b.rank || a.label.localeCompare(b.label));
+  const effChips = effOptions.map(e =>
+    `<button type="button" class="filter-chip" data-eff-effort="${esc(e.effort)}" onclick="toggleEffEffort('${esc(e.effort)}')">${esc(e.label)}</button>`
+  ).join('');
+
   return `
     <div class="dbg-card">
       <div class="eff-controls">
@@ -1267,6 +1412,15 @@ function renderEfficiencyShell(d) {
             <button type="button" class="filter-chip" data-eff-scope="tracked" onclick="setEffScope('tracked')">Tracked only</button>
           </div>
         </div>
+        ${effChips ? `
+          <div class="eff-row">
+            <div class="eff-input-wrap" style="flex:1;">
+              <span class="filter-label" style="min-width:auto;">Effort:</span>
+              <div class="filter-chips" style="flex:1;">${effChips}</div>
+            </div>
+            <button id="eff-reset-efforts" type="button" class="filter-reset-link" onclick="resetEffEfforts()" style="display:${effState.excludedEfforts.size > 0 ? 'inline' : 'none'};">All efforts</button>
+          </div>
+        ` : ''}
       </div>
     </div>
     <div class="dbg-card">
@@ -1293,7 +1447,7 @@ function updateEfficiencyTable() {
   const rows = getFilteredSortedEfficiency(currentData);
 
   if (rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No models match this cost limit or company filter.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No models match this cost limit, effort, or company filter.</td></tr>';
   } else {
     tbody.innerHTML = rows.map(r => `
       <tr>
@@ -1324,6 +1478,19 @@ function updateEfficiencyTable() {
     btn.classList.toggle('active', btn.dataset.effScope === effState.scope);
   });
 
+  document.querySelectorAll('[data-eff-effort]').forEach(btn => {
+    const eff = btn.dataset.effEffort;
+    const active = !effState.excludedEfforts.has(eff);
+    const baseLabel = btn.dataset.effLabel || btn.textContent.replace(/\s*✓$/, '');
+    btn.dataset.effLabel = baseLabel;
+    btn.classList.toggle('active', active);
+    btn.classList.toggle('inactive', !active);
+    btn.textContent = baseLabel + (active ? ' ✓' : '');
+  });
+
+  const resetEffBtn = document.getElementById('eff-reset-efforts');
+  if (resetEffBtn) resetEffBtn.style.display = effState.excludedEfforts.size > 0 ? 'inline' : 'none';
+
   document.querySelectorAll('[data-eff-sort]').forEach(th => {
     const active = th.dataset.effSort === effState.sortKey;
     th.classList.toggle('sort-active', active);
@@ -1349,6 +1516,20 @@ function setEffScope(scope) {
   updateEfficiencyTable();
 }
 
+function toggleEffEffort(eff) {
+  if (effState.excludedEfforts.has(eff)) {
+    effState.excludedEfforts.delete(eff);
+  } else {
+    effState.excludedEfforts.add(eff);
+  }
+  updateEfficiencyTable();
+}
+
+function resetEffEfforts() {
+  effState.excludedEfforts.clear();
+  updateEfficiencyTable();
+}
+
 function toggleEffSort(key) {
   if (effState.sortKey === key) {
     effState.sortDir = effState.sortDir === 'asc' ? 'desc' : 'asc';
@@ -1370,23 +1551,44 @@ function render(d) {
     filterContainer.innerHTML = renderFilterBar(d, activeModels);
   }
 
+  const dedupByBase = (list) => {
+    if (!filterState.bestPerModel) return list;
+    const seen = new Set();
+    return list.filter(m => {
+      const bn = getBaseName(m);
+      if (seen.has(bn)) return false;
+      seen.add(bn);
+      return true;
+    });
+  };
+
   const w = d.weights;
   const wPct = (k) => Math.round(w[k] * 100);
-  const overall = d.best_overall;
 
-  const isFiltered = activeModels.length < d.models.length;
-  const overallModel = activeModels.length > 0 ? activeModels[0] : null;
-  const others = activeModels.length > 1 ? activeModels.slice(1) : [];
+  const displayModels = dedupByBase(activeModels);
+  const isFiltered = activeModels.length < d.models.length || filterState.bestPerModel;
+  const overallModel = displayModels.length > 0 ? displayModels[0] : null;
+  const others = displayModels.length > 1 ? displayModels.slice(1) : [];
 
-  const ranked = (priority) => [...activeModels].sort((a,b) => {
-    const sa = a.per_priority[priority];
-    const sb = b.per_priority[priority];
-    if (sa == null && sb == null) return 0;
-    if (sa == null) return 1;
-    if (sb == null) return -1;
-    return sb - sa;
-  });
-  const rank = (model, priority) => ranked(priority).findIndex(m => m.id === model.id) + 1;
+  const ranked = (priority) => {
+    const sorted = [...activeModels].sort((a,b) => {
+      const sa = a.per_priority[priority];
+      const sb = b.per_priority[priority];
+      if (sa == null && sb == null) return 0;
+      if (sa == null) return 1;
+      if (sb == null) return -1;
+      return sb - sa;
+    });
+    return dedupByBase(sorted);
+  };
+  const rank = (model, priority) => {
+    const list = ranked(priority);
+    const idx = list.findIndex(m => m.id === model.id);
+    if (idx !== -1) return idx + 1;
+    const myScore = model.per_priority[priority];
+    if (myScore == null) return '—';
+    return 1 + list.filter(m => m.per_priority[priority] != null && m.per_priority[priority] > myScore).length;
+  };
 
   const wMap = { accuracy: 'acc', long_context: 'ctx', agent: 'agent', cost: 'cost' };
   const wSummary = Object.keys(w).map(k => `${wPct(k)} ${wMap[k] || k}`).join(' · ');
@@ -1397,7 +1599,7 @@ function render(d) {
       <p class="section-label">Best overall · ${wSummary}</p>
       <div class="winner-card" style="text-align:center;padding:36px 16px;">
         <p style="font-size:16px;font-weight:600;margin:0 0 6px;">No models match selected filters</p>
-        <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 16px;">Select at least one company or effort above, or reset filters.</p>
+        <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 16px;">Select at least one company, effort, or model above, or reset filters.</p>
         <button class="refresh-btn" onclick="resetAllFilters()" style="padding:6px 14px;font-size:12.5px;">Reset all filters</button>
       </div>
     `;
@@ -1405,11 +1607,11 @@ function render(d) {
     const pp = overallModel.per_priority;
     const dims = Object.keys(w).map(k => `${k === 'long_context' ? 'long context' : k} ${pp[k] ?? '—'}`).join(', ');
     const runnerStr = others.slice(0, 4).map(m => `${m.name} ${m.composite_unrounded != null ? m.composite_unrounded.toFixed(2) : (m.composite_overall ?? '—')}`).join('; ');
-    const filterNote = isFiltered ? `Filtered view (${activeModels.length} of ${d.models.length} models active). ` : '';
+    const filterNote = isFiltered ? `Filtered view (${displayModels.length} shown of ${d.models.length} configs). ` : '';
     const rationale = `${filterNote}Scores: ${dims} → ${overallModel.composite_unrounded != null ? overallModel.composite_unrounded.toFixed(2) : overallModel.composite_overall}. Next: ${runnerStr || 'none'}.`;
 
     winnerHtml = `
-      <p class="section-label">Best overall · ${wSummary}${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>
+      <p class="section-label">Best overall · ${wSummary}${isFiltered ? ` (${displayModels.length} shown)` : ''}</p>
       <div class="winner-card">
         <div class="winner-head">
           <div>
@@ -1465,7 +1667,7 @@ function render(d) {
   const html = `
     ${winnerHtml}
 
-    <p class="section-label">Best per priority${isFiltered ? ` (${activeModels.length}/${d.models.length} active)` : ''}</p>
+    <p class="section-label">Best per priority${isFiltered ? ` (${displayModels.length} shown)` : ''}</p>
     <div class="priority-grid">
       ${Object.keys(w).map(k => {
         const labels = {
@@ -1503,42 +1705,77 @@ function render(d) {
 
     <div id="pane-models" class="tab-pane ${activeTab === 'models' ? 'active' : ''}">
       ${[...new Set(d.models.map(m => m.vendor))].map(vendor => {
-        const tiers = d.models.filter(m => m.vendor === vendor);
-        if (!tiers.length) return '';
+        const vendorModels = d.models.filter(m => m.vendor === vendor);
+        if (!vendorModels.length) return '';
+        const groups = [];
+        const byBase = new Map();
+        for (const m of vendorModels) {
+          const bn = getBaseName(m);
+          if (!byBase.has(bn)) {
+            const grp = { baseName: bn, entries: [] };
+            byBase.set(bn, grp);
+            groups.push(grp);
+          }
+          byBase.get(bn).entries.push(m);
+        }
         return `
           <p class="section-label" style="margin-top:16px;">${vendor}</p>
           <div class="model-grid" style="margin-bottom:8px;">
-            ${tiers.map(m => {
-              const cov = getCoverage(m);
-              const active = isModelActive(m);
+            ${groups.map(({ baseName, entries }) => {
+              const rep = entries[0];
+              const baseActive = filterState.vendors.has(vendor) && !filterState.excludedBaseModels.has(baseName);
+              const anyProv = entries.some(isProvisional);
+              const repCov = getCoverage(rep);
+              const effortChips = entries.length > 1
+                ? entries.map(e => `<span class="tier-chip">${esc(EFFORT_DISPLAY[(e.target_effort || '').toLowerCase()] || e.target_effort)}</span>`).join('')
+                : (rep.target_effort ? `<span class="tier-chip">${esc(EFFORT_DISPLAY[rep.target_effort.toLowerCase()] || rep.target_effort)}</span>` : '');
+              const effortRows = entries.map(e => {
+                const effLbl = EFFORT_DISPLAY[(e.target_effort || '').toLowerCase()] || e.target_effort || 'Default';
+                const pp = e.per_priority || {};
+                const cov = getCoverage(e);
+                return `<tr>
+                  <td>${esc(effLbl)}</td>
+                  <td>${e.composite_overall ?? '—'}</td>
+                  <td>${pp.accuracy ?? '—'}</td>
+                  <td>${pp.long_context ?? '—'}</td>
+                  <td>${pp.agent ?? '—'}</td>
+                  <td>${pp.cost ?? '—'}</td>
+                  <td>${cov.measured}/${cov.total}</td>
+                </tr>`;
+              }).join('');
+              const provLines = entries.flatMap(e => {
+                const effLbl = EFFORT_DISPLAY[(e.target_effort || '').toLowerCase()] || e.target_effort || '';
+                const inh = Object.values(e.score_detail || {}).flatMap(det => (det.inputs || []).filter(i => i.inherited).map(i => `${i.name} (from ${i.board_name})`));
+                return inh.length ? [`${effLbl}: ${inh.join(', ')}`] : [];
+              });
               return `
-              <div class="model-card ${active ? '' : 'is-filtered-out'}" data-toggle>
+              <div class="model-card ${baseActive ? '' : 'is-filtered-out'}" data-toggle>
                 <div class="model-head">
                   <div>
                     <div class="model-name-row">
-                      <p class="model-name">${esc(m.name)}</p>
-                      ${m.tier ? `<span class="tier-chip">${esc(m.tier)}</span>` : ''}
-                      ${m.target_effort ? `<span class="tier-chip" title="Target reasoning effort: ${esc(m.target_effort)}">${esc(m.target_effort)} effort</span>` : ''}
-                      ${isProvisional(m)
-                        ? `<span class="calibrating-chip" title="${cov.measured} of ${cov.total} benchmarks directly measured, ${cov.provisional} inherited from older versions">Provisional (${cov.measured}/${cov.total})</span>`
-                        : `<span class="cov-chip" title="All ${cov.total} benchmarks directly measured">${cov.measured}/${cov.total} measured</span>`}
-                      ${!isNaN(daysSince(m.released)) && daysSince(m.released) <= 14 ? `<span class="new-chip">${daysSince(m.released)}d ago</span>` : ''}
+                      <p class="model-name">${esc(baseName)}</p>
+                      ${rep.tier ? `<span class="tier-chip">${esc(rep.tier)}</span>` : ''}
+                      ${effortChips}
+                      ${anyProv
+                        ? `<span class="calibrating-chip" title="Some benchmarks inherited from older versions">Provisional</span>`
+                        : `<span class="cov-chip" title="All ${repCov.total} benchmarks directly measured">${repCov.measured}/${repCov.total} measured</span>`}
+                      ${!isNaN(daysSince(rep.released)) && daysSince(rep.released) <= 14 ? `<span class="new-chip">${daysSince(rep.released)}d ago</span>` : ''}
                     </div>
-                    <p class="model-vendor">${fmt(m.released)}</p>
+                    <p class="model-vendor">${fmt(rep.released)}</p>
                   </div>
                   <div style="display:flex;align-items:center;gap:6px;">
-                    <button class="hide-btn" style="border:0.5px solid var(--border);border-radius:4px;padding:2px 7px;" title="${active ? 'Exclude from rankings' : 'Include in rankings'}" onclick="toggleModelExclude('${esc(m.id)}', event)">${active ? '✕ Hide' : '+ Include'}</button>
+                    <button class="hide-btn" style="border:0.5px solid var(--border);border-radius:4px;padding:2px 7px;" title="${baseActive ? 'Exclude model from rankings' : 'Include model in rankings'}" onclick="toggleBaseModelExclude('${esc(baseName)}', event)">${baseActive ? '✕ Hide' : '+ Include'}</button>
                     <span class="chev">▼</span>
                   </div>
                 </div>
                 <div class="model-changelog">
-                  <p><span class="changelog-head">vs ${esc(m.previous)}:</span> ${esc(m.changelog)}</p>
-                  <a href="${m.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
-                  <div class="model-bench-meta" style="margin-top:10px;padding-top:8px;border-top:0.5px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.5;">
-                    <p style="margin:0 0 3px;"><b>Benchmarked effort:</b> ${esc(m.target_effort || 'medium')} effort</p>
-                    <p style="margin:0 0 3px;"><b>Directly measured (${cov.measured}/${cov.total}):</b> ${Object.values(m.score_detail || {}).flatMap(d => (d.inputs || []).filter(i => !i.inherited).map(i => i.name)).join(', ') || 'None'}</p>
-                    ${cov.provisional > 0 ? `<p style="margin:0;"><b>Provisional / inherited (${cov.provisional}/${cov.total}):</b> ${Object.values(m.score_detail || {}).flatMap(d => (d.inputs || []).filter(i => i.inherited).map(i => `${i.name} (from ${i.board_name})`)).join(', ')}</p>` : ''}
-                  </div>
+                  <p><span class="changelog-head">vs ${esc(rep.previous)}:</span> ${esc(rep.changelog)}</p>
+                  <a href="${rep.release_notes_url}" target="_blank" rel="noopener">Release notes ↗</a>
+                  <table class="model-release-efforts-table">
+                    <thead><tr><th>Effort</th><th>Comp</th><th>Acc</th><th>Ctx</th><th>Agent</th><th>Cost</th><th>Meas</th></tr></thead>
+                    <tbody>${effortRows}</tbody>
+                  </table>
+                  ${provLines.length ? `<p style="margin:8px 0 0;font-size:11.5px;color:var(--text-dim);"><b>Provisional:</b> ${esc(provLines.join(' · '))}</p>` : ''}
                 </div>
               </div>
             `;}).join('')}

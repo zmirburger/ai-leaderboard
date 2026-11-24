@@ -31,7 +31,7 @@ Personal dashboard tracking the current leading AI model across Zmir's four prio
 All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 
 1. **Raw values:** each source's full leaderboard goes into `data.json` → `raw_benchmarks` (a cache with `fetched_at`). A failed fetch, or one that returns fewer than half the cached rows, keeps the old values, which are shown with "as of <date>" once more than 14 days old.
-2. **Name matching & reasoning effort:** `norm_name()` canonicalizes names. Each model targets Zmir's configured reasoning effort: **medium** for heavyweight tiers (`Opus`, `Fable`, `Carbon`, `Neon`, `Grok`, `Sol`, `Astra`); **high** for fast/cheaper or single-effort tiers (`Sonnet`, `Haiku`, `Luna`, `Argon`, `Hydrogen`, `Flash-Lite`, `Gemini`). Scrapers pick the target effort run, falling back to the closest available or board default.
+2. **Name matching & reasoning effort:** `norm_name()` canonicalizes names. Multi-effort tracked models span **Medium / High / Xhigh / Max** efforts where published on AA (`target_effort` on each entry in `data.json`). Scrapers pick the target effort run, falling back to the closest available or board default.
 3. **Normalization (0–100):** linear benchmarks = value ÷ best on the whole board × 100. METR hours = −25 per doubling from the best. Cost uses AA Cost per Solved Task (`Cost per Task ÷ (Intelligence Index / 100)`) log-scaled across the tracked models only: lowest $/solved task 100, highest 0.
 4. **Priority score** = mean of that priority's benchmark scores. Status is `measured`, `partial` (some boards don't list the model), `provisional` (uses inherited values) or `none`. Coverage ratios (`measured/total`) are computed overall and per priority.
 5. **New model / slow board:** if a board doesn't list a model, it inherits the newest older version of the same family on that board within the same major version (`Opus 5 → 5.5` yes, `Gemini 3.1 → 4.0` no). It's flagged Provisional with its coverage ratio (e.g. `5/8`) and replaced automatically once the board lists the model. A board that hasn't directly tested any tracked model released in the last 90 days (`LIVE_BOARD_DAYS`) is dropped (`dropped_benchmarks` in data.json) instead of feeding inherited values forever — AA retired IFBench/Terminal-Bench Hard/τ²-Bench/AA-LCR, and Vectara HHEM was dropped on 2026-10-12.
@@ -39,7 +39,7 @@ All scores are computed by `refresh.py`; nothing in `per_priority` is hand-set.
 
 Artificial Analysis data is fetched directly from AA's public `leaderboards/models` Next.js RSC stream (Intelligence Index v5.0, GDP.pdf, Terminal-Bench 4.0, τ-Bench Banking, and Cost per Solved Task = Cost per Task ÷ Intelligence Index; plus `/models/<slug>` RSC backfill for deprecated tracked releases covering GDP.pdf and Cost per Solved Task), optionally supplemented by `AA_API_KEY` on `/api/v2/language/models/free`.
 
-The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority, and the sortable "Efficiency" tab renders `efficiency` (raw AA `Cost / Task` in USD with a max cost/task filter).
+The dashboard's "Score breakdown" tab renders `score_detail` for every model × priority, "Latest releases" groups by base model, and the sortable "Efficiency" tab renders `efficiency` (raw AA `Cost / Task` in USD with effort-level filtering and a max cost/task cap).
 
 ## Stack
 

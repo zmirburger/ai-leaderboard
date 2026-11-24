@@ -464,6 +464,113 @@
     opacity: 0.5;
     border-style: dashed;
   }
+  .eff-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .eff-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .eff-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .eff-input-group {
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 0 8px;
+    height: 30px;
+  }
+  .eff-input-group:focus-within {
+    border-color: var(--accent);
+  }
+  .eff-prefix {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .eff-input {
+    background: transparent;
+    border: 0;
+    color: var(--text);
+    font-size: 13px;
+    width: 78px;
+    outline: none;
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+  }
+  .eff-clear-btn {
+    background: transparent;
+    border: 0;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 2px;
+    line-height: 1;
+  }
+  .eff-clear-btn:hover { color: var(--text); }
+  .eff-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .eff-table-wrap { overflow-x: auto; }
+  .eff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .eff-table th {
+    text-align: right;
+    font-size: 10.5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    padding: 6px 8px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .eff-table th:first-child, .eff-table td:first-child { text-align: left; padding-left: 0; }
+  .eff-table th:nth-child(2), .eff-table td:nth-child(2) { text-align: left; }
+  .eff-table th:last-child, .eff-table td:last-child { padding-right: 0; }
+  .eff-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+  .eff-table th.sortable:hover { color: var(--text); }
+  .eff-table th.sort-active { color: var(--accent); font-weight: 600; }
+  .sort-arrow { margin-left: 3px; font-size: 10px; }
+  .eff-table td {
+    text-align: right;
+    padding: 8px;
+    font-size: 13px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: middle;
+  }
+  .eff-table tbody tr:last-child td { border-bottom: 0; }
+  .eff-table tbody tr:hover { background: var(--surface-2); }
+  .eff-tracked-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
 </style>
 </head>
 <body>
@@ -1077,6 +1184,181 @@ async function load() {
   }
 }
 
+const effState = {
+  maxCost: '',
+  scope: 'all',
+  sortKey: 'cost_per_task',
+  sortDir: 'asc',
+};
+
+function fmtUsdTask(v) {
+  if (v == null || isNaN(v)) return '—';
+  return v < 0.01 ? '$' + v.toFixed(3) : '$' + v.toFixed(2);
+}
+
+function getFilteredSortedEfficiency(d) {
+  const all = d.efficiency || [];
+  const maxStr = String(effState.maxCost ?? '').trim();
+  const maxVal = maxStr === '' ? NaN : parseFloat(maxStr);
+  const hasMax = maxStr !== '' && !isNaN(maxVal) && maxVal >= 0;
+
+  const rows = all.filter(r => {
+    if (!filterState.vendors.has(r.vendor)) return false;
+    if (effState.scope === 'tracked' && !r.tracked) return false;
+    if (hasMax) {
+      const cmpVal = r.cost_per_task < 0.01 ? r.cost_per_task : Math.round(r.cost_per_task * 100) / 100;
+      if (cmpVal > maxVal + 1e-9) return false;
+    }
+    return true;
+  });
+
+  const dir = effState.sortDir === 'asc' ? 1 : -1;
+  const key = effState.sortKey;
+  rows.sort((a, b) => {
+    if (key === 'model') {
+      return (a.model.localeCompare(b.model) * dir) || (a.effort_rank - b.effort_rank);
+    }
+    if (key === 'effort') {
+      return ((a.effort_rank - b.effort_rank) * dir) || a.model.localeCompare(b.model);
+    }
+    const va = a[key];
+    const vb = b[key];
+    if (va == null && vb == null) return a.model.localeCompare(b.model);
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    if (va !== vb) return (va - vb) * dir;
+    return a.model.localeCompare(b.model) || (a.effort_rank - b.effort_rank);
+  });
+  return rows;
+}
+
+function renderEfficiencyShell(d) {
+  const cols = [
+    { key: 'model', label: 'Model' },
+    { key: 'effort', label: 'Effort' },
+    { key: 'cost_per_task', label: 'Cost / Task' },
+    { key: 'intelligence_index', label: 'AA II' },
+    { key: 'cost_per_solved', label: '$/Solved' },
+  ];
+  const ths = cols.map(c =>
+    `<th class="sortable" data-eff-sort="${c.key}" onclick="toggleEffSort('${c.key}')">${c.label}<span class="sort-arrow"></span></th>`
+  ).join('');
+
+  return `
+    <div class="dbg-card">
+      <div class="eff-controls">
+        <div class="eff-row">
+          <div class="eff-input-wrap">
+            <span class="filter-label" style="min-width:auto;">Max Cost/Task:</span>
+            <div class="eff-input-group">
+              <span class="eff-prefix">$</span>
+              <input id="eff-max-cost" class="eff-input" type="number" step="0.1" min="0" placeholder="No limit" value="${esc(effState.maxCost)}" oninput="handleEffMaxCost(this.value)">
+              <button id="eff-clear-btn" class="eff-clear-btn" type="button" onclick="setEffMaxPreset('')" title="Clear limit" style="display:${effState.maxCost !== '' ? 'inline' : 'none'};">✕</button>
+            </div>
+            <div class="filter-chips" style="flex:0 1 auto;">
+              <button type="button" class="filter-chip" data-eff-preset="" onclick="setEffMaxPreset('')">All</button>
+              <button type="button" class="filter-chip" data-eff-preset="0.5" onclick="setEffMaxPreset('0.5')">≤ $0.50</button>
+              <button type="button" class="filter-chip" data-eff-preset="1.5" onclick="setEffMaxPreset('1.5')">≤ $1.50</button>
+              <button type="button" class="filter-chip" data-eff-preset="5" onclick="setEffMaxPreset('5')">≤ $5.00</button>
+            </div>
+          </div>
+          <div class="filter-chips" style="flex:0 1 auto;">
+            <button type="button" class="filter-chip" data-eff-scope="all" onclick="setEffScope('all')">All AA efforts</button>
+            <button type="button" class="filter-chip" data-eff-scope="tracked" onclick="setEffScope('tracked')">Tracked only</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dbg-card">
+      <div class="eff-meta-row">
+        <span id="eff-count"></span>
+        <span><span class="eff-tracked-dot" style="margin:0 4px 0 0;"></span>Used in main ranking · Click headers to sort</span>
+      </div>
+      <div class="eff-table-wrap">
+        <table class="eff-table">
+          <thead><tr>${ths}</tr></thead>
+          <tbody id="eff-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="cl-note">Actual USD cost per Artificial Analysis Intelligence Index task (<code>intelligenceIndexCostPerTask</code>) across all published reasoning efforts for tracked model families. $/Solved divides Cost/Task by (AA Intelligence Index ÷ 100).</p>
+  `;
+}
+
+function updateEfficiencyTable() {
+  if (!currentData) return;
+  const tbody = document.getElementById('eff-table-body');
+  if (!tbody) return;
+  const allRows = currentData.efficiency || [];
+  const rows = getFilteredSortedEfficiency(currentData);
+
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No models match this cost limit or company filter.</td></tr>';
+  } else {
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${esc(r.model)}${r.tracked ? '<span class="eff-tracked-dot" title="Used in main dashboard scoring"></span>' : ''}</td>
+        <td><span class="tier-chip">${esc(r.effort_label)}</span></td>
+        <td><b>${fmtUsdTask(r.cost_per_task)}</b></td>
+        <td>${r.intelligence_index != null ? r.intelligence_index.toFixed(1) : '—'}</td>
+        <td>${r.cost_per_solved != null ? fmtUsdTask(r.cost_per_solved) : '—'}</td>
+      </tr>
+    `).join('');
+  }
+
+  const countEl = document.getElementById('eff-count');
+  if (countEl) countEl.textContent = `Showing ${rows.length} of ${allRows.length} AA model × effort configs`;
+
+  const clearBtn = document.getElementById('eff-clear-btn');
+  if (clearBtn) clearBtn.style.display = String(effState.maxCost ?? '').trim() !== '' ? 'inline' : 'none';
+
+  document.querySelectorAll('[data-eff-preset]').forEach(btn => {
+    const val = btn.dataset.effPreset;
+    const match = val === ''
+      ? String(effState.maxCost ?? '').trim() === ''
+      : parseFloat(effState.maxCost) === parseFloat(val);
+    btn.classList.toggle('active', match);
+  });
+
+  document.querySelectorAll('[data-eff-scope]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.effScope === effState.scope);
+  });
+
+  document.querySelectorAll('[data-eff-sort]').forEach(th => {
+    const active = th.dataset.effSort === effState.sortKey;
+    th.classList.toggle('sort-active', active);
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = active ? (effState.sortDir === 'asc' ? '▲' : '▼') : '';
+  });
+}
+
+function handleEffMaxCost(val) {
+  effState.maxCost = val;
+  updateEfficiencyTable();
+}
+
+function setEffMaxPreset(val) {
+  effState.maxCost = val;
+  const input = document.getElementById('eff-max-cost');
+  if (input) input.value = val;
+  updateEfficiencyTable();
+}
+
+function setEffScope(scope) {
+  effState.scope = scope;
+  updateEfficiencyTable();
+}
+
+function toggleEffSort(key) {
+  if (effState.sortKey === key) {
+    effState.sortDir = effState.sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    effState.sortKey = key;
+    effState.sortDir = key === 'intelligence_index' ? 'desc' : 'asc';
+  }
+  updateEfficiencyTable();
+}
+
 function render(d) {
   renderWeightPanel();
 
@@ -1214,6 +1496,7 @@ function render(d) {
 
     <div class="tabs">
       <button class="tab-btn ${activeTab === 'models' ? 'active' : ''}" data-tab="models">Latest releases</button>
+      <button class="tab-btn ${activeTab === 'efficiency' ? 'active' : ''}" data-tab="efficiency">Efficiency</button>
       <button class="tab-btn ${activeTab === 'details' ? 'active' : ''}" data-tab="details">Benchmark details</button>
       <button class="tab-btn ${activeTab === 'debug' ? 'active' : ''}" data-tab="debug">Score breakdown</button>
     </div>
@@ -1287,6 +1570,10 @@ function render(d) {
       }).join('')}
     </div>
 
+    <div id="pane-efficiency" class="tab-pane ${activeTab === 'efficiency' ? 'active' : ''}">
+      ${renderEfficiencyShell(d)}
+    </div>
+
     <div id="pane-debug" class="tab-pane ${activeTab === 'debug' ? 'active' : ''}">
       ${renderDebugTab(d)}
     </div>
@@ -1295,6 +1582,7 @@ function render(d) {
   `;
   document.getElementById('content').innerHTML = html;
   document.getElementById('content').classList.remove('loading');
+  updateEfficiencyTable();
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {

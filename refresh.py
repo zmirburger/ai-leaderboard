@@ -107,7 +107,7 @@ _AA_RSC_SCORES = {
     "aa_terminalbench_v4": "terminalbench-4-0",
     "aa_tau_banking": "tau3-banking",
 }
-_AA_MERGE_BENCHES = {"aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved"}
+_AA_MERGE_BENCHES = {"aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved", "aa_cost_per_task"}
 _aa_rsc_cache = None
 
 def _extract_rsc_stream(html):
@@ -465,7 +465,7 @@ def _supplement_aa_model_pages(out, releases_arr):
         return
     present = {
         b: {norm_name(k) for k in out[b]}
-        for b in ("aa_gdp", "aa_cost_solved", "aa_intelligence_index")
+        for b in ("aa_gdp", "aa_cost_solved", "aa_cost_per_task", "aa_intelligence_index")
     }
     tracked_groups = [
         [norm_name(m["name"])] + [norm_name(a) for a in m.get("aliases", [])]
@@ -510,6 +510,8 @@ def _supplement_aa_model_pages(out, releases_arr):
                             page_gdp[rname] = float(val)
                         ii = r.get("intelligenceIndex")
                         cpt = _extract_aa_cpt(r.get("intelligenceIndexCostPerTask"))
+                        if cpt is not None:
+                            out["aa_cost_per_task"].setdefault(rname, cpt)
                         if isinstance(ii, (int, float)) and ii > 0:
                             out["aa_intelligence_index"].setdefault(rname, float(ii))
                             if cpt is not None:
@@ -526,7 +528,7 @@ def _supplement_aa_model_pages(out, releases_arr):
 def fetch_aa():
     """Artificial Analysis leaderboard RSC stream (+ optional Free V2 API supplement)."""
     models_arr, releases_arr = _get_aa_rsc()
-    out = {b: {} for b in ("aa_intelligence_index", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved")}
+    out = {b: {} for b in ("aa_intelligence_index", "aa_gdp", "aa_terminalbench_v4", "aa_tau_banking", "aa_cost_solved", "aa_cost_per_task")}
     for it in models_arr:
         name = it.get("name")
         if not name:
@@ -540,6 +542,8 @@ def fetch_aa():
             if isinstance(v, (int, float)):
                 out[bench][name] = float(v)
         cpt = _extract_aa_cpt(it.get("intelligenceIndexCostPerTask"))
+        if cpt is not None:
+            out["aa_cost_per_task"][name] = cpt
         if isinstance(ii, (int, float)) and ii > 0 and cpt is not None:
             out["aa_cost_solved"][name] = cpt / (float(ii) / 100.0)
     for bench in _AA_RSC_SCORES:
@@ -1036,6 +1040,62 @@ def compute_scores(data):
             "total": tot_all,
             "provisional": tot_all - tot_meas,
         }
+
+    cpt_vals = cache.get("aa_cost_per_task", {}).get("values", {})
+    ii_vals = cache.get("aa_intelligence_index", {}).get("values", {})
+    cps_vals = cache.get("aa_cost_solved", {}).get("values", {})
+    tracked_board_names = {
+        i["board_name"]
+        for m in models
+        for i in m["score_detail"].get("cost", {}).get("inputs", [])
+        if not i.get("inherited")
+    }
+    tracked_families = {}
+    for m in models:
+        base_name = m.get("base_name") or re.sub(r"\s*\((?:Medium|High)\)\s*$", "", m["name"], flags=re.I)
+        vendor = m.get("vendor", "")
+        keys = [norm_name(m["name"])] + [norm_name(a) for a in m.get("aliases", [])]
+        for k in keys:
+            if k and k not in tracked_families:
+                tracked_families[k] = (base_name, vendor)
+
+    seen_eff = {}
+    for board_name, cpt in cpt_vals.items():
+        if not isinstance(cpt, (int, float)) or cpt <= 0:
+            continue
+        k = norm_name(board_name)
+        if k not in tracked_families:
+            continue
+        base_name, vendor = tracked_families[k]
+        if "non-reasoning" in board_name.lower():
+            eff, eff_label, eff_rank = "non-reasoning", "Non-reasoning", 0
+        else:
+            ex = extract_effort(board_name)
+            if ex:
+                eff, eff_label, eff_rank = ex, ex.capitalize(), EFFORT_RANKS.get(ex, 0)
+            else:
+                eff, eff_label, eff_rank = "default", "Default", 0
+        is_tracked = board_name in tracked_board_names
+        dedup_key = (base_name, eff)
+        if dedup_key in seen_eff and not (is_tracked and not seen_eff[dedup_key]["tracked"]):
+            continue
+        ii = ii_vals.get(board_name)
+        cps = cps_vals.get(board_name)
+        if cps is None and isinstance(ii, (int, float)) and ii > 0:
+            cps = float(cpt) / (float(ii) / 100.0)
+        seen_eff[dedup_key] = {
+            "model": base_name,
+            "vendor": vendor,
+            "effort": eff,
+            "effort_label": eff_label,
+            "effort_rank": eff_rank,
+            "cost_per_task": round(float(cpt), 4),
+            "intelligence_index": round(float(ii), 2) if isinstance(ii, (int, float)) else None,
+            "cost_per_solved": round(float(cps), 4) if isinstance(cps, (int, float)) else None,
+            "tracked": is_tracked,
+            "board_name": board_name,
+        }
+    data["efficiency"] = sorted(seen_eff.values(), key=lambda r: (r["cost_per_task"], r["model"], r["effort_rank"]))
 
 def recompute_rankings(data):
     """Composite = weighted mean over the priorities at least half the models have a
